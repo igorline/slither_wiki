@@ -1,4 +1,4 @@
-Slither has a detector plugin architecture so you can integrate your new detector that run by default from the command line.
+Slither has a plugin architecture so you can integrate new detectors that run from the command line.
 
 The skeleton for a detector is:
 
