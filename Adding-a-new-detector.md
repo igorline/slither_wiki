@@ -19,9 +19,9 @@ class Skeloton(AbstractDetector):
         return []
 ```
 
-- `ARGUMENT` allows to run the detector from the command line
+- `ARGUMENT` lets you run the detector from the command line
 - `HELP` is the information printed from the command line
-- `CLASSIFICATION` indicates your confidence in the severity and precision of the issues. Allowed values are:
+- `CLASSIFICATION` indicates your confidence in the impact of the issue. Allowed values are:
   - `DetectorClassification.LOW`: printed in green
   - `DetectorClassification.MEDIUM`: printed in yellow
   - `DetectorClassification.HIGH`: printed in red
