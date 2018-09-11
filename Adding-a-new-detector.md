@@ -3,8 +3,8 @@ Slither's plugin architecture lets you integrate new detectors that run from the
 The skeleton for a detector is:
 
 ```python
-from slither.detectors.abstractDetector import AbstractDetector
-from slither.detectors.detectorClassification import DetectorClassification
+from slither.detectors.abstract_detector import AbstractDetector, DetectorClassification
+
 
 class Skeloton(AbstractDetector):
     """
@@ -26,10 +26,10 @@ class Skeloton(AbstractDetector):
   - `DetectorClassification.MEDIUM`: printed in yellow
   - `DetectorClassification.HIGH`: printed in red
 
-`detect()` needs to return a list of findings. To facilitate the automation of Slither, a finding is a dictionary containing a `vuln` key associated to the vulnerability name and additional information according of the vulnerability itself.
+`detect()` needs to return a list of findings. To facilitate the automation of Slither, a finding is a dictionary containing a `vuln` key associated with the vulnerability name and additional information according to the vulnerability itself.
 
 An `AbstractDetector` object has the `slither` attribute, which returns the current `Slither` object, and the `log(str)` function to print the result.
 
-For example, [backdoor.py](https://github.com/trailofbits/slither/blob/f47c4385db33c09d26e3dc67b20d58ec80995f91/slither/detectors/examples/backdoor.py) will detect any function with `backdoor` in its name.
+For example, [backdoor.py](https://github.com/trailofbits/slither/blob/d3265490ea2d92033d83c8f3d9fc8fdb7f3d60f4/slither/detectors/examples/backdoor.py) will detect any function with `backdoor` in its name.
 
-In addition, you need to load the module in Slither in [slither/detectors/detectors.py](https://github.com/trailofbits/slither/blob/f47c4385db33c09d26e3dc67b20d58ec80995f91/slither/detectors/detectors.py). For example, `backdoor.py` is loaded [here](https://github.com/trailofbits/slither/blob/f47c4385db33c09d26e3dc67b20d58ec80995f91/slither/detectors/detectors.py#L9).
+In addition, you need to load the module in Slither in [slither/__main.py](https://github.com/trailofbits/slither/blob/d3265490ea2d92033d83c8f3d9fc8fdb7f3d60f4/slither/__main__.py#L65-L71).
