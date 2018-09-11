@@ -56,10 +56,10 @@ for contract in slither.contracts:
     print 'Contract: '+ contract.name  
   
     for function in contract.functions:  
-        print 'Function: {}'.format(function.name)  
+        print('Function: {}'.format(function.name))  
   
-        print '\tRead: {}'.format([v.name for v in function.state_variables_read])  
-        print '\tWritten {}'.format([v.name for v in function.state_variables_written])
+        print('\tRead: {}'.format([v.name for v in function.state_variables_read]))  
+        print('\tWritten {}'.format([v.name for v in function.state_variables_written]))
 ```
 
 You will find more Slither API examples [here](https://github.com/trailofbits/slither/tree/f47c4385db33c09d26e3dc67b20d58ec80995f91/examples/scripts). For example:
