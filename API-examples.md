@@ -17,7 +17,7 @@ A Contract object has:
 - `name (str)`: Name of the contract
 - `functions (list(Function))`: List of functions
 - `modifiers (list(Modifier))`: List of functions
-- `inheritances (list(Contract))`: List of inherited contracts
+- `inheritance (list(Contract))`: List of inherited contracts
 - `get_function_from_signature (str)`: Return a `Function` from its signature
 - `get_modifier_from_signature (str)`: Return a `Modifier` from its signature
 - `get_state_variable_from_name (str)`: Return a `StateVariable` from its name
@@ -62,7 +62,7 @@ for contract in slither.contracts:
         print('\tWritten {}'.format([v.name for v in function.state_variables_written]))
 ```
 
-You will find more Slither API examples [here](https://github.com/trailofbits/slither/tree/d3265490ea2d92033d83c8f3d9fc8fdb7f3d60f4/examples/scripts). For example:
-* [functions_writing.py](https://github.com/trailofbits/slither/blob/d3265490ea2d92033d83c8f3d9fc8fdb7f3d60f4/examples/scripts/functions_writing.py): Where the state variable `a` is written?
-* [variable_in_condition.py](https://github.com/trailofbits/slither/blob/d3265490ea2d92033d83c8f3d9fc8fdb7f3d60f4/examples/scripts/variable_in_condition.py): Is the variable `a` used in a condition?
-* [functions_called.py](https://github.com/trailofbits/slither/blob/d3265490ea2d92033d83c8f3d9fc8fdb7f3d60f4/examples/scripts/functions_called.py): What are all the functions reached by a call to `entry_point()`?
+You will find more Slither API examples [here](https://github.com/trailofbits/slither/tree/5930e4ca6bca16c51a59a12af420982ca672c904/examples/scripts). For example:
+* [functions_writing.py](https://github.com/trailofbits/slither/blob/5930e4ca6bca16c51a59a12af420982ca672c904/examples/scripts/functions_writing.py): Where the state variable `a` is written?
+* [variable_in_condition.py](https://github.com/trailofbits/slither/blob/5930e4ca6bca16c51a59a12af420982ca672c904/examples/scripts/variable_in_condition.py): Is the variable `a` used in a condition?
+* [functions_called.py](https://github.com/trailofbits/slither/blob/5930e4ca6bca16c51a59a12af420982ca672c904/examples/scripts/functions_called.py): What are all the functions reached by a call to `entry_point()`?
