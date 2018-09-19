@@ -6,7 +6,7 @@ The skeleton for a detector is:
 from slither.detectors.abstract_detector import AbstractDetector, DetectorClassification
 
 
-class Skeloton(AbstractDetector):
+class Skeleton(AbstractDetector):
     """
     Documentation
     """
