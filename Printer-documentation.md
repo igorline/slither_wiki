@@ -1,5 +1,3 @@
-# Slither Printers
-
 Slither allows printing contracts information through its printers.
 
 ## Quick Summary
