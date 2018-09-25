@@ -69,16 +69,15 @@ Print the variables written and the check on `msg.sender` of each function.
 ### Example
 ```
 ...
+$ slither examples/printers/authorization.sol --printer-inheritance
+[..]
 INFO:Printers:
-Contract MyNewBank
-+----------+-------------------------+--------------------------+
-| Function | State variables written | Conditions on msg.sender |
-+----------+-------------------------+--------------------------+
-|   kill   |           []            | ['msg.sender != owner']  |
-| withdraw |           []            | ['msg.sender != owner']  |
-|   init   |       [u'owner']        |            []            |
-|  owned   |       [u'owner']        |            []            |
-| fallback |     [u'deposits']       |            []            |
-+----------+-------------------------+--------------------------+
+Contract MyContract
++-------------+-------------------------+----------------------------------------+
+|   Function  | State variables written |        Conditions on msg.sender        |
++-------------+-------------------------+----------------------------------------+
+| constructor |        ['owner']        |                   []                   |
+|     mint    |       ['balances']      | ['require(bool)(msg.sender == owner)'] |
++-------------+-------------------------+----------------------------------------+
 ```
 
