@@ -62,7 +62,7 @@ for contract in slither.contracts:
         print('\tWritten {}'.format([v.name for v in function.state_variables_written]))
 ```
 
-You will find more Slither API examples [here](https://github.com/trailofbits/slither/tree/5930e4ca6bca16c51a59a12af420982ca672c904/examples/scripts). For example:
-* [functions_writing.py](https://github.com/trailofbits/slither/blob/5930e4ca6bca16c51a59a12af420982ca672c904/examples/scripts/functions_writing.py): Where the state variable `a` is written?
-* [variable_in_condition.py](https://github.com/trailofbits/slither/blob/5930e4ca6bca16c51a59a12af420982ca672c904/examples/scripts/variable_in_condition.py): Is the variable `a` used in a condition?
-* [functions_called.py](https://github.com/trailofbits/slither/blob/5930e4ca6bca16c51a59a12af420982ca672c904/examples/scripts/functions_called.py): What are all the functions reached by a call to `entry_point()`?
+You will find more Slither API examples [here](https://github.com/trailofbits/slither/tree/0d1bbbebad52affcc8f6ee5855ab16e3b6bbbc74/examples/scripts). For example:
+* [functions_writing.py](https://github.com/trailofbits/slither/blob/0d1bbbebad52affcc8f6ee5855ab16e3b6bbbc74/examples/scripts/functions_writing.py): Where the state variable `a` is written?
+* [variable_in_condition.py](https://github.com/trailofbits/slither/blob/0d1bbbebad52affcc8f6ee5855ab16e3b6bbbc74/examples/scripts/variable_in_condition.py): Is the variable `a` used in a condition?
+* [functions_called.py](https://github.com/trailofbits/slither/blob/0d1bbbebad52affcc8f6ee5855ab16e3b6bbbc74/examples/scripts/functions_called.py): What are all the functions reached by a call to `entry_point()`?
