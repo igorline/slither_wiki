@@ -36,6 +36,6 @@ class Skeleton(AbstractDetector):
 
 An `AbstractDetector` object has the `slither` attribute, which returns the current `Slither` object, and the `log(str)` function to print the result.
 
-For example, [backdoor.py](https://github.com/trailofbits/slither/blob/5930e4ca6bca16c51a59a12af420982ca672c904/slither/detectors/examples/backdoor.py) will detect any function with `backdoor` in its name.
+For example, [backdoor.py](https://github.com/trailofbits/slither/blob/67907575492b199d98282c2f05bbd941c26f780c/slither/detectors/examples/backdoor.py) will detect any function with `backdoor` in its name.
 
-You will find a skeleton example to integrate your detector into slither in [slither/plugin_example](https://github.com/trailofbits/slither/tree/5930e4ca6bca16c51a59a12af420982ca672c904/plugin_example).
+You will find a skeleton example to integrate your detector into slither in [slither/plugin_example](https://github.com/trailofbits/slither/tree/67907575492b199d98282c2f05bbd941c26f780c/plugin_example).
