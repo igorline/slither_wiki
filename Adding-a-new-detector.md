@@ -13,7 +13,8 @@ class Skeleton(AbstractDetector):
 
     ARGUMENT = 'mydetector' # slither will launch the detector with slither.py --mydetector
     HELP = 'Help printed by slither'
-    CLASSIFICATION = DetectorClassification.HIGH
+    IMPACT = DetectorClassification.HIGH
+    CONFIDENCE = DetectorClassification.HIGH
 
     def detect(self):
         return []
@@ -21,10 +22,15 @@ class Skeleton(AbstractDetector):
 
 - `ARGUMENT` lets you run the detector from the command line
 - `HELP` is the information printed from the command line
-- `CLASSIFICATION` indicates your confidence in the impact of the issue. Allowed values are:
+- `IMPACT` indicates the impact of the issue. Allowed values are:
+  - `DetectorClassification.INFORMATIONAL`: printed in green
   - `DetectorClassification.LOW`: printed in green
   - `DetectorClassification.MEDIUM`: printed in yellow
   - `DetectorClassification.HIGH`: printed in red
+- `CONFIDENCE` indicates your confidence in the analysis. Allowed values are:
+  - `DetectorClassification.LOW`
+  - `DetectorClassification.MEDIUM`
+  - `DetectorClassification.HIGH`
 
 `detect()` needs to return a list of findings. To facilitate the automation of Slither, a finding is a dictionary containing a `vuln` key associated with the vulnerability name and additional information according to the vulnerability itself.
 
