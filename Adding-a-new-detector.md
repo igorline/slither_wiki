@@ -1,5 +1,7 @@
 Slither's plugin architecture lets you integrate new detectors that run from the command line.
 
+# Detector Skeleton
+
 The skeleton for a detector is:
 
 ```python
@@ -36,6 +38,11 @@ class Skeleton(AbstractDetector):
 
 An `AbstractDetector` object has the `slither` attribute, which returns the current `Slither` object, and the `log(str)` function to print the result.
 
-For example, [backdoor.py](https://github.com/trailofbits/slither/blob/0d1bbbebad52affcc8f6ee5855ab16e3b6bbbc74/slither/detectors/examples/backdoor.py) will detect any function with `backdoor` in its name.
+# Integration
 
-You will find a skeleton example to integrate your detector into slither in [slither/plugin_example](https://github.com/trailofbits/slither/tree/0d1bbbebad52affcc8f6ee5855ab16e3b6bbbc74/plugin_example).
+You can either integrate your detector into slither by:
+- Adding it in [slither/detectors](https://github.com/trailofbits/slither/tree/20b8fdb7bc9227abe3c9c3a769f59eb5d1338849/slither/detectors) and its instance in [__main__.py#L92-L108](https://github.com/trailofbits/slither/blob/20b8fdb7bc9227abe3c9c3a769f59eb5d1338849/slither/__main__.py#L92-L108)
+- Or by creating a plugin package (see the [skeleton example](https://github.com/trailofbits/slither/tree/0d1bbbebad52affcc8f6ee5855ab16e3b6bbbc74/plugin_example)).
+
+# Example
+[backdoor.py](https://github.com/trailofbits/slither/blob/0d1bbbebad52affcc8f6ee5855ab16e3b6bbbc74/slither/detectors/examples/backdoor.py) will detect any function with `backdoor` in its name.
