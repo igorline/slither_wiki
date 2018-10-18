@@ -1,6 +1,6 @@
 ## Adding a detector
 
-1. Review the brief guide to [adding a detector](Adding-a-new-detector)
+1. Review the guide to [adding a detector](Adding-a-new-detector)
 2. Reference the complete [API documentation](API-examples)
 3. Reference the complete [SlithIR definition](SlithIR)
 
