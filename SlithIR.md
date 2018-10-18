@@ -1,12 +1,7 @@
 # SlithIR
-Slither possesses an intermediate representation, called SlithIR.
+Slither translates Solidity an intermediate representation, SlithIR, to enable high-precision analysis via a simple API. It supports taint and value tracking to enable detection of complex patterns.
 
-SlithIR allows:
-- To simplify code analysis
-- To write more precise detectors
-- To support taint and value tracking 
-
-SlihtIR is an ongoing project, [contact us](https://www.trailofbits.com/contact/) for more information.
+SlithIR is a work in progress, although it is usable today. New developments in SlithIR are driven by needs identified by new detector modules. Please help us bugtest and enhance SlithIR!
 
 ## Example
 `$ slither file.sol --printer-slithir` will output the IR for every function.
@@ -48,8 +43,8 @@ Contract MyContract
 - `Constant` (`string` or `int`)
 - `SolidityVariable`
 - `TupleVariable`
-- `TemporaryVariable` (variables added by slithIR)
-- `ReferenceVariable` (variables added by slithIR, for mapping/index accesses)
+- `TemporaryVariable` (variables added by SlithIR)
+- `ReferenceVariable` (variables added by SlithIR, for mapping/index accesses)
 
 In the following we use:
 - a `LVALUE` can be: `StateVariable`, `LocalVariable`, `TemporaryVariable`, `ReferenceVariable` or `TupleVariable`
