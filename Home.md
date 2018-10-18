@@ -12,7 +12,7 @@ Slither includes a set of "printers" to help visualize information in smart cont
 
 We're happy to offer bounties for contributions to Slither! Please review [Gitcoin](https://gitcoin.co/profile/trailofbits) for a list of available bounties.
 
-Upon any new release, Trail of Bits may consider sending a bounty payment to any PR that was not covered by Gitcoin. In these cases, we will send an automated payment to the email in your `git log` via PayPal upon a new release of Slither.
+Upon any new release, Trail of Bits may consider sending a bounty payment to any PR that was not covered by Gitcoin. In these cases, we will send an automated payment to the email in your `git log` via PayPal.
 
 In general, we are interested in and would like to see contributions of:
 * Detector modules for new conditions and vulnerability patterns
