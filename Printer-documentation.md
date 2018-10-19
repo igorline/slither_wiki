@@ -1,18 +1,18 @@
 Slither allows printing contracts information through its printers.
 
-## Quick Summary
-`slither file.sol --printer-quick-summary`
+## Contract Summary
+`slither file.sol --printer-contract-summary`
 
 Output a quick summary of the contract.
 ### Example
 ```
-$ slither examples/printers/quick_summary.sol --printer-quick-summary
+$ slither examples/printers/quick_summary.sol --printer-contract-summary
 ```
 
 <img src="https://raw.githubusercontent.com/trailofbits/slither/master/examples/printers/quick_summary.sol.png?sanitize=true">
 
-## Summary
-`slither file.sol --printer-summary`
+## Function Summary
+`slither file.sol --printer-function-summary`
 
 Output a summary of the contract showing for each function:
 - What are the visibility and the modifiers 
@@ -21,7 +21,7 @@ Output a summary of the contract showing for each function:
 
 ### Example
 ```
-$ slither tests/backdoor.sol --printer-summary
+$ slither tests/backdoor.sol --printer-function-summary
 ```
 ```
 [...]
