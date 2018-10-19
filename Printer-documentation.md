@@ -46,6 +46,12 @@ Inheritances:: []
 `slither file.sol --printer-inheritance`
 
 Output a graph showing the inheritance interaction between the contracts.
+
+This printer requires xdot installed for vizualization:
+```
+sudo apt install xdot
+```
+
 ### Example
 ```
 $ slither examples/printers/inheritances.sol --printer-inheritance
@@ -53,7 +59,12 @@ $ slither examples/printers/inheritances.sol --printer-inheritance
 INFO:PrinterInheritance:Inheritance Graph: examples/DAO.sol.dot
 ```
 
-The output format is [dot](https://www.graphviz.org/) and can be converted to svg using:
+The output format is [dot](https://www.graphviz.org/).
+To vizualize the graph:
+```
+xdot examples/printers/inheritances.sol.dot
+```
+To convert the file to svg:
 ```
 dot examples/printers/inheritances.sol.dot -Tsvg -o examples/printers/inheritances.sol.png
 ```
