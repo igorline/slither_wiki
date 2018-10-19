@@ -3,6 +3,18 @@ Slither translates Solidity an intermediate representation, SlithIR, to enable h
 
 SlithIR is a work in progress, although it is usable today. New developments in SlithIR are driven by needs identified by new detector modules. Please help us bugtest and enhance SlithIR!
 
+## What is an IR?
+
+In language design, compilers often operate on an “intermediate representation” (IR) of a language that carries extra details about the program as it is parsed. For example, a compiler creates a parse tree of a program that represents a program as written. However, the compiler can continue to enrich this tree with information, such as taint information, source location, and other items that could have impacted an item from a control flow perspective. Additionally, languages such as Solidity have inheritance, meaning that functions and methods may be defined outside the scope of a given contract. An IR could linearize these methods, allowing additional transformations and processing of the contract’s source code. 
+
+A demonstrative example would be LLVM’s IR vs C or x86 code. While C will clearly demonstrate a function call, it may be missing details about the underlying system, the path to a location, and so on. Likewise, while an analog to the same call would be clear in x86, this would lose all transient details of which variables and which path an application had taken to arrive at a specific call. LLVM’s IR solves this by abstracting away the specific details of a call instruction, while still capturing the variables, environmental state, and other values that lead to this position. In this way, LLVM can perform additional introspection of the resulting code, and use these analyses to drive other optimizations or information to other passes of the compiler.
+
+## Why Does Slither Translate to an IR?
+
+Solidity itself is an quirky language with a number of edge cases, both in terms of syntax and semantics. By translating to an IR, Slither attempts to normalize many of these quirks, so as to be able to better analyze the contract. For example, Solidity’s grammar defines an array push as a function call to the array. A straightforward representation of this semantic would be indistinguishable from a normal function call. Slither, in contrast, treats array pushes as a specific operation, allowing for further analysis of the accesses to arrays, and their impact to the security of a program. Moreover, the operators in SlithIR have a hierarchy, so, for example in a few lines of code you can track all the operators that write to a variable, which makes it trivial to write precise taint analysis.
+
+Additionally, by translating to an IR, Slither can include non-trivial variable tracking by default. This can build richer representations of contracts, and allow for deeper analysis of potential vulnerabilities. For example, answering the question “can a user control a variable” is central to uncovering more complex vulnerabilities from a static position. Slither will furthermore propagate information from function parameters to program state in an iterative fashion, which captures the control flow of information across potentially multiple transactions. In this way, Slither can enrich information and statically provide a large amount of assurance to contracts that standard vulnerabilities exist and are reachable under certain conditions. 
+
 ## Example
 `$ slither file.sol --printer-slithir` will output the IR for every function.
 
