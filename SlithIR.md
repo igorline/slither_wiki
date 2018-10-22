@@ -128,6 +128,7 @@ Note: The reference points to the memory location
 
 ### Push Operator
 - `PUSH LVALUE RVALUE`
+- `PUSH LVALUE Function` (for dynamic function)
 
 ### Delete Operator
 - `DELETE LVALUE`
