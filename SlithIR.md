@@ -59,14 +59,12 @@ Contract MyContract
 - `ReferenceVariable` (variables added by SlithIR, for mapping/index accesses)
 
 In the following we use:
-- a `LVALUE` can be: `StateVariable`, `LocalVariable`, `TemporaryVariable`, `ReferenceVariable` or `TupleVariable`
-
-- a `RVALUE` can be: `StateVariable`, `LocalVariable`, `Constant`, `SolidityVariable`, `TemporaryVariable` or `ReferenceVariable` 
+- `LVALUE` can be: `StateVariable`, `LocalVariable`, `TemporaryVariable`, `ReferenceVariable` or `TupleVariable`
+- `RVALUE` can be: `StateVariable`, `LocalVariable`, `Constant`, `SolidityVariable`, `TemporaryVariable` or `ReferenceVariable` 
 
 ## Operators
 
 - All the operators inherit from `Operation` and have a `read` attribute returning the list of variables read (see [slither/slithir/operations/operation.py](https://github.com/trailofbits/slither/blob/slithir/slither/slithir/operations/operation.py)).
-
 - All the operators writing to a `LVALUE` inherit from `OperationWithLValue` and have the `lvalue` attribute (see [slither/slithir/operations/lvalue.py](https://github.com/trailofbits/slither/blob/slithir/slither/slithir/operations/lvalue.py)).
 
 ### Assignment
