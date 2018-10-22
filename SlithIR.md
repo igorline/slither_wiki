@@ -116,7 +116,7 @@ Note: The reference points to the memory location
 
 `ARRAY_TYPE` is a [solidity_types](https://github.com/trailofbits/slither/tree/master/slither/core/solidity_types)
 
-`DEPTH` is used for arrays of multi-dimension)
+`DEPTH` is used for arrays of multiple dimensions.
 
 - `LVALUE = NEW_CONTRACT CONSTANT`
 - `LVALUE = NEW_STRUCTURE STRUCTURE`
@@ -142,7 +142,7 @@ TYPE is a [solidity_types](https://github.com/trailofbits/slither/tree/master/sl
 ### Array Initialization
 - `LVALUE = INIT_VALUES`
 
-`INIT_VALUES` is a list of `RVALUE`, or a list of list in case of a multi dimensions array.
+`INIT_VALUES` is a list of `RVALUE`, or a list of lists in case of a multidimensional array.
 
 ### Calls Operators
 
@@ -160,7 +160,7 @@ In the following, `ARG` is a variable as defined in [SlithIR#variables](https://
 - `LVALUE = INTERNAL_CALL FUNCTION [ARG, ..]` 
 - `LVALUE = INTERNAL_DYNAMIC_CALL FUNCTION_TYPE [ARG, ..]` 
 
-`INTERNAL_DYNAMIC_CALL` represent pointer of function.
+`INTERNAL_DYNAMIC_CALL` represents the pointer of function.
 
 `FUNCTION_TYPE` is defined in [slither/core/solidity_types/function_type.py](https://github.com/trailofbits/slither/blob/master/slither/core/solidity_types/function_type.py)
 
@@ -168,7 +168,6 @@ In the following, `ARG` is a variable as defined in [SlithIR#variables](https://
 - `LVALUE = EVENT_CALL EVENT_NAME [ARG, ..]`
 - `LVALUE = SEND DESTINATION VALUE`
 - `TRANSFER DESTINATION VALUE`
-
 
 Optional arguments: 
 - `GAS` and `VALUE` for `HIGH_LEVEL_CALL` / `LOW_LEVEL_CALL`. 
@@ -178,7 +177,7 @@ Optional arguments:
 - `RETURN TUPLE`
 - `RETURN None`
 
-`Return None` represents an empty return statement
+`Return None` represents an empty return statement.
 
 ### Condition
 - `CONDITION RVALUE`
