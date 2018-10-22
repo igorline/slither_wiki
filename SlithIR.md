@@ -9,7 +9,7 @@ In language design, compilers often operate on an “intermediate representation
 
 A demonstrative example would be LLVM’s IR vs C or x86 code. While C will clearly demonstrate a function call, it may be missing details about the underlying system, the path to a location, and so on. Likewise, while an analog to the same call would be clear in x86, this would lose all transient details of which variables and which path an application had taken to arrive at a specific call. LLVM’s IR solves this by abstracting away the specific details of a call instruction, while still capturing the variables, environmental state, and other values that lead to this position. In this way, LLVM can perform additional introspection of the resulting code, and use these analyses to drive other optimizations or information to other passes of the compiler.
 
-## Why Does Slither Translate to an IR?
+## Why does Slither translate to an IR?
 
 Solidity itself is an quirky language with a number of edge cases, both in terms of syntax and semantics. By translating to an IR, Slither attempts to normalize many of these quirks, so as to be able to better analyze the contract. For example, Solidity’s grammar defines an array push as a function call to the array. A straightforward representation of this semantic would be indistinguishable from a normal function call. Slither, in contrast, treats array pushes as a specific operation, allowing for further analysis of the accesses to arrays, and their impact to the security of a program. Moreover, the operators in SlithIR have a hierarchy, so, for example in a few lines of code you can track all the operators that write to a variable, which makes it trivial to write precise taint analysis.
 
