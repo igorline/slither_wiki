@@ -1,7 +1,7 @@
 Let's start with the smallest possible Slither script:
 
 ```python
-from slither.slither import Slither # Requires Slither in PYTHONPATH  
+from slither.slither import Slither  
   
 slither = Slither('file.sol')  
 ```
