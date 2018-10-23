@@ -17,6 +17,7 @@ A Contract object has:
 - `name (str)`: Name of the contract
 - `functions (list(Function))`: List of functions
 - `modifiers (list(Modifier))`: List of functions
+- `all_functions_called (list(Function/Modifier))`: List of all the internal functions reachable by the contract
 - `inheritance (list(Contract))`: List of inherited contracts
 - `get_function_from_signature (str)`: Return a `Function` from its signature
 - `get_modifier_from_signature (str)`: Return a `Modifier` from its signature
