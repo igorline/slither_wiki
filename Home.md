@@ -21,3 +21,9 @@ In general, we are interested in and would like to see contributions of:
 * Architectural and code quality improvements of any kind
 * Bugfixes of any kind
 * 3rd-party writeups and blogs that demonstrate advanced usage of Slither
+
+## Troubleshooting
+
+### FileNotFoundError: [Errno 2] No such file or directory: 'solc'
+
+You may have installed solcjs, not solc. Slither requires solc. Install one of the [binary packages](https://solidity.readthedocs.io/en/v0.4.21/installing-solidity.html#binary-packages), e.g., via apt-get, and Slither will work.
