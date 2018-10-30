@@ -21,6 +21,7 @@ In general, we are interested in and would like to see contributions of:
 * Architectural and code quality improvements of any kind
 * Bugfixes of any kind
 * 3rd-party writeups and blogs that demonstrate advanced usage of Slither
+* Help with any issues labeled "good first issue" or "help wanted"
 
 ## Troubleshooting
 
