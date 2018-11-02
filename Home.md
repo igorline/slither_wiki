@@ -31,4 +31,8 @@ You may have installed solcjs, not solc. Slither requires solc. Install one of t
 
 ### pip: slither-analyzer requires Python '>=3.6' but the running Python is 2.7.15
 
-Slither requires Python3. If you are on macOS, run `brew install python3` then `pip3 install slither-analyzer`.
+Slither requires Python3. If you are on macOS, run:
+```bash
+brew install python3
+pip3 install slither-analyzer
+```
