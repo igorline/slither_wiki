@@ -28,3 +28,7 @@ In general, we are interested in and would like to see contributions of:
 ### FileNotFoundError: [Errno 2] No such file or directory: 'solc'
 
 You may have installed solcjs, not solc. Slither requires solc. Install one of the [binary packages](https://solidity.readthedocs.io/en/v0.4.21/installing-solidity.html#binary-packages), e.g., via apt-get, and Slither will work.
+
+### pip: slither-analyzer requires Python '>=3.6' but the running Python is 2.7.15
+
+Slither requires Python3. If you are on macOS, run `brew install python3` then `pip3 install slither-analyzer`.
