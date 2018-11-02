@@ -71,7 +71,7 @@ dot examples/printers/inheritances.sol.dot -Tsvg -o examples/printers/inheritanc
 
 Functions in orange override a parent's functions. If a variable points to another contract, the contract type is written in blue.
 
-<img src="https://raw.githubusercontent.com/trailofbits/slither/master/examples/printers/inheritances.sol.png?sanitize=true">
+<img src="https://raw.githubusercontent.com/trailofbits/slither/master/examples/printers/inheritances_graph.sol.png?sanitize=true">
 
 ## Variables written and authorization
 `slither file.sol --printers vars-and-auth`
