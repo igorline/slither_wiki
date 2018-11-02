@@ -43,7 +43,7 @@ Inheritances:: []
 ```
 
 ## Inheritance Graph
-`slither file.sol --printer inheritance-graph`
+`slither file.sol --printers inheritance-graph`
 
 Output a graph showing the inheritance interaction between the contracts.
 
