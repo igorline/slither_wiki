@@ -212,13 +212,64 @@ Use the `external` attribute for functions never called from the contract.
 ### Recommendation
 Use the `external` attribute for functions never called from the contract.
 
+## Low level calls	
+* Check: `low-level`
+* Severity: Informational
+* Confidence: High
+
+### Description
+The use of low-level calls is error-prone. Low-level calls do not check for [code existence](https://solidity.readthedocs.io/en/v0.4.25/control-structures.html#error-handling-assert-require-revert-and-exceptions) or call success.
+
+### Recommendation
+Avoid low-level calls. Check the call success. If the call is meant for a contract, check for code existence.
+
+## Conformance to Solidity naming conventions	
+* Check: `naming-convention	`
+* Severity: Informational
+* Confidence: High
+
+### Description
+Solidity defines a [naming convention](https://solidity.readthedocs.io/en/v0.4.25/style-guide.html#naming-conventions) that should be followed.
+Slither accepts the following rule exceptions:
+- Allow constant variables name/symbol/decimals to be lowercase (ERC20)
+- Allow `_` at the beginning of the mixed_case match for private variables and unused parameters
+
+### Recommendation
+Follow the Solidity [naming convention](https://solidity.readthedocs.io/en/v0.4.25/style-guide.html#naming-conventions).
+
+## Different pragma directives are used	
+* Check: `pragma`
+* Severity: Informational
+* Confidence: High
+
+### Description
+Detect if different Solidity versions are used.
+
+### Recommendation
+Use one Solidity version.
 
 
+## Old versions of Solidity 
+* Check: `solc-version`
+* Severity: Informational
+* Confidence: High
 
+### Description
+Solc frequently releases new compiler versions. Using an old version prevent access to new Solidity security checks.
 
+### Recommendation
+Use Solidity >= 0.4.23.
 
+## Unused state variables	
+* Check: `unused-state`
+* Severity: Informational
+* Confidence: High
 
+### Description
+Unused state variable.
 
+### Recommendation
+Remove unused state variables.
 
 
 
