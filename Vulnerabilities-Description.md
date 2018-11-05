@@ -99,7 +99,6 @@ Bob calls `setDestination` and `withdraw`. As a result he withdraws the contract
 ### Recommendation
 Ensure that an arbitrary user cannot withdraw unauthorize funds.
 
-
 ## Reentrancy vulnerabilities	
 * Check: `reentrancy`
 * Severity: High
@@ -124,3 +123,102 @@ Bob uses the re-entrancy bug to call `withdrawBalance` two times, and withdraw m
 
 ### Recommendation
 Apply the [check-effects-interactions pattern](http://solidity.readthedocs.io/en/v0.4.21/security-considerations.html#re-entrancy).
+
+
+## Contracts that lock ether	
+* Check: `locked-ether	`
+* Severity: Medium
+* Confidence: Medium
+
+### Description
+Contract with a `payable` function, but without a withdraw capacity.
+
+### Exploit scenario
+```solidity
+pragma solidity 0.4.24;
+contract Locked{
+    function receive() payable public{
+    }
+}
+```
+Every ethers send to `Locked` will be lost.
+
+### Recommendation
+Remove the payable attribute or add a withdraw function.
+
+## Dangerous usage of `tx.origin`	
+* Check: `tx-origin`
+* Severity: Medium
+* Confidence: Medium
+
+### Description
+`tx.origin`-based protection can be abused by malicious contract if a legitimate user interacts with the malicious contract.
+
+### Exploit scenario
+```solidity
+contract TxOrigin {
+    address owner = msg.sender;
+
+    function bug() {
+        require(tx.origin == owner);
+    }
+```
+Bob is the owner of `TxOrigin`. Bob calls Eve's contract. Eve's contact calls `TxOrigin` and bypass the `tx.origin` protection.
+
+### Recommendation
+Do not use `tx.origin` for authentification.
+
+## Assembly usage		
+* Check: `assembly`
+* Severity: Informational
+* Confidence: High
+
+### Description
+The use of assembly is error-prone and should be avoided.
+
+### Recommendation
+Do not use evm assembly.
+
+## State variables that could be declared constant			
+* Check: `constable-states`
+* Severity: Informational
+* Confidence: High
+
+### Description
+Constant state variable should be declared constant to save gas.
+
+### Recommendation
+Add the `constant` attributes to the state variables that never change.
+
+## Public function that could be declared as external
+* Check: `external-function	`
+* Severity: Informational
+* Confidence: High
+
+### Description
+`public` functions that are never called by the contract should be declared `external` to save gas.
+
+### Recommendation
+Use the `external` attribute for functions never called from the contract.
+
+## Public function that could be declared as external
+* Check: `external-function	`
+* Severity: Informational
+* Confidence: High
+
+### Description
+`public` functions that are never called by the contract should be declared `external` to save gas.
+
+### Recommendation
+Use the `external` attribute for functions never called from the contract.
+
+
+
+
+
+
+
+
+
+
+
