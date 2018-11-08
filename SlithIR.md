@@ -16,7 +16,7 @@ Solidity is a quirky language with a number of edge cases, both in terms of synt
 Additionally, Slither can include non-trivial variable tracking by default by translating to an IR. This can build richer representations of contracts and allow for deeper analysis of potential vulnerabilities. For example, answering the question “can a user control a variable” is central to uncovering more complex vulnerabilities from a static position. Slither will propagate information from function parameters to program state in an iterative fashion, which captures the control flow of information across potentially multiple transactions. In this way, Slither can enrich information and statically provide a large amount of assurance to contracts that standard vulnerabilities exist and are reachable under certain conditions.
 
 ## Example
-`$ slither file.sol --printers slithir` will output the IR for every function.
+`$ slither file.sol --print slithir` will output the IR for every function.
 
 ```
 $ slither examples/printers/slihtir.sol --printers slithir
