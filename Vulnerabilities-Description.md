@@ -19,8 +19,6 @@ Bob calls `kill` and destruct the contract.
 ### Recommendation
 Protect the access to all sensitive functions.
 
-
-
 ## Uninitialized state variables	
 * Check: `uninitialized-state`
 * Severity: High
@@ -167,6 +165,35 @@ Every ethers send to `Locked` will be lost.
 ### Recommendation
 Remove the payable attribute or add a withdraw function.
 
+
+## Constant functions changing the state
+* Check: `constant-functions`
+* Severity: Medium
+* Confidence: Medium
+
+### Description
+Functions declared as `constant`/`pure`/`view` changing the state or using assembly code.
+
+`constant`/`pure`/`view` was not enforced prior Solidity 0.5.
+Starting from Solidity 0.5, a call to a `constant`/`pure`/`view` function uses the `STATICCALL` opcode, which reverts in case of state modification.
+
+As a result, a call to an incorrectly labeled function may trap a contract starting from Solidity 0.5.
+
+### Exploit Scenario
+```solidity
+contract Constant{
+    uint counter;
+    function get() public view returns(uint){
+       counter = counter +1;
+       return counter
+    }
+}
+```
+`Constant` was deployed with Solidity 0.4.25. Bob writes a smart contract interacting with `Constant` in Solidity 0.5.0. 
+All the calls to `get` reverts, breaking Bob's smart contract execution.
+
+### Recommendation
+Ensure that the attributes of contracts compiled prior Solidity 0.5.0 are correct.
 
 
 
