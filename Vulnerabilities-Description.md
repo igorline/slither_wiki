@@ -146,6 +146,9 @@ Every ethers send to `Locked` will be lost.
 ### Recommendation
 Remove the payable attribute or add a withdraw function.
 
+
+
+
 ## Dangerous usage of `tx.origin`	
 * Check: `tx-origin`
 * Severity: Medium
@@ -167,6 +170,29 @@ Bob is the owner of `TxOrigin`. Bob calls Eve's contract. Eve's contact calls `T
 
 ### Recommendation
 Do not use `tx.origin` for authentification.
+
+## Uninitialized local variables	
+* Check: `uninitialized-local`
+* Severity: Medium
+* Confidence: Medium
+
+### Description
+Uninitialized local variables.
+
+### Exploit Scenario
+```solidity
+contract Uninitialized is Owner{
+    function withdraw() payable public onlyOwner{
+        address to;
+        to.transfer(this.balance)
+    }
+}
+```
+Bob calls `transfer`. As a result, the ethers are sent to the address 0x0 and are lost.
+
+### Recommendation
+Initialize all the variables. If a variable is meant to be initialized to zero, explicitly set it to zero.
+
 
 ## Assembly usage		
 * Check: `assembly`
