@@ -99,6 +99,27 @@ Bob calls `setDestination` and `withdraw`. As a result he withdraws the contract
 ### Recommendation
 Ensure that an arbitrary user cannot withdraw unauthorize funds.
 
+## Controlled Delegatecall
+* Check: `controlled-delegatecall`
+* Severity: High
+* Confidence: Medium
+
+### Description
+Delegatecall or callcode to an address controlled by the user.
+
+### Exploit Scenario
+```solidity
+contract Delegatecall{
+    function delegate(address to, bytes data){
+        to.delegatecall(data);
+    }
+}
+```
+Bob calls `delegate` and delegate the execution to its malicious contract. As a result, Bob withdraws the funds of the contract and destruct it.
+
+### Recommendation
+Avoid using `delegatecall`. Use only trusted destinations.
+
 ## Reentrancy vulnerabilities	
 * Check: `reentrancy`
 * Severity: High
