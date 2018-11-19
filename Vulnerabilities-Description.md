@@ -167,7 +167,7 @@ Remove the payable attribute or add a withdraw function.
 
 
 ## Constant functions changing the state
-* Check: `constant-functions`
+* Check: `constant-function`
 * Severity: Medium
 * Confidence: Medium
 
