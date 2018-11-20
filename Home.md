@@ -49,7 +49,7 @@ To install it on macOS, run:
 brew install graphviz
 ```
 
-Additionally, you can open dot files with xdot.
+Additionally, you can open dot files directly with xdot.
 
 To install it on Ubuntu, run:
 ```
