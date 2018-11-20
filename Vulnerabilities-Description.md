@@ -241,6 +241,28 @@ Bob calls `transfer`. As a result, the ethers are sent to the address 0x0 and ar
 ### Recommendation
 Initialize all the variables. If a variable is meant to be initialized to zero, explicitly set it to zero.
 
+## Unused return value	
+* Check: `unused-return`
+* Severity: Medium
+* Confidence: Medium
+
+### Description
+Return value of an external call not stored in a local or state variable.
+
+### Exploit Scenario
+```solidity
+contract MyConc{
+    using SafeMath for uint;   
+    function my_func(uint a, uint b) public{
+        a.add(b);
+    }
+}
+```
+`MyConc` call `add` of safemath, but does not store the result in `a`. As a result, the computation has no effect.
+
+### Recommendation
+Ensure that all the return value of the function call are stored in a local or state variable.
+
 
 ## Assembly usage		
 * Check: `assembly`
