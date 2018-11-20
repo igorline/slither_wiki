@@ -36,3 +36,26 @@ Slither requires Python3. If you are on macOS, run:
 brew install python3
 pip3 install slither-analyzer
 ```
+
+###  dot: command not found
+
+Several printers use the [dot](https://www.graphviz.org/) format.
+To install it on Ubuntu, run:
+```
+apt install graphviz
+```
+To install it on macOS, run:
+```
+brew install graphviz
+```
+
+Additionally, you can open dot files with xdot.
+
+To install it on Ubuntu, run:
+```
+apt install xdot
+```
+To install it on macOS, run:
+```
+brew install xdot
+```
