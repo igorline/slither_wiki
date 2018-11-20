@@ -241,13 +241,13 @@ Bob calls `transfer`. As a result, the ethers are sent to the address 0x0 and ar
 ### Recommendation
 Initialize all the variables. If a variable is meant to be initialized to zero, explicitly set it to zero.
 
-## Unused return value	
+## Unused return
 * Check: `unused-return`
 * Severity: Medium
 * Confidence: Medium
 
 ### Description
-Return value of an external call not stored in a local or state variable.
+The return value of an external call is not stored in a local or state variable.
 
 ### Exploit Scenario
 ```solidity
