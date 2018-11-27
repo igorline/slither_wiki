@@ -3,7 +3,7 @@
 - If possible, there is a `source_mapping` field to match the information to the source code
 
 ## Source mapping format
-In the following, each `source_mapping` field follow this format:
+In the following, each `source_mapping` field follows this format:
 ```
 {
  "filename": "tests/constant.sol",
