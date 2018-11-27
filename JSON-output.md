@@ -20,7 +20,7 @@ In the following, each `source_mapping` field follow this format:
 ## Detectors
 
 ### `pragma`
-```json
+```
 [
     {
         "pragmas": [
