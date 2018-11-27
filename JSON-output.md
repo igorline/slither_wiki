@@ -1,4 +1,8 @@
-## Source mapping example
+## Json Output
+- Each element has a `check` field, which is the slither flag to run the detector
+- If possible, there is a `source_mapping` field to match the information to the source code
+
+## Source mapping format
 In the following, each `source_mapping` field follow this format:
 ```
 {
@@ -15,7 +19,7 @@ In the following, each `source_mapping` field follow this format:
 
 ## Detectors
 
-`pragma`
+### `pragma`
 ```json
 [
     {
@@ -32,7 +36,7 @@ In the following, each `source_mapping` field follow this format:
 ```
 - `pragmas` contains a list
 
-`constant-function`
+### `constant-function`
 ```
 [
     {
