@@ -25,7 +25,7 @@ Bob calls `kill` and destruct the contract.
 ### Recommendation
 Protect the access to all sensitive functions.
 
-## Uninitialized state variables	
+## Uninitialized state variables
 
 ### Configuration
 * Check: `uninitialized-state`
@@ -51,7 +51,7 @@ Bob calls `transfer`. As a result, the ethers are sent to the address 0x0 and ar
 Initialize all the variables. If a variable is meant to be initialized to zero, explicitly set it to zero.
 
 
-## Uninitialized storage variables	
+## Uninitialized storage variables
 
 ### Configuration
 * Check: `uninitialized-storage`
@@ -81,7 +81,7 @@ Bob calls `func`. As a result, `owner` is override to 0.
 ### Recommendation
 Initialize all the storage variables.
 
-## Functions that send ether to arbitrary destinations	
+## Functions that send ether to arbitrary destinations
 
 ### Configuration
 * Check: `arbitrary-send`
@@ -132,7 +132,7 @@ Bob calls `delegate` and delegate the execution to its malicious contract. As a 
 ### Recommendation
 Avoid using `delegatecall`. Use only trusted destinations.
 
-## Reentrancy vulnerabilities	
+## Reentrancy vulnerabilities
 
 ### Configuration
 * Check: `reentrancy`
@@ -160,10 +160,10 @@ Bob uses the re-entrancy bug to call `withdrawBalance` two times, and withdraw m
 Apply the [check-effects-interactions pattern](http://solidity.readthedocs.io/en/v0.4.21/security-considerations.html#re-entrancy).
 
 
-## Contracts that lock ether	
+## Contracts that lock ether
 
 ### Configuration
-* Check: `locked-ether	`
+* Check: `locked-ether`
 * Severity: Medium
 * Confidence: Medium
 
@@ -217,7 +217,7 @@ Ensure that the attributes of contracts compiled prior Solidity 0.5.0 are correc
 
 
 
-## Dangerous usage of `tx.origin`	
+## Dangerous usage of `tx.origin`
 
 ### Configuration
 * Check: `tx-origin`
@@ -241,7 +241,7 @@ Bob is the owner of `TxOrigin`. Bob calls Eve's contract. Eve's contact calls `T
 ### Recommendation
 Do not use `tx.origin` for authentification.
 
-## Uninitialized local variables	
+## Uninitialized local variables
 
 ### Configuration
 * Check: `uninitialized-local`
@@ -290,7 +290,7 @@ contract MyConc{
 Ensure that all the return value of the function call are stored in a local or state variable.
 
 
-## Assembly usage		
+## Assembly usage
 
 ### Configuration
 * Check: `assembly`
@@ -303,7 +303,7 @@ The use of assembly is error-prone and should be avoided.
 ### Recommendation
 Do not use evm assembly.
 
-## State variables that could be declared constant			
+## State variables that could be declared constant
 
 ### Configuration
 * Check: `constable-states`
@@ -319,7 +319,7 @@ Add the `constant` attributes to the state variables that never change.
 ## Public function that could be declared as external
 
 ### Configuration
-* Check: `external-function	`
+* Check: `external-function`
 * Severity: Informational
 * Confidence: High
 
@@ -332,7 +332,7 @@ Use the `external` attribute for functions never called from the contract.
 ## Public function that could be declared as external
 
 ### Configuration
-* Check: `external-function	`
+* Check: `external-function`
 * Severity: Informational
 * Confidence: High
 
@@ -342,7 +342,7 @@ Use the `external` attribute for functions never called from the contract.
 ### Recommendation
 Use the `external` attribute for functions never called from the contract.
 
-## Low level calls	
+## Low level calls
 
 ### Configuration
 * Check: `low-level`
@@ -355,10 +355,10 @@ The use of low-level calls is error-prone. Low-level calls do not check for [cod
 ### Recommendation
 Avoid low-level calls. Check the call success. If the call is meant for a contract, check for code existence.
 
-## Conformance to Solidity naming conventions	
+## Conformance to Solidity naming conventions
 
 ### Configuration
-* Check: `naming-convention	`
+* Check: `naming-convention`
 * Severity: Informational
 * Confidence: High
 
@@ -371,7 +371,7 @@ Solidity defines a [naming convention](https://solidity.readthedocs.io/en/v0.4.2
 ### Recommendation
 Follow the Solidity [naming convention](https://solidity.readthedocs.io/en/v0.4.25/style-guide.html#naming-conventions).
 
-## Different pragma directives are used	
+## Different pragma directives are used
 
 ### Configuration
 * Check: `pragma`
@@ -398,7 +398,7 @@ Solc frequently releases new compiler versions. Using an old version prevent acc
 ### Recommendation
 Use Solidity >= 0.4.23.
 
-## Unused state variables	
+## Unused state variables
 
 ### Configuration
 * Check: `unused-state`
@@ -438,7 +438,7 @@ Bob calls `kill` and destruct the contract.
 ### Recommendation
 Protect the access to all sensitive functions.
 
-## Uninitialized state variables	
+## Uninitialized state variables
 
 ### Configuration
 * Check: `uninitialized-state`
@@ -464,7 +464,7 @@ Bob calls `transfer`. As a result, the ethers are sent to the address 0x0 and ar
 Initialize all the variables. If a variable is meant to be initialized to zero, explicitly set it to zero.
 
 
-## Uninitialized storage variables	
+## Uninitialized storage variables
 
 ### Configuration
 * Check: `uninitialized-storage`
@@ -494,7 +494,7 @@ Bob calls `func`. As a result, `owner` is override to 0.
 ### Recommendation
 Initialize all the storage variables.
 
-## Functions that send ether to arbitrary destinations	
+## Functions that send ether to arbitrary destinations
 
 ### Configuration
 * Check: `arbitrary-send`
@@ -545,7 +545,7 @@ Bob calls `delegate` and delegate the execution to its malicious contract. As a 
 ### Recommendation
 Avoid using `delegatecall`. Use only trusted destinations.
 
-## Reentrancy vulnerabilities	
+## Reentrancy vulnerabilities
 
 ### Configuration
 * Check: `reentrancy`
@@ -573,10 +573,10 @@ Bob uses the re-entrancy bug to call `withdrawBalance` two times, and withdraw m
 Apply the [check-effects-interactions pattern](http://solidity.readthedocs.io/en/v0.4.21/security-considerations.html#re-entrancy).
 
 
-## Contracts that lock ether	
+## Contracts that lock ether
 
 ### Configuration
-* Check: `locked-ether	`
+* Check: `locked-ether`
 * Severity: Medium
 * Confidence: Medium
 
@@ -630,7 +630,7 @@ Ensure that the attributes of contracts compiled prior Solidity 0.5.0 are correc
 
 
 
-## Dangerous usage of `tx.origin`	
+## Dangerous usage of `tx.origin`
 
 ### Configuration
 * Check: `tx-origin`
@@ -654,7 +654,7 @@ Bob is the owner of `TxOrigin`. Bob calls Eve's contract. Eve's contact calls `T
 ### Recommendation
 Do not use `tx.origin` for authentification.
 
-## Uninitialized local variables	
+## Uninitialized local variables
 
 ### Configuration
 * Check: `uninitialized-local`
@@ -703,7 +703,7 @@ contract MyConc{
 Ensure that all the return value of the function call are stored in a local or state variable.
 
 
-## Assembly usage		
+## Assembly usage
 
 ### Configuration
 * Check: `assembly`
@@ -716,7 +716,7 @@ The use of assembly is error-prone and should be avoided.
 ### Recommendation
 Do not use evm assembly.
 
-## State variables that could be declared constant			
+## State variables that could be declared constant
 
 ### Configuration
 * Check: `constable-states`
@@ -732,7 +732,7 @@ Add the `constant` attributes to the state variables that never change.
 ## Public function that could be declared as external
 
 ### Configuration
-* Check: `external-function	`
+* Check: `external-function`
 * Severity: Informational
 * Confidence: High
 
@@ -745,7 +745,7 @@ Use the `external` attribute for functions never called from the contract.
 ## Public function that could be declared as external
 
 ### Configuration
-* Check: `external-function	`
+* Check: `external-function`
 * Severity: Informational
 * Confidence: High
 
@@ -755,7 +755,7 @@ Use the `external` attribute for functions never called from the contract.
 ### Recommendation
 Use the `external` attribute for functions never called from the contract.
 
-## Low level calls	
+## Low level calls
 
 ### Configuration
 * Check: `low-level`
@@ -768,7 +768,7 @@ The use of low-level calls is error-prone. Low-level calls do not check for [cod
 ### Recommendation
 Avoid low-level calls. Check the call success. If the call is meant for a contract, check for code existence.
 
-## Different pragma directives are used	
+## Different pragma directives are used
 
 ### Configuration
 * Check: `pragma`
@@ -795,7 +795,7 @@ Solc frequently releases new compiler versions. Using an old version prevent acc
 ### Recommendation
 Use Solidity >= 0.4.23.
 
-## Unused state variables	
+## Unused state variables
 
 ### Configuration
 * Check: `unused-state`
@@ -807,4 +807,3 @@ Unused state variable.
 
 ### Recommendation
 Remove unused state variables.
-
