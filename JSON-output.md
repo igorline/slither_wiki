@@ -30,6 +30,7 @@ In the following, each `source_mapping` field follow this format:
     }
 ]
 ```
+- `pragmas` contains a list
 
 `constant-function`
 ```
@@ -47,4 +48,5 @@ In the following, each `source_mapping` field follow this format:
     }
 ]
 ```
-> if `contains_assembly`is true, `variables_written` is empty.
+- `variables_written` contains a list
+- if `contains_assembly`is true, `variables_written` is empty.
