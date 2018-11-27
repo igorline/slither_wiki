@@ -1,938 +1,371 @@
-# Public Detectors
-
-List of public detectors
-
-## State variable shadowing
-
-### Configuration
-* Check `shadowing--state`
+## Suicidal
+* Check: `suicidal`
 * Severity: High
 * Confidence: High
 
-### What it Detects
-Detection of state variables shadowed.
+### Description
+Unprotected call to a function executing `selfdestruct`/`suicide` 
 
 ### Exploit Scenario
 ```solidity
-contract BaseContract{
-    address owner;
-
-    modifier isOwner(){
-        require(owner == msg.sender);
-        _;
-    }
-
-}
-
-contract DerivedContract is BaseContract{
-    address owner;
-
-    constructor(){
-        owner = msg.sender;
-    }
-
-    function withdraw() isOwner() external{
-        msg.sender.transfer(this.balance);
+contract Suicidal{
+    function kill() public{
+        selfdestruct(msg.value);
     }
 }
 ```
-`owner` of `BaseContract` is never assigned and the modifier `isOwner` does not work.
+Bob calls `kill` and destruct the contract.
 
 ### Recommendation
-Remove the state variable shadowing
+Protect the access to all sensitive functions.
 
-## Missing constructor
-
-### Configuration
-* Check `missing-constructor`
+## Uninitialized state variables	
+* Check: `uninitialized-state`
 * Severity: High
-* Confidence: Medium
-
-### What it Detects
-Detection of a contract that contains sensitives variables without constructor to initiate them.
-
-### Exploit Scenario
-
-```solidity
-contract Owner{
-
-    address owner;
-
-    function transferOwnership(address newOwner) external{
-        require(owner == msg.sender);
-        owner = newOwner;
-    }
-}
-```
-`owner` is not initialized at construction. As a result it is always 0 and cannot be changed.
-
-### Recommendation
-Initiate the sensitives variables in the constructor.
-
-
-## Missing return statements
-
-### Configuration
-* Check `missing-return`
-* Severity: Medium
-* Confidence: Medium
-
-### What it Detects
-Function with missing return statements
-
-### Exploit Scenario
-```solidity
-    function f(uint a, uint b) external returns(uint){
-        if(a>b){
-            return a;
-        }
-    }
-```
-`f` has an implicit return statement: if `a<=b`, `f` returns 0 (the default value).
-
-
-### Recommendation
-Explicit all return statements. Initiate all the return variables.
-
-## Dangerous strict equalities
-
-### Configuration
-* Check `incorrect-equality`
-* Severity: Medium
 * Confidence: High
 
-### What it Detects
-Use of strick equalities that can be easily manipulated by an attacker.
+### Description
+Uninitialized state variables.
 
 ### Exploit Scenario
 ```solidity
-contract Crowdsale{
-    function fund_reached() public returns(bool){
-        return this.balance == 100 ether;
+contract Uninitialized{
+    address destination;
+
+    function transfer() payable public{
+        destination.transfer(msg.value);
     }
+}
 ```
-`Crowdsale` relies on `fund_reached` to know when to stop the sale of tokens. `Crowdsale` reaches 100 ether. Bob sends 0.1 ether. As a result, `fund_reached` is always false and the crowdsale never ends.
+Bob calls `transfer`. As a result, the ethers are sent to the address 0x0 and are lost.
 
 ### Recommendation
-Don't use strict equality to determine if an account has enough ethers or tokens.
-
-## Controlled Lowlevelcall
-
-### Configuration
-* Check `controlled-lowlevelcall`
-* Severity: Medium
-* Confidence: Medium
-
-### What it Detects
-Low-level call with a user-controlled `data` field. 
-
-### Exploit Scenario
-```solidity
-    address token;
-
-    function call_token(bytes data){
-        token.call(data);
-    }
-```
-`token` points to an ERC20 token. Bob uses `call_token` to call the `transfer` function of `token` to withdraw all the tokens held by the contract.
-
-### Recommendation
-Avoid low-level call. Consider using a whitelist of function ids to call.
+Initialize all the variables. If a variable is meant to be initialized to zero, explicitly set it to zero.
 
 
-## State variable shadowing from abstract contracts
-
-### Configuration
-* Check `shadowing--abstract`
-* Severity: Medium
+## Uninitialized storage variables	
+* Check: `uninitialized-storage`
+* Severity: High
 * Confidence: High
 
-### What it Detects
-Detection of state variables shadowed from abstract contracts.
+### Description
+An uinitialized storage variable will act as a reference to the first state variable, and can override a critical variable.
 
 ### Exploit Scenario
 ```solidity
-contract BaseContract{
-    address owner;
-}
-
-contract DerivedContract is BaseContract{
-    address owner;
-}
-```
-`owner` of `BaseContract` is never assigned.
-
-### Recommendation
-Remove the state variable shadowing
-
-## Race conditions at contract's initialization
-
-### Configuration
-* Check `race-condition-init`
-* Severity: High
-* Confidence: Medium
-
-### What it Detects
-Detect race condition at contract's initialization.
-
-### Exploit Scenario
-```solidity
-pragma solidity ^0.4.24;
-
-contract Bug{
-
-    bool was_init = false;
-    address owner;
-
-    constructor(){}
-
-    function init() not_init{
-        was_init = true;
-        owner = msg.sender;
-    }
-
-    modifier onlyOwner(){
-        require(msg.sender == owner);
-        _;
-    }
-
-    modifier not_init(){
-        require(!was_init);
-        _;
-    }
-}
-```
-Alice deploys `Bug`. Alice calls `init()`. Bob sees Alice's transaction before it has been accepted. Bob calls `init()`. Bob's transaction is accepted before Alice's one. As a result, Bob becomes the owner of the contract.
-
-### Recommendation
-Call the initialization function in the contract's constructor.
-
-Upgradable contracts using the delegatecall proxy pattern need an initialization function. Ensure that your deployment script is robust to a race condition during the contract upgrade.
-
-## Unprotected ecrecover leading to a race condition
-
-### Configuration
-* Check `race-condition-ecrecover`
-* Severity: High
-* Confidence: Medium
-
-### What it Detects
-Detect incorrect usage of `ecrecover` leading to a race condition.
-
-### Exploit Scenario
-```solidity
-    mapping(address => bool) valid_signer;
-
-    function bad(bytes code, uint8 recoveryByte, bytes32 ecdsaR, bytes32 ecdsaS){
-        bytes32 msghash = keccak256(code);
-        
-        address signer = ecrecover(msghash, recoveryByte, ecdsaR, ecdsaS);
-
-        require(signer!=0);
-        require(valid_signer[signer]);
-
-        msg.sender.transfer(this.balance);
-    }
-```
-Alice calls `bad`. Bob sees Alice's transaction before it has been accepted and calls `bad` with the same parameters. As a result, Bob can withdraw the contract's balance.
-
-
-### Recommendation
-Protect `ecrecover` against race condition. 
-In the previous example, you can build `msghash` with the `msg.sender` value:
-```solidity
-bytes32 msghash = keccak256(msg.sender, code);
-```
-
-## Unprotected functions
-
-### Configuration
-* Check `unprotected-function`
-* Severity: High
-* Confidence: Medium
-
-### What it Detects
-Detect function that should be protected.
-
-### Exploit Scenario
-```solidity
-contract Bug{
+contract Uninitialized{
     address owner = msg.sender;
 
-    function setOwner() external{
-        owner = msg.sender;
+    struct St{
+        uint a;
     }
 
-    modifier isOwner(){
-        require(owner == msg.sender);
-        _;
-    }
+    function func() {
+        St st;
+        st.a = 0x0;
+    }    
 }
 ```
-Alice deploys the contract. Bob calls `setOwner` and becomes the owner of the contract.
+Bob calls `func`. As a result, `owner` is override to 0.
 
 ### Recommendation
-Protect functions writing to sensitive state variables.
+Initialize all the storage variables.
 
-## Unimplemented functions
-
-### Configuration
-* Check `unimplemented`
-* Severity: Medium
-* Confidence: Medium
-
-### What it Detects
-Detect functions with empty body
-
-### Exploit Scenario
-```solidity
-contract BaseContract{
-    function f1() external returns(uint){}
-    function f2() external returns(uint){}
-}
-
-contract DerivedContract is BaseContract{
-    function f1() external returns(uint){
-        return 42;
-    }
-}
-```
-`DerivedContract` does not overide `f2`. As a result, `f2` will always return 0.
-
-### Recommendation
-Do not declare functions with an empty body. Favor [interface](https://solidity.readthedocs.io/en/latest/contracts.html##interfaces) over abstract contract.
-
-
-## Overflow in ERC20 Balance
-
-### Configuration
-* Check `unprotected-erc20-balance`
+## Functions that send ether to arbitrary destinations	
+* Check: `arbitrary-send`
 * Severity: High
 * Confidence: Medium
 
-### What it Detects
-ERC20 balance is modified without checking for overflow.
+### Description
+Unprotected call to a function executing sending ethers to an arbitrary address.
 
 ### Exploit Scenario
 ```solidity
-    function transfer(address to, uint256 value) external returns (bool){
-        balanceOf[msg.sender] -= value;
-        balanceOf[to] += value;
-        return true;
-    }
-```
-Alice has 100 tokens. She transfers 101 tokens to Bob. As a result, Alice has an infinite amount of tokens.
-
-### Recommendation
-Use `SafeMath`. If `SafeMath` is not used, check manually for overflow.
-
-## Overflow in ERC20 Allowance
-
-### Configuration
-* Check `unprotected-erc20-allowance`
-* Severity: Medium
-* Confidence: Medium
-
-### What it Detects
-ERC20 allowance is modified without checking for overflow.
-
-### Exploit Scenario
-```solidity
-    function buggyDecreaseApproval(address spender, uint value) external{
-        allowance[msg.sender][spender] -= value;
-    }
-```
-`buggyDecreaseApproval` decreases the allowance without checking for overflow. 
-Alice approves Bob 100 tokens. Alice wants to reduce the allowance of 10 and call `buggyDecreaseApproval` with a `value` of 10. Bob already spent the 100 tokens. As a result, Bob has a large number for the allowance.
-
-### Recommendation
-Use `SafeMath`. If `SafeMath` is not used, check manually for overflow.
-
-## Lack of msg.sender usage in transferFrom
-
-### Configuration
-* Check `incorrect-transferFrom`
-* Severity: Medium
-* Confidence: Medium
-
-### What it Detects
-`transferFrom` is not using `msg.sender` to decrease the allowance.
-
-### Exploit Scenario
-```solidity
-    function transferFrom(address from, address to, uint256 value) external returns (bool){
-        require(balanceOf[from] >= value);
-        require(allowance[from] >= value);
-
-        balanceOf[from] -= value;
-        balanceOf[to] -= value;
-        return true;
-    }
-```
-`transferFrom` decrease the allowance of `from` instead of the `msg.sender`. As a result, anyone can transfer the tokens to the destination.
-
-### Recommendation
-Use `msg.sender` in `transferFrom`
-
-## msg.value usage on non payable functions
-
-### Configuration
-* Check `msg-value`
-* Severity: Medium
-* Confidence: Medium
-
-### What it Detects
-If a function uses `msg.value` it should be `payable`. `msg.value` will always be 0 otherwise.
-
-### Exploit Scenario
-```solidity
-pragma solidity ^0.4.24;
-
-contract NonPayable{
-
-    mapping(address => uint) balances;
-
-    function buy() external{
-        balances[msg.sender] += msg.value;
+contract ArbitrarySend{
+    address destination;
+    function setDestination(){
+        destination = msg.sender; 
     }
 
-}
-```
-`buy` is not `payable`. As a result, nobody can buy tokens.
-
-### Recommendation
-Add the `payable` attribute to the functions using `msg.value`
-
-## Incorrect erc20 interface
-
-### Configuration
-* Check `erc20-interface`
-* Severity: Medium
-* Confidence: High
-### What it Detects
-Lack of return value for the ERC20 `approve`/`transfer`/`transferFrom` functions. A contract compiled with solidity > 0.4.22 interacting with these functions will fail to execute them, as the return value is missing.
-
-### Exploit Scenario
-```solidity
-contract Token{
-    function transfer(address to, uint value) external;
-    //...
-}
-```
-`Token.transfer` does not return a boolean. Bob deploys the token. Alice creates a contract that interacts with it but assumes a correct ERC20 interface implementation. Alice's contract is unable to interact with Bob's contract.
-
-### Recommendation
-Return a boolean for the `approve`/`transfer`/`transferFrom` functions. 
-
-
-## Deletion on mapping containing a structure
-
-### Configuration
-* Check `mapping-deletion`
-* Severity: Medium
-* Confidence: High
-
-### What it Detects
-A deletion on a structure containing a mapping will not delete the mapping (see the [Solidity documentation](https://solidity.readthedocs.io/en/latest/types.html##delete)). The remaining data may be used to compromise the contract.
-
-### Exploit Scenario
-```solidity
-    struct BalancesStruct{
-        address owner;
-        mapping(address => uint) balances;
-    } 
-    mapping(address => BalancesStruct) public stackBalance;
-
-    function remove() internal{
-         delete stackBalance[msg.sender];
-    }
-```
-`remove` delete an item of `stackBalance`. The mapping `balances` is never deleted. As a result, `remove` does not work as intended.
-
-### Recommendation
-Use of lock-mechanism instead of a deletion to disable structure containing a mapping.
-
-## Variable names too similar
-
-### Configuration
-* Check `similar-names`
-* Severity: Informational
-* Confidence: Medium
-
-
-### What it Detects
-Detect variables with names too similar.
-
-### Exploit Scenario
-Bob uses several variables with similar names. As a result, its code is difficult to review.
-
-### Recommendation
-Prevent variables to have similar names.
-## State variable shadowing
-
-### Configuration
-* Check `shadowing--state`
-* Severity: High
-* Confidence: High
-
-### What it Detects
-Detection of state variables shadowed.
-
-### Exploit Scenario
-```solidity
-contract BaseContract{
-    address owner;
-
-    modifier isOwner(){
-        require(owner == msg.sender);
-        _;
-    }
-
-}
-
-contract DerivedContract is BaseContract{
-    address owner;
-
-    constructor(){
-        owner = msg.sender;
-    }
-
-    function withdraw() isOwner() external{
-        msg.sender.transfer(this.balance);
+    function withdraw() public{
+        destination.transfer(this.balance);
     }
 }
 ```
-`owner` of `BaseContract` is never assigned and the modifier `isOwner` does not work.
+Bob calls `setDestination` and `withdraw`. As a result he withdraws the contract's balance.
 
 ### Recommendation
-Remove the state variable shadowing
+Ensure that an arbitrary user cannot withdraw unauthorize funds.
 
-## Missing constructor
-
-### Configuration
-* Check `missing-constructor`
+## Controlled Delegatecall
+* Check: `controlled-delegatecall`
 * Severity: High
 * Confidence: Medium
 
-### What it Detects
-Detection of a contract that contains sensitives variables without constructor to initiate them.
+### Description
+Delegatecall or callcode to an address controlled by the user.
 
 ### Exploit Scenario
-
 ```solidity
-contract Owner{
-
-    address owner;
-
-    function transferOwnership(address newOwner) external{
-        require(owner == msg.sender);
-        owner = newOwner;
+contract Delegatecall{
+    function delegate(address to, bytes data){
+        to.delegatecall(data);
     }
 }
 ```
-`owner` is not initialized at construction. As a result it is always 0 and cannot be changed.
+Bob calls `delegate` and delegate the execution to its malicious contract. As a result, Bob withdraws the funds of the contract and destruct it.
 
 ### Recommendation
-Initiate the sensitives variables in the constructor.
+Avoid using `delegatecall`. Use only trusted destinations.
 
-
-## Missing return statements
-
-### Configuration
-* Check `missing-return`
-* Severity: Medium
+## Reentrancy vulnerabilities	
+* Check: `reentrancy`
+* Severity: High
 * Confidence: Medium
 
-### What it Detects
-Function with missing return statements
+### Description
+Detection of the [re-entrancy bug](https://github.com/trailofbits/not-so-smart-contracts/tree/master/reentrancy).
 
-### Exploit Scenario
+### Exploit scenario
 ```solidity
-    function f(uint a, uint b) external returns(uint){
-        if(a>b){
-            return a;
+    function withdrawBalance(){
+        // send userBalance[msg.sender] ethers to msg.sender
+        // if mgs.sender is a contract, it will call its fallback function
+        if( ! (msg.sender.call.value(userBalance[msg.sender])() ) ){
+            throw;
         }
-    }
+        userBalance[msg.sender] = 0;
+    }   
 ```
-`f` has an implicit return statement: if `a<=b`, `f` returns 0 (the default value).
 
+Bob uses the re-entrancy bug to call `withdrawBalance` two times, and withdraw more than its initial deposit to the contract.
 
 ### Recommendation
-Explicit all return statements. Initiate all the return variables.
+Apply the [check-effects-interactions pattern](http://solidity.readthedocs.io/en/v0.4.21/security-considerations.html#re-entrancy).
 
-## Dangerous strict equalities
 
-### Configuration
-* Check `incorrect-equality`
-* Severity: Medium
-* Confidence: High
-
-### What it Detects
-Use of strick equalities that can be easily manipulated by an attacker.
-
-### Exploit Scenario
-```solidity
-contract Crowdsale{
-    function fund_reached() public returns(bool){
-        return this.balance == 100 ether;
-    }
-```
-`Crowdsale` relies on `fund_reached` to know when to stop the sale of tokens. `Crowdsale` reaches 100 ether. Bob sends 0.1 ether. As a result, `fund_reached` is always false and the crowdsale never ends.
-
-### Recommendation
-Don't use strict equality to determine if an account has enough ethers or tokens.
-
-## Controlled Lowlevelcall
-
-### Configuration
-* Check `controlled-lowlevelcall`
+## Contracts that lock ether	
+* Check: `locked-ether	`
 * Severity: Medium
 * Confidence: Medium
 
-### What it Detects
-Low-level call with a user-controlled `data` field. 
+### Description
+Contract with a `payable` function, but without a withdraw capacity.
 
-### Exploit Scenario
+### Exploit scenario
 ```solidity
-    address token;
-
-    function call_token(bytes data){
-        token.call(data);
+pragma solidity 0.4.24;
+contract Locked{
+    function receive() payable public{
     }
+}
 ```
-`token` points to an ERC20 token. Bob uses `call_token` to call the `transfer` function of `token` to withdraw all the tokens held by the contract.
+Every ethers send to `Locked` will be lost.
 
 ### Recommendation
-Avoid low-level call. Consider using a whitelist of function ids to call.
+Remove the payable attribute or add a withdraw function.
 
 
-## State variable shadowing from abstract contracts
-
-### Configuration
-* Check `shadowing--abstract`
+## Constant functions changing the state
+* Check: `constant-function`
 * Severity: Medium
-* Confidence: High
-
-### What it Detects
-Detection of state variables shadowed from abstract contracts.
-
-The difference with the `shadowing--state` detector is that the variable is shadowed from an abstract contract, decreasing the issue impact.
-
-### Exploit Scenario
-```solidity
-contract BaseContract{
-    address owner;
-}
-
-contract DerivedContract is BaseContract{
-    address owner;
-}
-```
-`owner` of `BaseContract` is never assigned.
-
-### Recommendation
-Remove the state variable shadowing
-
-## Race conditions at contract's initialization
-
-### Configuration
-* Check `race-condition-init`
-* Severity: High
 * Confidence: Medium
 
-### What it Detects
-Detect race condition at contract's initialization.
+### Description
+Functions declared as `constant`/`pure`/`view` changing the state or using assembly code.
+
+`constant`/`pure`/`view` was not enforced prior Solidity 0.5.
+Starting from Solidity 0.5, a call to a `constant`/`pure`/`view` function uses the `STATICCALL` opcode, which reverts in case of state modification.
+
+As a result, a call to an [incorrectly labeled function may trap a contract compiled with Solidity 0.5](https://solidity.readthedocs.io/en/develop/050-breaking-changes.html#interoperability-with-older-contracts).
 
 ### Exploit Scenario
 ```solidity
-pragma solidity ^0.4.24;
-
-contract Bug{
-
-    bool was_init = false;
-    address owner;
-
-    constructor(){}
-
-    function init() not_init{
-        was_init = true;
-        owner = msg.sender;
-    }
-
-    modifier onlyOwner(){
-        require(msg.sender == owner);
-        _;
-    }
-
-    modifier not_init(){
-        require(!was_init);
-        _;
+contract Constant{
+    uint counter;
+    function get() public view returns(uint){
+       counter = counter +1;
+       return counter
     }
 }
 ```
-Alice deploys `Bug`. Alice calls `init()`. Bob sees Alice's transaction before it has been accepted. Bob calls `init()`. Bob's transaction is accepted before Alice's one. As a result, Bob becomes the owner of the contract.
+`Constant` was deployed with Solidity 0.4.25. Bob writes a smart contract interacting with `Constant` in Solidity 0.5.0. 
+All the calls to `get` reverts, breaking Bob's smart contract execution.
 
 ### Recommendation
-Call the initialization function in the contract's constructor.
+Ensure that the attributes of contracts compiled prior Solidity 0.5.0 are correct.
 
-Upgradable contracts using the delegatecall proxy pattern need an initialization function. Ensure that your deployment script is robust to a race condition during the contract upgrade.
 
-## Unprotected ecrecover leading to a race condition
 
-### Configuration
-* Check `race-condition-ecrecover`
-* Severity: High
+## Dangerous usage of `tx.origin`	
+* Check: `tx-origin`
+* Severity: Medium
 * Confidence: Medium
 
-### What it Detects
-Detect incorrect usage of `ecrecover` leading to a race condition.
+### Description
+`tx.origin`-based protection can be abused by malicious contract if a legitimate user interacts with the malicious contract.
 
-### Exploit Scenario
+### Exploit scenario
 ```solidity
-    mapping(address => bool) valid_signer;
-
-    function bad(bytes code, uint8 recoveryByte, bytes32 ecdsaR, bytes32 ecdsaS){
-        bytes32 msghash = keccak256(code);
-        
-        address signer = ecrecover(msghash, recoveryByte, ecdsaR, ecdsaS);
-
-        require(signer!=0);
-        require(valid_signer[signer]);
-
-        msg.sender.transfer(this.balance);
-    }
-```
-Alice calls `bad`. Bob sees Alice's transaction before it has been accepted and calls `bad` with the same parameters. As a result, Bob can withdraw the contract's balance.
-
-
-### Recommendation
-Protect `ecrecover` against race condition. 
-In the previous example, you can build `msghash` with the `msg.sender` value:
-```solidity
-bytes32 msghash = keccak256(msg.sender, code);
-```
-
-## Unprotected functions
-
-### Configuration
-* Check `unprotected-function`
-* Severity: High
-* Confidence: Medium
-
-### What it Detects
-Detect function that should be protected.
-
-### Exploit Scenario
-```solidity
-contract Bug{
+contract TxOrigin {
     address owner = msg.sender;
 
-    function setOwner() external{
-        owner = msg.sender;
+    function bug() {
+        require(tx.origin == owner);
     }
-
-    modifier isOwner(){
-        require(owner == msg.sender);
-        _;
-    }
-}
 ```
-Alice deploys the contract. Bob calls `setOwner` and becomes the owner of the contract.
+Bob is the owner of `TxOrigin`. Bob calls Eve's contract. Eve's contact calls `TxOrigin` and bypass the `tx.origin` protection.
 
 ### Recommendation
-Protect functions writing to sensitive state variables.
+Do not use `tx.origin` for authentification.
 
-## Unimplemented functions
-
-### Configuration
-* Check `unimplemented`
+## Uninitialized local variables	
+* Check: `uninitialized-local`
 * Severity: Medium
 * Confidence: Medium
 
-### What it Detects
-Detect functions with empty body
+### Description
+Uninitialized local variables.
 
 ### Exploit Scenario
 ```solidity
-contract BaseContract{
-    function f1() external returns(uint){}
-    function f2() external returns(uint){}
-}
-
-contract DerivedContract is BaseContract{
-    function f1() external returns(uint){
-        return 42;
+contract Uninitialized is Owner{
+    function withdraw() payable public onlyOwner{
+        address to;
+        to.transfer(this.balance)
     }
 }
 ```
-`DerivedContract` does not overide `f2`. As a result, `f2` will always return 0.
+Bob calls `transfer`. As a result, the ethers are sent to the address 0x0 and are lost.
 
 ### Recommendation
-Do not declare functions with an empty body. Favor [interface](https://solidity.readthedocs.io/en/latest/contracts.html##interfaces) over abstract contract.
+Initialize all the variables. If a variable is meant to be initialized to zero, explicitly set it to zero.
 
-
-## Overflow in ERC20 Balance
-
-### Configuration
-* Check `unprotected-erc20-balance`
-* Severity: High
-* Confidence: Medium
-
-### What it Detects
-ERC20 balance is modified without checking for overflow.
-
-### Exploit Scenario
-```solidity
-    function transfer(address to, uint256 value) external returns (bool){
-        balanceOf[msg.sender] -= value;
-        balanceOf[to] += value;
-        return true;
-    }
-```
-Alice has 100 tokens. She transfers 101 tokens to Bob. As a result, Alice has an infinite amount of tokens.
-
-### Recommendation
-Use `SafeMath`. If `SafeMath` is not used, check manually for overflow.
-
-## Overflow in ERC20 Allowance
-
-### Configuration
-* Check `unprotected-erc20-allowance`
+## Unused return
+* Check: `unused-return`
 * Severity: Medium
 * Confidence: Medium
 
-### What it Detects
-ERC20 allowance is modified without checking for overflow.
+### Description
+The return value of an external call is not stored in a local or state variable.
 
 ### Exploit Scenario
 ```solidity
-    function buggyDecreaseApproval(address spender, uint value) external{
-        allowance[msg.sender][spender] -= value;
+contract MyConc{
+    using SafeMath for uint;   
+    function my_func(uint a, uint b) public{
+        a.add(b);
     }
-```
-`buggyDecreaseApproval` decreases the allowance without checking for overflow. 
-Alice approves Bob 100 tokens. Alice wants to reduce the allowance of 10 and call `buggyDecreaseApproval` with a `value` of 10. Bob already spent the 100 tokens. As a result, Bob has a large number for the allowance.
-
-### Recommendation
-Use `SafeMath`. If `SafeMath` is not used, check manually for overflow.
-
-## Lack of msg.sender usage in transferFrom
-
-### Configuration
-* Check `incorrect-transferFrom`
-* Severity: Medium
-* Confidence: Medium
-
-### What it Detects
-`transferFrom` is not using `msg.sender` to decrease the allowance.
-
-### Exploit Scenario
-```solidity
-    function transferFrom(address from, address to, uint256 value) external returns (bool){
-        require(balanceOf[from] >= value);
-        require(allowance[from] >= value);
-
-        balanceOf[from] -= value;
-        balanceOf[to] -= value;
-        return true;
-    }
-```
-`transferFrom` decrease the allowance of `from` instead of the `msg.sender`. As a result, anyone can transfer the tokens to the destination.
-
-### Recommendation
-Use `msg.sender` in `transferFrom`
-
-## msg.value usage on non payable functions
-
-### Configuration
-* Check `msg-value`
-* Severity: Medium
-* Confidence: Medium
-
-### What it Detects
-If a function uses `msg.value` it should be `payable`. `msg.value` will always be 0 otherwise.
-
-### Exploit Scenario
-```solidity
-pragma solidity ^0.4.24;
-
-contract NonPayable{
-
-    mapping(address => uint) balances;
-
-    function buy() external{
-        balances[msg.sender] += msg.value;
-    }
-
 }
 ```
-`buy` is not `payable`. As a result, nobody can buy tokens.
+`MyConc` call `add` of safemath, but does not store the result in `a`. As a result, the computation has no effect.
 
 ### Recommendation
-Add the `payable` attribute to the functions using `msg.value`
-
-## Incorrect erc20 interface
-
-### Configuration
-* Check `erc20-interface`
-* Severity: Medium
-* Confidence: High
-### What it Detects
-Lack of return value for the ERC20 `approve`/`transfer`/`transferFrom` functions. A contract compiled with solidity > 0.4.22 interacting with these functions will fail to execute them, as the return value is missing.
-
-### Exploit Scenario
-```solidity
-contract Token{
-    function transfer(address to, uint value) external;
-    //...
-}
-```
-`Token.transfer` does not return a boolean. Bob deploys the token. Alice creates a contract that interacts with it but assumes a correct ERC20 interface implementation. Alice's contract is unable to interact with Bob's contract.
-
-### Recommendation
-Return a boolean for the `approve`/`transfer`/`transferFrom` functions. 
+Ensure that all the return value of the function call are stored in a local or state variable.
 
 
-## Deletion on mapping containing a structure
-
-### Configuration
-* Check `mapping-deletion`
-* Severity: Medium
-* Confidence: High
-
-### What it Detects
-A deletion on a structure containing a mapping will not delete the mapping (see the [Solidity documentation](https://solidity.readthedocs.io/en/latest/types.html##delete)). The remaining data may be used to compromise the contract.
-
-### Exploit Scenario
-```solidity
-    struct BalancesStruct{
-        address owner;
-        mapping(address => uint) balances;
-    } 
-    mapping(address => BalancesStruct) public stackBalance;
-
-    function remove() internal{
-         delete stackBalance[msg.sender];
-    }
-```
-`remove` delete an item of `stackBalance`. The mapping `balances` is never deleted. As a result, `remove` does not work as intended.
-
-### Recommendation
-Use of lock-mechanism instead of a deletion to disable structure containing a mapping.
-
-## Variable names too similar
-
-### Configuration
-* Check `similar-names`
+## Assembly usage		
+* Check: `assembly`
 * Severity: Informational
-* Confidence: Medium
+* Confidence: High
 
-
-### What it Detects
-Detect variables with names too similar.
-
-### Exploit Scenario
-Bob uses several variables with similar names. As a result, its code is difficult to review.
+### Description
+The use of assembly is error-prone and should be avoided.
 
 ### Recommendation
-Prevent variables to have similar names.
+Do not use evm assembly.
+
+## State variables that could be declared constant			
+* Check: `constable-states`
+* Severity: Informational
+* Confidence: High
+
+### Description
+Constant state variable should be declared constant to save gas.
+
+### Recommendation
+Add the `constant` attributes to the state variables that never change.
+
+## Public function that could be declared as external
+* Check: `external-function	`
+* Severity: Informational
+* Confidence: High
+
+### Description
+`public` functions that are never called by the contract should be declared `external` to save gas.
+
+### Recommendation
+Use the `external` attribute for functions never called from the contract.
+
+## Public function that could be declared as external
+* Check: `external-function	`
+* Severity: Informational
+* Confidence: High
+
+### Description
+`public` functions that are never called by the contract should be declared `external` to save gas.
+
+### Recommendation
+Use the `external` attribute for functions never called from the contract.
+
+## Low level calls	
+* Check: `low-level`
+* Severity: Informational
+* Confidence: High
+
+### Description
+The use of low-level calls is error-prone. Low-level calls do not check for [code existence](https://solidity.readthedocs.io/en/v0.4.25/control-structures.html#error-handling-assert-require-revert-and-exceptions) or call success.
+
+### Recommendation
+Avoid low-level calls. Check the call success. If the call is meant for a contract, check for code existence.
+
+## Conformance to Solidity naming conventions	
+* Check: `naming-convention	`
+* Severity: Informational
+* Confidence: High
+
+### Description
+Solidity defines a [naming convention](https://solidity.readthedocs.io/en/v0.4.25/style-guide.html#naming-conventions) that should be followed.
+Slither accepts the following rule exceptions:
+- Allow constant variables name/symbol/decimals to be lowercase (ERC20)
+- Allow `_` at the beginning of the mixed_case match for private variables and unused parameters
+
+### Recommendation
+Follow the Solidity [naming convention](https://solidity.readthedocs.io/en/v0.4.25/style-guide.html#naming-conventions).
+
+## Different pragma directives are used	
+* Check: `pragma`
+* Severity: Informational
+* Confidence: High
+
+### Description
+Detect if different Solidity versions are used.
+
+### Recommendation
+Use one Solidity version.
+
+
+## Old versions of Solidity 
+* Check: `solc-version`
+* Severity: Informational
+* Confidence: High
+
+### Description
+Solc frequently releases new compiler versions. Using an old version prevent access to new Solidity security checks.
+
+### Recommendation
+Use Solidity >= 0.4.23.
+
+## Unused state variables	
+* Check: `unused-state`
+* Severity: Informational
+* Confidence: High
+
+### Description
+Unused state variable.
+
+### Recommendation
+Remove unused state variables.
+
+
+
