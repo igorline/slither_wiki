@@ -1,3 +1,20 @@
+## Source mapping example
+
+```
+{
+ "filename": "tests/constant.sol",
+ "length": 58,
+ "lines": [
+   5,
+   6,
+   7
+ ],
+ "start": 45
+}
+
+## Detectors
+
+```
 `pragma`
 ```json
 [
@@ -22,16 +39,7 @@
         "contains_assembly": false,
         "function": {
             "name": "test_view_bug",
-            "source_mapping": {
-                "filename": "tests/constant.sol",
-                "length": 58,
-                "lines": [
-                    5,
-                    6,
-                    7
-                ],
-                "start": 45
-            }
+            "source_mapping": { .. }
         },
         "variables_written": [
             "a"
