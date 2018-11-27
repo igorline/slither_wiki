@@ -70,3 +70,19 @@ In the following, each `source_mapping` field follows this format:
 ]
 ```
 - `functions_payable` contains a list
+
+### `solc-version`
+```
+[
+    {
+        "check": "solc-version",
+        "pragmas": [
+            {
+                "source_mapping": {...},
+                "version": "0.4.21"
+            }
+        ]
+    }
+]
+```
+- `pragmas` contains a list
