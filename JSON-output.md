@@ -1,5 +1,5 @@
 ## Source mapping example
-
+In the following, each `source_mapping` field follow this format:
 ```
 {
  "filename": "tests/constant.sol",
