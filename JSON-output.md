@@ -13,10 +13,10 @@
 }
 ```
 
-`pragma`
-```
 ## Detectors
-json
+
+`pragma`
+```json
 [
     {
         "pragmas": [
