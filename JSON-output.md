@@ -54,3 +54,19 @@ In the following, each `source_mapping` field follow this format:
 ```
 - `variables_written` contains a list
 - if `contains_assembly`is true, `variables_written` is empty.
+
+### `locked-ether`
+```
+[
+    {
+        "check": "locked-ether",
+        "functions_payable": [
+            {
+                "name": "receive",
+                "source_mapping": {...}
+            }
+        ]
+    }
+]
+```
+- `functions_payable` contains a list
