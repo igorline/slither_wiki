@@ -1,3 +1,24 @@
+## Controlled Lowlevelcall
+* Check: `controlled-lowlevelcall`
+* Severity: Medium
+* Confidence: Medium
+
+### Description
+Low-level call with a user-controlled `data` field. 
+
+### Exploit Scenario
+```solidity
+    address token;
+
+    function call_token(bytes data){
+        token.call(data);
+    }
+```
+`token` points to a ERC20 token. Bob uses `call_token` to call the `transfer` function of `token` to withdraw all the tokens hold by the contract.
+
+### Recommendation
+Avoid low level call. Consider using a whiltelist of function ids to call.
+
 ## Suicidal
 * Check: `suicidal`
 * Severity: High
