@@ -11,12 +11,12 @@
  ],
  "start": 45
 }
-
-## Detectors
-
 ```
+
 `pragma`
-```json
+```
+## Detectors
+json
 [
     {
         "pragmas": [
