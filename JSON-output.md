@@ -131,3 +131,31 @@ In the following, each `source_mapping` field follows this format:
     }
 ]
 ```
+
+### `naming-convention`
+```
+{
+        "check": "naming-convention",
+        "convention": "CapWords",
+        "name": {
+            "name": "contract_name",
+            "source_mapping": {...},
+        "type": "contract"
+    }
+]
+```
+- `convention` can be:
+  - `CapWords`
+  - `mixedCase`
+  - `l_O_I_should_not_be_used`
+  - `UPPER_CASE_WITH_UNDERSCORES`
+- `type` can be:
+  - `contract`
+  - `structure`
+  - `event`
+  - `function`
+  - `variable`
+  - `variable_constant`
+  - `parameter`
+  - `enum`
+  - `modifier`
