@@ -257,3 +257,24 @@ In the following, each `source_mapping` field follows this format:
 ]
 ```
 - `assembly` contains a list
+
+###  `controlled-delegatecall`
+
+```
+[
+    {
+        "check": "controlled-delegatecall",
+        "controlled_delegatecalls": [
+            {
+                "expression": "addr_bad.delegatecall(func_id,data)",
+                "source_mapping": {...}
+            }
+        ],
+        "function": {
+            "name": "bad_delegate_call2",
+            "source_mapping": {...}
+        }
+    }
+]
+```
+- `controlled_delegatecalls` contains a list
