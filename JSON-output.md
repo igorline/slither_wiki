@@ -179,3 +179,24 @@ In the following, each `source_mapping` field follows this format:
 ]
 ```
 - `nodes_with_assembly` contains a list
+
+### `unused-return`
+
+```
+[
+    {
+        "check": "unused-return",
+        "function": {
+            "name": "test",
+            "source_mapping": {...}
+        },
+        "unused_returns": [
+            {
+                "expression": "a.add(0)",
+                "source_mapping": {...}
+            }
+        ]
+    }
+]
+```
+- `unused_returns` contains a list
