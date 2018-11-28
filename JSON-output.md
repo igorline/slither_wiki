@@ -118,3 +118,16 @@ In the following, each `source_mapping` field follows this format:
     }
 }
 ```
+
+### `suicidal`
+```
+[
+    {
+        "check": "suicidal",
+        "function": {
+            "name": "i_am_a_backdoor",
+            "source_mapping": {...}
+        }
+    }
+]
+```
