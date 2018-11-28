@@ -279,7 +279,7 @@ In the following, each `source_mapping` field follows this format:
 ```
 - `controlled_delegatecalls` contains a list
 
-###
+### `tx-origin`
 ```
 [
     {
