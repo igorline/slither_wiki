@@ -86,3 +86,23 @@ In the following, each `source_mapping` field follows this format:
 ]
 ```
 - `pragmas` contains a list
+
+### `arbitrary-send`
+```
+[
+    {
+        "check": "arbitrary-send",
+        "dangerous_calls": [
+            {
+                "source_mapping": {...}
+            }
+        ],
+        "function": {
+            "name": "direct",
+            "source_mapping": {...}
+        }
+    }
+]
+```
+- `dangerous_calls` contains a list
+
