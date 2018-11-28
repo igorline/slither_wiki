@@ -238,3 +238,22 @@ In the following, each `source_mapping` field follows this format:
 - `variables_written` contains a list
 - `external_calls_sending_eth` can be empty
 
+### `assembly`
+
+```
+[
+    {
+        "assembly": [
+            {
+                "source_mapping": {...}
+            }
+        ],
+        "check": "assembly",
+        "function": {
+            "name": "at",
+            "source_mapping": {...}
+        }
+    }
+]
+```
+- `assembly` contains a list
