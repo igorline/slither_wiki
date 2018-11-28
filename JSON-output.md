@@ -296,3 +296,21 @@ In the following, each `source_mapping` field follows this format:
 ]
 ```
 - `tx_origin` contains a list
+
+### `constable-states`
+
+```
+[
+    {
+        "check": "constable-states",
+        "variables": [
+            {
+                "contract": "A",
+                "name": "myFriendsAddress",
+                "source_mapping": {.. }
+            }
+        ]
+    }
+]
+```
+- `variables` contains a list
