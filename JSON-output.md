@@ -200,3 +200,40 @@ In the following, each `source_mapping` field follows this format:
 ]
 ```
 - `unused_returns` contains a list
+
+### `reentrancy`
+```
+[
+    {
+        "check": "reentrancy",
+        "external_calls": [
+            {
+                "expression": "! (msg.sender.call.value(userBalance[msg.sender])())",
+                "source_mapping": {...}
+            }
+        ],
+        "external_calls_sending_eth": [
+            {
+                "expression": "! (msg.sender.call.value(userBalance[msg.sender])())",
+                "source_mapping": {...}
+            }
+        ],
+        "function": {
+            "name": "withdrawBalance",
+            "source_mapping": {...}
+        },
+        "variables_written": [
+            {
+                "expression": "userBalance[msg.sender] = 0",
+                "name": "userBalance",
+                "source_mapping": {...}
+            }
+        ]
+    }
+]
+```
+- `external_calls` contains a list
+- `external_calls_sending_eth` contains a list
+- `variables_written` contains a list
+- `external_calls_sending_eth` can be empty
+
