@@ -278,3 +278,21 @@ In the following, each `source_mapping` field follows this format:
 ]
 ```
 - `controlled_delegatecalls` contains a list
+
+###
+```
+[
+    {
+        "check": "tx-origin",
+        "function": {...}
+        },
+        "tx_origin": [
+            {
+                "expression": "require(bool)(tx.origin == owner)",
+                "source_mapping": {...}
+            }
+        ]
+    }
+]
+```
+- `tx_origin` contains a list
