@@ -106,3 +106,15 @@ In the following, each `source_mapping` field follows this format:
 ```
 - `dangerous_calls` contains a list
 
+### `external-function`
+```
+[
+    {
+        "check": "external-function",
+        "function": {
+            "name": "myfunc",
+            "source_mapping": {..}
+        }
+    }
+}
+```
