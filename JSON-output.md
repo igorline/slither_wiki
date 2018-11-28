@@ -134,7 +134,8 @@ In the following, each `source_mapping` field follows this format:
 
 ### `naming-convention`
 ```
-{
+[
+    {
         "check": "naming-convention",
         "convention": "CapWords",
         "name": {
