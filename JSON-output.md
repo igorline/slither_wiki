@@ -170,15 +170,16 @@ In the following, each `source_mapping` field follows this format:
             "name": "send",
             "source_mapping": {...}
         },
-        "nodes_with_assembly": [
+        "low_level_calls": [
             {
+                "expression": "_receiver.call.value(msg.value).gas(7777)()",
                 "source_mapping": {...}
             }
         ]
     }
 ]
 ```
-- `nodes_with_assembly` contains a list
+- `low_level_calls` contains a list
 
 ### `unused-return`
 
