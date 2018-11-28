@@ -160,3 +160,22 @@ In the following, each `source_mapping` field follows this format:
   - `parameter`
   - `enum`
   - `modifier`
+
+### `low-level-calls`
+```
+[
+    {
+        "check": "low-level-calls",
+        "function": {
+            "name": "send",
+            "source_mapping": {...}
+        },
+        "nodes_with_assembly": [
+            {
+                "source_mapping": {...}
+            }
+        ]
+    }
+]
+```
+- `nodes_with_assembly` contains a list
