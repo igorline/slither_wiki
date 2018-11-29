@@ -23,10 +23,10 @@ In the following, each `source_mapping` field follows this format:
 ```
 [
     {
-        "pragmas": [
+        "expressions": [
             {
                 "source_mapping": {...},
-                "version": "^0.4.23"
+                "expression": "^0.4.23"
             }, 
             ...
         ],
@@ -46,21 +46,21 @@ In the following, each `source_mapping` field follows this format:
             "name": "test_view_bug",
             "source_mapping": { .. }
         },
-        "variables_written": [
+        "variables": [
             "a"
         ]
     }
 ]
 ```
-- `variables_written` contains a list
-- if `contains_assembly`is true, `variables_written` is empty.
+- `variables` contains a list
+- if `contains_assembly`is true, `variables` is empty.
 
 ### `locked-ether`
 ```
 [
     {
         "check": "locked-ether",
-        "functions_payable": [
+        "functions": [
             {
                 "name": "receive",
                 "source_mapping": {...}
@@ -76,10 +76,10 @@ In the following, each `source_mapping` field follows this format:
 [
     {
         "check": "solc-version",
-        "pragmas": [
+        "expressions": [
             {
                 "source_mapping": {...},
-                "version": "0.4.21"
+                "expression": "0.4.21"
             }
         ]
     }
@@ -92,7 +92,7 @@ In the following, each `source_mapping` field follows this format:
 [
     {
         "check": "arbitrary-send",
-        "dangerous_calls": [
+        "expressions": [
             {
                 "source_mapping": {...}
             }
@@ -170,7 +170,7 @@ In the following, each `source_mapping` field follows this format:
             "name": "send",
             "source_mapping": {...}
         },
-        "low_level_calls": [
+        "expressions": [
             {
                 "expression": "_receiver.call.value(msg.value).gas(7777)()",
                 "source_mapping": {...}
@@ -179,7 +179,6 @@ In the following, each `source_mapping` field follows this format:
     }
 ]
 ```
-- `low_level_calls` contains a list
 
 ### `unused-return`
 
@@ -191,7 +190,7 @@ In the following, each `source_mapping` field follows this format:
             "name": "test",
             "source_mapping": {...}
         },
-        "unused_returns": [
+        "expressions": [
             {
                 "expression": "a.add(0)",
                 "source_mapping": {...}
@@ -200,7 +199,6 @@ In the following, each `source_mapping` field follows this format:
     }
 ]
 ```
-- `unused_returns` contains a list
 
 ### `reentrancy`
 ```
@@ -223,7 +221,7 @@ In the following, each `source_mapping` field follows this format:
             "name": "withdrawBalance",
             "source_mapping": {...}
         },
-        "variables_written": [
+        "variables": [
             {
                 "expression": "userBalance[msg.sender] = 0",
                 "name": "userBalance",
@@ -235,7 +233,7 @@ In the following, each `source_mapping` field follows this format:
 ```
 - `external_calls` contains a list
 - `external_calls_sending_eth` contains a list
-- `variables_written` contains a list
+- `variables` contains a list
 - `external_calls_sending_eth` can be empty
 
 ### `assembly`
@@ -264,7 +262,7 @@ In the following, each `source_mapping` field follows this format:
 [
     {
         "check": "controlled-delegatecall",
-        "controlled_delegatecalls": [
+        "expressions": [
             {
                 "expression": "addr_bad.delegatecall(func_id,data)",
                 "source_mapping": {...}
@@ -286,7 +284,7 @@ In the following, each `source_mapping` field follows this format:
         "check": "tx-origin",
         "function": {...}
         },
-        "tx_origin": [
+        "expressions": [
             {
                 "expression": "require(bool)(tx.origin == owner)",
                 "source_mapping": {...}
@@ -305,7 +303,6 @@ In the following, each `source_mapping` field follows this format:
         "check": "constable-states",
         "variables": [
             {
-                "contract": "A",
                 "name": "myFriendsAddress",
                 "source_mapping": {.. }
             }
