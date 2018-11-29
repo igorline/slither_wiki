@@ -151,7 +151,6 @@ Ex:
   - `modifier`
 
 ### `low-level-calls`
-```
 - `check`
 - `expressions`
 - `function`
