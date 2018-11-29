@@ -1,11 +1,13 @@
-## Json Output
-- Each element has a `check` field, which is the slither flag to run the detector
-- If possible, there is a `source_mapping` field to match the information to the source code
-
-## Source mapping format
-In the following, each `source_mapping` field follows this format:
+## Standard fields
+### `check`
 ```
-{
+"check": "slither_flag"
+```
+Each element has a `check` field, which is the slither flag to run the detector
+
+### `source_mapping`
+```
+"source_mapping": {
  "filename": "tests/constant.sol",
  "length": 58,
  "lines": [
@@ -17,120 +19,107 @@ In the following, each `source_mapping` field follows this format:
 }
 ```
 
-## Detectors
+### `expressions`
 
-### `pragma`
 ```
-[
-    {
         "expressions": [
             {
                 "source_mapping": {...},
-                "expression": "^0.4.23"
+                "expression": "the expression..."
             }, 
             ...
         ],
-        "vuln": "pragma"
-    }
-]
 ```
-- `pragmas` contains a list
+- `expressions` is a list
+
+### `function`
+```
+        "function": {
+           { "name": "function_name",
+            "source_mapping": { .. }
+            }
+        },
+```
+
+
+### `functions`
+```
+        "functions": {
+           [
+           { "name": "function_name",
+            "source_mapping": { .. }}
+            ]
+        },
+```
+- `functions` is a list
+
+
+### `variables`
+```
+        "variables": [
+            {
+                "name": "userBalance",
+                "source_mapping": {...}
+            }
+```
+- `variables` is a list
+
+
+
+## Detectors
+
+### `pragma`
+- `check`
+- `expressions`
 
 ### `constant-function`
+- `check`
+- `expressions`
+- `function`
+- `variables`
+- `countains_assembly`: `boolean`
+- if `contains_assembly`is true, `variables` is empty.
+
+Ex: 
 ```
 [
     {
         "check": "constant-function",
         "contains_assembly": false,
-        "function": {
+        "functions": [ {
             "name": "test_view_bug",
             "source_mapping": { .. }
-        },
+        }],
         "variables": [
-            "a"
+            "name": "test_view_bug",
+            "source_mapping": { .. }
         ]
     }
 ]
 ```
-- `variables` contains a list
-- if `contains_assembly`is true, `variables` is empty.
 
 ### `locked-ether`
-```
-[
-    {
-        "check": "locked-ether",
-        "functions": [
-            {
-                "name": "receive",
-                "source_mapping": {...}
-            }
-        ]
-    }
-]
-```
-- `functions_payable` contains a list
+- `check`
+- `functions`
 
 ### `solc-version`
-```
-[
-    {
-        "check": "solc-version",
-        "expressions": [
-            {
-                "source_mapping": {...},
-                "expression": "0.4.21"
-            }
-        ]
-    }
-]
-```
-- `pragmas` contains a list
+- `check`
+- `expressions`
+
 
 ### `arbitrary-send`
-```
-[
-    {
-        "check": "arbitrary-send",
-        "expressions": [
-            {
-                "source_mapping": {...}
-            }
-        ],
-        "function": {
-            "name": "direct",
-            "source_mapping": {...}
-        }
-    }
-]
-```
-- `dangerous_calls` contains a list
+- `check`
+- `expressions`
+- `function`
 
 ### `external-function`
-```
-[
-    {
-        "check": "external-function",
-        "function": {
-            "name": "myfunc",
-            "source_mapping": {..}
-        }
-    }
-}
-```
+- `check`
+- `function`
+
 
 ### `suicidal`
-```
-[
-    {
-        "check": "suicidal",
-        "function": {
-            "name": "i_am_a_backdoor",
-            "source_mapping": {...}
-        }
-    }
-]
-```
+- `check`
+- `function`
 
 ### `naming-convention`
 ```
@@ -163,42 +152,14 @@ In the following, each `source_mapping` field follows this format:
 
 ### `low-level-calls`
 ```
-[
-    {
-        "check": "low-level-calls",
-        "function": {
-            "name": "send",
-            "source_mapping": {...}
-        },
-        "expressions": [
-            {
-                "expression": "_receiver.call.value(msg.value).gas(7777)()",
-                "source_mapping": {...}
-            }
-        ]
-    }
-]
-```
+- `check`
+- `expressions`
+- `function`
 
 ### `unused-return`
-
-```
-[
-    {
-        "check": "unused-return",
-        "function": {
-            "name": "test",
-            "source_mapping": {...}
-        },
-        "expressions": [
-            {
-                "expression": "a.add(0)",
-                "source_mapping": {...}
-            }
-        ]
-    }
-]
-```
+- `check`
+- `expressions`
+- `function`
 
 ### `reentrancy`
 ```
@@ -257,57 +218,15 @@ In the following, each `source_mapping` field follows this format:
 - `assembly` contains a list
 
 ###  `controlled-delegatecall`
-
-```
-[
-    {
-        "check": "controlled-delegatecall",
-        "expressions": [
-            {
-                "expression": "addr_bad.delegatecall(func_id,data)",
-                "source_mapping": {...}
-            }
-        ],
-        "function": {
-            "name": "bad_delegate_call2",
-            "source_mapping": {...}
-        }
-    }
-]
-```
-- `controlled_delegatecalls` contains a list
+- `check`
+- `expressions`
+- `function`
 
 ### `tx-origin`
-```
-[
-    {
-        "check": "tx-origin",
-        "function": {...}
-        },
-        "expressions": [
-            {
-                "expression": "require(bool)(tx.origin == owner)",
-                "source_mapping": {...}
-            }
-        ]
-    }
-]
-```
-- `tx_origin` contains a list
+- `check`
+- `expressions`
+- `function`
 
 ### `constable-states`
-
-```
-[
-    {
-        "check": "constable-states",
-        "variables": [
-            {
-                "name": "myFriendsAddress",
-                "source_mapping": {.. }
-            }
-        ]
-    }
-]
-```
-- `variables` contains a list
+- `check`
+- `variables`
