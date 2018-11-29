@@ -54,6 +54,15 @@ Each element has a `check` field, which is the slither flag to run the detector
 - `functions` is a list
 
 
+### `variable`
+```
+        "variable": 
+            {
+                "name": "userBalance",
+                "source_mapping": {...}
+            }
+```
+
 ### `variables`
 ```
         "variables": [
@@ -61,6 +70,7 @@ Each element has a `check` field, which is the slither flag to run the detector
                 "name": "userBalance",
                 "source_mapping": {...}
             }
+        ]
 ```
 - `variables` is a list
 
@@ -68,17 +78,32 @@ Each element has a `check` field, which is the slither flag to run the detector
 
 ## Detectors
 
-### `pragma`
-- `check`
-- `expressions`
+Num | Detector                  | `check` | `function` | `functions` | `variable` | `variables` | `expressions` | Extra 
+--- | ---                       | :---:   | :---:      | :---:       | :---:       | :---:       | :---:         |  --- 
+1 | `suicidal`                  |    X    |     X      |             |             |             |               |  
+2 | `uninitialized-state`       |    X    |            |     X       |    X        |             |               | 
+3 | `uninitialized-storage`     |    X    |     X      |             |    X        |             |               | 
+4 | `arbitrary-send`            |    X    |     X      |             |             |             |      X        | 
+5 | `controlled-delegatecall`   |    X    |     X      |             |             |             |      X        | 
+6 | `reentrancy`                |    X    |            |             |             |             |               | Yes 
+7 | `locked-ether`              |    X    |     X      |             |             |             |               | 
+8 | `constant-function`         |    X    |     X      |             |    X        |             |     X         | Yes
+9 | `tx-origin`                 |    X    |     X      |             |             |             |     X         | 
+10 | `uninitialized-local`      |    X    |     X      |             |    X        |             |               | 
+11 | `unused-return`            |    X    |     X      |             |             |             |     X         | 
+12 | `assembly`                 |    X    |     X      |             |             |             |               | Yes
+13 | `constable-states`         |    X    |     X      |             |             |     X       |               | 
+14 | `external-function`        |    X    |     X      |             |             |             |               | 
+15 | `low-level-calls`          |    X    |     X      |             |             |             |     X         | 
+16 | `naming-convention`        |    X    |            |             |             |             |               | Yes
+17 | `pragma`                   |    X    |            |             |             |             |     X         | 
+18 | `solc-version`             |    X    |            |             |             |             |     X         | 
+19 | `unused-state`             |    X    |            |             |             |     X       |               |                 
+
+## Exceptions
 
 ### `constant-function`
-- `check`
-- `expressions`
-- `function`
-- `variables`
-- `countains_assembly`: `boolean`
-- if `contains_assembly`is true, `variables` is empty.
+The additional field is the boolean `contain_assembly`
 
 Ex: 
 ```
@@ -97,29 +122,8 @@ Ex:
     }
 ]
 ```
+- if `contains_assembly`is true, `variables` is empty.
 
-### `locked-ether`
-- `check`
-- `functions`
-
-### `solc-version`
-- `check`
-- `expressions`
-
-
-### `arbitrary-send`
-- `check`
-- `expressions`
-- `function`
-
-### `external-function`
-- `check`
-- `function`
-
-
-### `suicidal`
-- `check`
-- `function`
 
 ### `naming-convention`
 ```
@@ -150,15 +154,6 @@ Ex:
   - `enum`
   - `modifier`
 
-### `low-level-calls`
-- `check`
-- `expressions`
-- `function`
-
-### `unused-return`
-- `check`
-- `expressions`
-- `function`
 
 ### `reentrancy`
 ```
@@ -181,7 +176,7 @@ Ex:
             "name": "withdrawBalance",
             "source_mapping": {...}
         },
-        "variables": [
+        "variables_written": [
             {
                 "expression": "userBalance[msg.sender] = 0",
                 "name": "userBalance",
@@ -216,16 +211,3 @@ Ex:
 ```
 - `assembly` contains a list
 
-###  `controlled-delegatecall`
-- `check`
-- `expressions`
-- `function`
-
-### `tx-origin`
-- `check`
-- `expressions`
-- `function`
-
-### `constable-states`
-- `check`
-- `variables`
