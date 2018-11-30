@@ -32,6 +32,15 @@ Each element has a `check` field, which is the slither flag to run the detector
 ```
 - `expressions` is a list
 
+
+### `contract`
+```
+        "contract": {
+           { "name": "contract_name",
+            "source_mapping": { .. }
+            }
+        },
+```
 ### `function`
 ```
         "function": {
@@ -74,31 +83,27 @@ Each element has a `check` field, which is the slither flag to run the detector
 ```
 - `variables` is a list
 
-
-
-## Detectors
-
-Num | Detector                  | `check` | `function` | `functions` | `variable` | `variables` | `expressions` | Extra 
---- | ---                       | :---:   | :---:      | :---:       | :---:       | :---:       | :---:         |  --- 
-1 | `suicidal`                  |    X    |     X      |             |             |             |               |  
-2 | `uninitialized-state`       |    X    |            |     X       |    X        |             |               | 
-3 | `uninitialized-storage`     |    X    |     X      |             |    X        |             |               | 
-4 | `arbitrary-send`            |    X    |     X      |             |             |             |      X        | 
-5 | `controlled-delegatecall`   |    X    |     X      |             |             |             |      X        | 
-6 | `reentrancy`                |    X    |            |             |             |             |               | Yes 
-7 | `locked-ether`              |    X    |     X      |             |             |             |               | 
-8 | `constant-function`         |    X    |     X      |             |    X        |             |     X         | Yes
-9 | `tx-origin`                 |    X    |     X      |             |             |             |     X         | 
-10 | `uninitialized-local`      |    X    |     X      |             |    X        |             |               | 
-11 | `unused-return`            |    X    |     X      |             |             |             |     X         | 
-12 | `assembly`                 |    X    |     X      |             |             |             |               | Yes
-13 | `constable-states`         |    X    |     X      |             |             |     X       |               | 
-14 | `external-function`        |    X    |     X      |             |             |             |               | 
-15 | `low-level-calls`          |    X    |     X      |             |             |             |     X         | 
-16 | `naming-convention`        |    X    |            |             |             |             |               | Yes
-17 | `pragma`                   |    X    |            |             |             |             |     X         | 
-18 | `solc-version`             |    X    |            |             |             |             |     X         | 
-19 | `unused-state`             |    X    |            |             |             |     X       |               |                 
+Num | Detector                  | `check` | `contract` | `function` | `functions` | `variable` | `variables` | `expressions` | Extra 
+--- | ---                       | :---:   | :---:      | :---:      | :---:       | :---:       | :---:       | :---:         |  --- 
+1 | `suicidal`                  |    X    |            |     X      |             |             |             |               |  
+2 | `uninitialized-state`       |    X    |            |            |     X       |    X        |             |               | 
+3 | `uninitialized-storage`     |    X    |            |     X      |             |    X        |             |               | 
+4 | `arbitrary-send`            |    X    |            |     X      |             |             |             |      X        | 
+5 | `controlled-delegatecall`   |    X    |            |     X      |             |             |             |      X        | 
+6 | `reentrancy`                |    X    |            |            |             |             |             |               | Yes 
+7 | `locked-ether`              |    X    |     X      |     X      |             |             |             |               | 
+8 | `constant-function`         |    X    |            |     X      |             |    X        |             |     X         | Yes
+9 | `tx-origin`                 |    X    |            |     X      |             |             |             |     X         | 
+10 | `uninitialized-local`      |    X    |            |     X      |             |    X        |             |               | 
+11 | `unused-return`            |    X    |            |     X      |             |             |             |     X         | 
+12 | `assembly`                 |    X    |            |     X      |             |             |             |               | Yes
+13 | `constable-states`         |    X    |            |            |             |             |     X       |               | 
+14 | `external-function`        |    X    |            |     X      |             |             |             |               | 
+15 | `low-level-calls`          |    X    |     X      |     X      |             |             |             |     X         | 
+16 | `naming-convention`        |    X    |            |            |             |             |             |               | Yes
+17 | `pragma`                   |    X    |            |            |             |             |             |     X         | 
+18 | `solc-version`             |    X    |            |            |             |             |             |     X         | 
+19 | `unused-state`             |    X    |            |            |             |             |     X       |               |                 
 
 ## Exceptions
 
@@ -210,4 +215,3 @@ Ex:
 ]
 ```
 - `assembly` contains a list
-
