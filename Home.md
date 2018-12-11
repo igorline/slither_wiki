@@ -62,4 +62,6 @@ brew install xdot
 
 ###  `KeyError` or `NoneType` Error
 Truffle does not handle projects where two different contracts share the same name (see https://github.com/trufflesuite/truffle/issues/1087). 
-If slither fails to run, ensure that all the contracts have a unique name.
+If slither fails to run:
+- Ensure that all the contracts have a unique name.
+- Remove the `build` directory to remove any previous truffle files
