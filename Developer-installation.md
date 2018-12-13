@@ -1,4 +1,4 @@
-Use [virtualenv](https://virtualenvwrapper.readthedocs.io/en/latest/) to install a developer version of Slither (up-to-date with https://github.com/trailofbits/slither):
+Use [virtualenv](https://virtualenvwrapper.readthedocs.io/en/latest/) to install a developer version of Slither (up-to-date with `master`):
 ```
 pip3 install virtualenvwrapper
 source /usr/local/bin/virtualenvwrapper.sh
