@@ -1,4 +1,4 @@
-To use a developer version of slither (up-to-date with https://github.com/trailofbits/slither), we recommend to use python virtualenv:
+To use a developer version of slither (up-to-date with https://github.com/trailofbits/slither), we recommend to use python [virtualenv](https://virtualenvwrapper.readthedocs.io/en/latest/):
 ```
 pip3 install virtualenvwrapper
 source /usr/local/bin/virtualenvwrapper.sh
