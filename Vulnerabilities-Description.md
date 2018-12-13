@@ -2,6 +2,45 @@
 
 List of public detectors
 
+## State variable shadowing
+
+### Configuration
+* Check: `shadowing--state`
+* Severity: High
+* Confidence: High
+
+### What it Detects
+Detection of state variables shadowed.
+
+### Exploit Scenario
+```solidity
+contract BaseContract{
+    address owner;
+
+    modifier isOwner(){
+        require(owner == msg.sender);
+        _;
+    }
+
+}
+
+contract DerivedContract is BaseContract{
+    address owner;
+
+    constructor(){
+        owner = msg.sender;
+    }
+
+    function withdraw() isOwner() external{
+        msg.sender.transfer(this.balance);
+    }
+}
+```
+`owner` of `BaseContract` is never assigned and the modifier `isOwner` does not work.
+
+### Recommendation
+Remove the state variable shadowing
+
 ## Suicidal
 
 ### Configuration
@@ -183,6 +222,31 @@ Every ethers send to `Locked` will be lost.
 ### Recommendation
 Remove the payable attribute or add a withdraw function.
 
+
+## State variable shadowing from abstract contracts
+
+### Configuration
+* Check: `shadowing--abstract`
+* Severity: Medium
+* Confidence: High
+
+### What it Detects
+Detection of state variables shadowed from abstract contracts.
+
+### Exploit Scenario
+```solidity
+contract BaseContract{
+    address owner;
+}
+
+contract DerivedContract is BaseContract{
+    address owner;
+}
+```
+`owner` of `BaseContract` is shadowed in `DerivedContract`.
+
+### Recommendation
+Remove the state variable shadowing
 
 ## Constant functions changing the state
 
