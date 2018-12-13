@@ -353,6 +353,19 @@ contract MyConc{
 ### Recommendation
 Ensure that all the return value of the function call are stored in a local or state variable.
 
+## Block timestamp
+
+### Configuration
+* Check: `timestamp`
+* Severity: Low
+* Confidence: Medium
+
+### Description
+Dangerous usage of `block.timestamp`. `block.timestamp` can be manipulated by miners. 
+
+### Recommendation
+Avoid to rely on `block.timestamp`.
+
 
 ## Assembly usage
 
