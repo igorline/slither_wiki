@@ -1,4 +1,4 @@
-To use a developer version of slither (up-to-date with https://github.com/trailofbits/slither), we recommend to use python [virtualenv](https://virtualenvwrapper.readthedocs.io/en/latest/):
+Install a developer version of Slither (up-to-date with https://github.com/trailofbits/slither) with [virtualenv](https://virtualenvwrapper.readthedocs.io/en/latest/):
 ```
 pip3 install virtualenvwrapper
 source /usr/local/bin/virtualenvwrapper.sh
@@ -8,10 +8,9 @@ cd slither
 python setup.py develop
 ```
 
-Then on any terminal, run
+Start a shell with the Slither virtual environment by running:
 ```
 workon slither-dev
 ```
-To have a shell with a virtual python environment where slither is installed.
 
-To update slither, simply run `git pull` from the slither directory.
+Update Slither by running `git pull` from the slither directory.
