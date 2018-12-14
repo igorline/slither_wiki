@@ -280,7 +280,7 @@ All the calls to `get` reverts, breaking Bob's smart contract execution.
 Ensure that the attributes of contracts compiled prior Solidity 0.5.0 are correct.
 
 
-
+ 
 ## Dangerous usage of `tx.origin`
 
 ### Configuration
@@ -353,6 +353,39 @@ contract MyConc{
 ### Recommendation
 Ensure that all the return value of the function call are stored in a local or state variable.
 
+## Calls inside a loop
+
+### Configuration
+* Check: `calls-loop`
+* Severity: Low
+* Confidence: Medium
+
+### Description
+Calls inside a loop might lead to denial of service attack  
+
+### Exploit Scenario
+```
+contract CallsInLoop{
+
+    address[] destinations;
+
+    constructor(address[] newDestinations) public{
+        destinations = newDestinations;
+    }
+
+    function bad() external{
+        for (uint i=0; i < destinations.length; i++){
+            destinations[i].transfer(i);
+        }
+    }
+
+}
+```
+If one of the destinations has a fallback function which reverts, `bad` will always revert.
+
+### Recommendation
+Favor [pull over push](https://github.com/ethereum/wiki/wiki/Safety#favor-pull-over-push-for-external-calls) strategy for external calls.
+
 ## Block timestamp
 
 ### Configuration
@@ -364,7 +397,7 @@ Ensure that all the return value of the function call are stored in a local or s
 Dangerous usage of `block.timestamp`. `block.timestamp` can be manipulated by miners. 
 
 ### Recommendation
-Avoid to rely on `block.timestamp`.
+Avoid relying on `block.timestamp`.
 
 
 ## Assembly usage
