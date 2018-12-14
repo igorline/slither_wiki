@@ -364,7 +364,7 @@ Ensure that all the return value of the function call are stored in a local or s
 Calls inside a loop might lead to denial of service attack  
 
 ### Exploit Scenario
-```
+```solidity
 contract CallsInLoop{
 
     address[] destinations;
