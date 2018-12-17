@@ -41,11 +41,11 @@ An `AbstractDetector` object has the `slither` attribute, which returns the curr
 # Integration
 
 You can integrate your detector into Slither by:
-- Adding it in [slither/detectors](https://github.com/trailofbits/slither/tree/20b8fdb7bc9227abe3c9c3a769f59eb5d1338849/slither/detectors) and in [__main__.py#L92-L108](https://github.com/trailofbits/slither/blob/20b8fdb7bc9227abe3c9c3a769f59eb5d1338849/slither/__main__.py#L92-L108)
-- or, by creating a plugin package (see the [skeleton example](https://github.com/trailofbits/slither/tree/0d1bbbebad52affcc8f6ee5855ab16e3b6bbbc74/plugin_example)).
+- Adding it in [slither/detectors](https://github.com/trailofbits/slither/tree/20b8fdb7bc9227abe3c9c3a769f59eb5d1338849/slither/detectors) and in [__main__.py#L105-160](https://github.com/trailofbits/slither/blob/8f91c801c0bb903990c4fc9fa30611f157c6b0f9/slither/__main__.py#L105-L160)
+- or, by creating a plugin package (see the [skeleton example](https://github.com/trailofbits/slither/tree/8f91c801c0bb903990c4fc9fa30611f157c6b0f9/plugin_example)).
 
 ## Test the detector
-If you want to add your detector to [trailofbits/slither](https://github.com/trailofbits/slither), create a unit-test in [tests](https://github.com/trailofbits/slither/tree/master/tests) and update [scripts/travis_test.sh](https://github.com/trailofbits/slither/blob/master/scripts/travis_test.sh#L56) to run the unit-test automatically.
+If you want to add your detector to [trailofbits/slither](https://github.com/trailofbits/slither), create a unit-test in [tests](https://github.com/trailofbits/slither/tree/master/tests) and update [scripts/travis_test_4.sh](https://github.com/trailofbits/slither/blob/master/scripts/travis_test_4.sh#L92) to run the unit-test automatically.
 
 [deepdiff](https://github.com/seperman/deepdiff) is needed to run `travis_test.sh`:
 ```
