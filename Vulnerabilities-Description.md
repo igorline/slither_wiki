@@ -62,7 +62,7 @@ contract Suicidal{
 Bob calls `kill` and destruct the contract.
 
 ### Recommendation
-Protect the access to all sensitive functions.
+Protect access to all sensitive functions.
 
 ## Uninitialized state variables
 
@@ -147,6 +147,28 @@ Bob calls `setDestination` and `withdraw`. As a result he withdraws the contract
 
 ### Recommendation
 Ensure that an arbitrary user cannot withdraw unauthorize funds.
+
+## Dangerous strict equalities
+
+### Configuration
+* Check: `incorrect-equality`
+* Severity: Medium
+* Confidence: High
+
+### What it Detects
+Use of strick equalities that can be easily manipulated by an attacker.
+
+### Exploit Scenario
+```solidity
+contract Crowdsale{
+    function fund_reached() public returns(bool){
+        return this.balance == 100 ether;
+    }
+```
+`Crowdsale` relies on `fund_reached` to know when to stop the sale of tokens. `Crowdsale` reaches 100 ether. Bob sends 0.1 ether. As a result, `fund_reached` is always false and the crowdsale never ends.
+
+### Recommendation
+Don't use strict equality to determine if an account has enough ethers or tokens.
 
 ## Controlled Delegatecall
 
