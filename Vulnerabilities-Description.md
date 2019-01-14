@@ -196,12 +196,13 @@ Avoid using `delegatecall`. Use only trusted destinations.
 ## Reentrancy vulnerabilities
 
 ### Configuration
-* Check: `reentrancy`
+* Check: `reentrancy-eth`
 * Severity: High
 * Confidence: Medium
 
 ### Description
 Detection of the [re-entrancy bug](https://github.com/trailofbits/not-so-smart-contracts/tree/master/reentrancy).
+Do not report reentrancies that don't involve ethers (see `reentrancy-no-eth`)
 
 ### Exploit scenario
 ```solidity
@@ -220,6 +221,57 @@ Bob uses the re-entrancy bug to call `withdrawBalance` two times, and withdraw m
 ### Recommendation
 Apply the [check-effects-interactions pattern](http://solidity.readthedocs.io/en/v0.4.21/security-considerations.html#re-entrancy).
 
+## Reentrancy vulnerabilities
+
+### Configuration
+* Check: `reentrancy-no-eth`
+* Severity: Medium
+* Confidence: Medium
+
+### Description
+Detection of the [re-entrancy bug](https://github.com/trailofbits/not-so-smart-contracts/tree/master/reentrancy).
+Do not report reentrancies that involve ethers (see `reentrancy-eth`)
+
+
+### Exploit scenario
+```solidity
+    function bug(){
+        require(not_called);
+        if( ! (msg.sender.call() ) ){
+            throw;
+        }
+        not_called = False;
+    }   
+```
+
+### Recommendation
+Apply the [check-effects-interactions pattern](http://solidity.readthedocs.io/en/v0.4.21/security-considerations.html#re-entrancy).
+
+## Reentrancy vulnerabilities
+
+### Configuration
+* Check: `reentrancy-benign`
+* Severity: Low
+* Confidence: Medium
+
+### Description
+Detection of the [re-entrancy bug](https://github.com/trailofbits/not-so-smart-contracts/tree/master/reentrancy).
+Only report reentrancy that acts as a double call (see `reentrancy-eth`, `reentrancy-no-eth`).
+
+### Exploit scenario
+```solidity
+    function callme(){
+        if( ! (msg.sender.call()() ) ){
+            throw;
+        }
+        counter += 1
+    }   
+```
+
+`callme` contains a reentrancy. The reentrancy is benign because it's exploitation would have the same effect as two consecutive calls.
+
+### Recommendation
+Apply the [check-effects-interactions pattern](http://solidity.readthedocs.io/en/v0.4.21/security-considerations.html#re-entrancy).
 
 ## Contracts that lock ether
 
