@@ -562,7 +562,7 @@ Detect if different Solidity versions are used.
 Use one Solidity version.
 
 
-## Old versions of Solidity 
+## Incorrect versions of Solidity 
 
 ### Configuration
 * Check: `solc-version`
@@ -570,10 +570,11 @@ Use one Solidity version.
 * Confidence: High
 
 ### Description
-Solc frequently releases new compiler versions. Using an old version prevent access to new Solidity security checks.
+Solc frequently releases new compiler versions. Using an old version prevent access to new Solidity security checks. 
+We recommend avoiding complex pragma statement.
 
 ### Recommendation
-Use Solidity >= 0.4.23.
+Use Solidity 0.4.25 or 0.5.2.
 
 ## Unused state variables
 
