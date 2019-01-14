@@ -5,7 +5,7 @@ List of public detectors
 ## State variable shadowing
 
 ### Configuration
-* Check: `shadowing--state`
+* Check: `shadowing-state`
 * Severity: High
 * Confidence: High
 
@@ -300,7 +300,7 @@ Remove the payable attribute or add a withdraw function.
 ## State variable shadowing from abstract contracts
 
 ### Configuration
-* Check: `shadowing--abstract`
+* Check: `shadowing-abstract`
 * Severity: Medium
 * Confidence: High
 
