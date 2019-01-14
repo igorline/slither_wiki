@@ -353,6 +353,38 @@ contract MyConc{
 ### Recommendation
 Ensure that all the return value of the function call are stored in a local or state variable.
 
+## Builtin Symbol Shadowing
+
+### Configuration
+* Check: `shadowing-builtin`
+* Severity: Low
+* Confidence: High
+
+### What it Detects
+Detection of shadowing built-in symbols using local variables/state variables/functions/modifiers/events.
+
+### Exploit Scenario
+
+```solidity
+pragma solidity ^0.4.24;
+
+contract Bug {
+    uint now; // Overshadows current time stamp.
+
+    function assert(bool condition) public {
+        // Overshadows built-in symbol for providing assertions.
+    }
+
+    function get_next_expiration(uint earlier_time) private returns (uint) {
+        return now + 259200; // References overshadowed timestamp.
+    }
+}
+```
+`now` is defined as a state variable, and shadows with the built-in symbol `now`. The function `assert` overshadows the built-in `assert` function. Any use of either of these built-in symbols may lead to unexpected results.
+
+### Recommendation
+Rename the local variable/state variable/function/modifier/event, so as not to mistakenly overshadow any built-in symbol definitions.
+
 ## Calls inside a loop
 
 ### Configuration
