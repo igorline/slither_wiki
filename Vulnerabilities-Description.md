@@ -385,6 +385,41 @@ contract Bug {
 ### Recommendation
 Rename the local variable/state variable/function/modifier/event, so as not to mistakenly overshadow any built-in symbol definitions.
 
+## Local Variable Shadowing
+
+### Configuration
+* Check: `shadowing-local`
+* Severity: Low
+* Confidence: High
+
+### What it Detects
+Detection of shadowing using local variables.
+
+### Exploit Scenario
+
+```solidity
+pragma solidity ^0.4.24;
+
+contract Bug {
+    uint owner;
+
+    function sensitive_function(address owner) public {
+        // ...
+        require(owner == msg.sender);
+    }
+
+    function alternate_sensitive_function() public {
+        address owner = msg.sender;
+        // ...
+        require(owner == msg.sender);
+    }
+}
+```
+`sensitive_function.owner` shadows `Bug.owner`. As a result, the use of `owner` inside `sensitive_function` might be incorrect. 
+
+### Recommendation
+Rename the local variable so as not to mistakenly overshadow any state variable/function/modifier/event definitions.
+
 ## Calls inside a loop
 
 ### Configuration
