@@ -1,7 +1,7 @@
 Slither allows printing contracts information through its printers.
 
 ## Contract Summary
-`slither file.sol --printers contract-summary`
+`slither file.sol --print contract-summary`
 
 Output a quick summary of the contract.
 ### Example
@@ -12,7 +12,7 @@ $ slither examples/printers/quick_summary.sol --printers contract-summary
 <img src="https://raw.githubusercontent.com/trailofbits/slither/master/examples/printers/quick_summary.sol.png?sanitize=true">
 
 ## Function Summary
-`slither file.sol --printers function-summary`
+`slither file.sol --print function-summary`
 
 Output a summary of the contract showing for each function:
 - What are the visibility and the modifiers 
@@ -21,7 +21,7 @@ Output a summary of the contract showing for each function:
 
 ### Example
 ```
-$ slither tests/backdoor.sol --printers function-summary
+$ slither tests/backdoor.sol --print function-summary
 ```
 ```
 [...]
@@ -43,7 +43,7 @@ Inheritances:: []
 ```
 
 ## Inheritance Graph
-`slither file.sol --printers inheritance-graph`
+`slither file.sol --print inheritance-graph`
 
 Output a graph showing the inheritance interaction between the contracts.
 
@@ -54,7 +54,7 @@ sudo apt install xdot
 
 ### Example
 ```
-$ slither examples/printers/inheritances.sol --printers inheritance-graph
+$ slither examples/printers/inheritances.sol --print inheritance-graph
 [...]
 INFO:PrinterInheritance:Inheritance Graph: examples/DAO.sol.dot
 ```
@@ -74,13 +74,13 @@ Functions in orange override a parent's functions. If a variable points to anoth
 <img src="https://raw.githubusercontent.com/trailofbits/slither/master/examples/printers/inheritances_graph.sol.png?sanitize=true">
 
 ## Variables written and authorization
-`slither file.sol --printers vars-and-auth`
+`slither file.sol --print vars-and-auth`
 
 Print the variables written and the check on `msg.sender` of each function.
 ### Example
 ```
 ...
-$ slither examples/printers/authorization.sol --printers vars-and-auth
+$ slither examples/printers/authorization.sol --print vars-and-auth
 [..]
 INFO:Printers:
 Contract MyContract
@@ -98,7 +98,7 @@ Contract MyContract
 Print the IR for every function
 
 ```
-$ slither examples/printers/slihtir.sol --printers slithir
+$ slither examples/printers/slihtir.sol --print slithir
 Contract UnsafeMath
 	Function add(uint256,uint256)
 		Expression: a + b
