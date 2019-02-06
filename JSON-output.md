@@ -1,11 +1,31 @@
-## Standard fields
-### `check`
-```
-"check": "slither_flag"
-```
-Each element has a `check` field, which is the slither flag to run the detector
+The json contains a list of vulnerability. A vulnerability is described following this format:
 
-### `source_mapping`
+```
+{
+     check: ...
+     impact: ...
+     confidence: ...
+     description: ...
+     elements: [     
+      {
+          type: item0 
+          item0_additional_info: ...  
+          source_mapping : ...
+      },
+      {
+          type: item1
+          item1_additional_info: ...  
+          source_mapping : ...
+      }
+}
+```
+- `check`: slither flag (see the [list of flags](https://github.com/trailofbits/slither#detectors))
+- `impact`: string representation of the impact (`High`/ `Medium`/ `Low`/ `Informational`)
+- `confidence`: string representation of the confidence (`High`/ `Medium`/ `Low`)
+- `description`: string output of slither
+- `elements`: structure that changes according to the vulnerability class. Each element has at least its `type` (described below) and a `source_mapping` information. As a result, the additional info can be skiped to facilitate the parsing of the json
+
+`source_mapping` is:
 ```
 "source_mapping": {
  "filename": "tests/constant.sol",
@@ -19,199 +39,45 @@ Each element has a `check` field, which is the slither flag to run the detector
 }
 ```
 
-### `expressions`
-
-```
-        "expressions": [
-            {
-                "source_mapping": {...},
-                "expression": "the expression..."
-            }, 
-            ...
-        ],
-```
-- `expressions` is a list
 
 
-### `contract`
-```
-        "contract": {
-           { "name": "contract_name",
-            "source_mapping": { .. }
-            }
-        },
-```
-### `function`
-```
-        "function": {
-           { "name": "function_name",
-            "source_mapping": { .. }
-            }
-        },
-```
+## Expressions types
+- type `contract` has
+  - `"name":"contract_name"` 
+- `function` has
+  - `"name": "function_name"`
+  - `"contract": type contract`
+- `functions` has
+  - list of function
+- `variable` has 
+   - `"name": "variable_name"`
+- `variables` has
+  - list of variable
+- `expression` has
+  - `expression`: a string representation of the expression
 
+## Additional types
+Some detectors have non standard elements
+- `constant-function`: `contain_assembly`: bool
+- `naming-convention`: "convention": "CapWords", "name": "contract_name", "target": "target_name"
+  - `convention` can be:
+    - `CapWords`
+    - `mixedCase`
+    - `l_O_I_should_not_be_used`
+    - `UPPER_CASE_WITH_UNDERSCORES`
+  - `target` can be:
+    - `contract`
+    - `structure`
+    - `event`
+    - `function`
+    - `variable`
+    - `variable_constant`
+    - `parameter`
+    - `enum`
+    - `modifier`
 
-### `functions`
-```
-        "functions": {
-           [
-           { "name": "function_name",
-            "source_mapping": { .. }}
-            ]
-        },
-```
-- `functions` is a list
+- `reentrancy` (all variants): 
+  - list of "external_calls": `expression`/`source_mapping`
+  - list of "external_calls_sending_eth": `expression`/`source_mapping` 
+  - list of "variables_written": `expression`/`source_mapping`/`name`
 
-
-### `variable`
-```
-        "variable": 
-            {
-                "name": "userBalance",
-                "source_mapping": {...}
-            }
-```
-
-### `variables`
-```
-        "variables": [
-            {
-                "name": "userBalance",
-                "source_mapping": {...}
-            }
-        ]
-```
-- `variables` is a list
-
-Num | Detector                  | `check` | `contract` | `function` | `functions` | `variable` | `variables` | `expressions` | Extra 
---- | ---                       | :---:   | :---:      | :---:      | :---:       | :---:       | :---:       | :---:         |  --- 
-1 | `suicidal`                  |    X    |            |     X      |             |             |             |               |  
-2 | `uninitialized-state`       |    X    |            |            |     X       |    X        |             |               | 
-3 | `uninitialized-storage`     |    X    |            |     X      |             |    X        |             |               | 
-4 | `arbitrary-send`            |    X    |            |     X      |             |             |             |      X        | 
-5 | `controlled-delegatecall`   |    X    |            |     X      |             |             |             |      X        | 
-6 | `reentrancy`                |    X    |            |            |             |             |             |               | Yes 
-7 | `locked-ether`              |    X    |     X      |     X      |             |             |             |               | 
-8 | `constant-function`         |    X    |            |     X      |             |    X        |             |     X         | Yes
-9 | `tx-origin`                 |    X    |            |     X      |             |             |             |     X         | 
-10 | `uninitialized-local`      |    X    |            |     X      |             |    X        |             |               | 
-11 | `unused-return`            |    X    |            |     X      |             |             |             |     X         | 
-12 | `assembly`                 |    X    |            |     X      |             |             |             |               | Yes
-13 | `constable-states`         |    X    |            |            |             |             |     X       |               | 
-14 | `external-function`        |    X    |            |     X      |             |             |             |               | 
-15 | `low-level-calls`          |    X    |     X      |     X      |             |             |             |     X         | 
-16 | `naming-convention`        |    X    |            |            |             |             |             |               | Yes
-17 | `pragma`                   |    X    |            |            |             |             |             |     X         | 
-18 | `solc-version`             |    X    |            |            |             |             |             |     X         | 
-19 | `unused-state`             |    X    |            |            |             |             |     X       |               |                 
-
-## Exceptions
-
-### `constant-function`
-The additional field is the boolean `contain_assembly`
-
-Ex: 
-```
-[
-    {
-        "check": "constant-function",
-        "contains_assembly": false,
-        "functions": [ {
-            "name": "test_view_bug",
-            "source_mapping": { .. }
-        }],
-        "variables": [
-            "name": "test_view_bug",
-            "source_mapping": { .. }
-        ]
-    }
-]
-```
-- if `contains_assembly`is true, `variables` is empty.
-
-
-### `naming-convention`
-```
-[
-    {
-        "check": "naming-convention",
-        "convention": "CapWords",
-        "name": {
-            "name": "contract_name",
-            "source_mapping": {...},
-        "type": "contract"
-    }
-]
-```
-- `convention` can be:
-  - `CapWords`
-  - `mixedCase`
-  - `l_O_I_should_not_be_used`
-  - `UPPER_CASE_WITH_UNDERSCORES`
-- `type` can be:
-  - `contract`
-  - `structure`
-  - `event`
-  - `function`
-  - `variable`
-  - `variable_constant`
-  - `parameter`
-  - `enum`
-  - `modifier`
-
-
-### `reentrancy`
-```
-[
-    {
-        "check": "reentrancy",
-        "external_calls": [
-            {
-                "expression": "! (msg.sender.call.value(userBalance[msg.sender])())",
-                "source_mapping": {...}
-            }
-        ],
-        "external_calls_sending_eth": [
-            {
-                "expression": "! (msg.sender.call.value(userBalance[msg.sender])())",
-                "source_mapping": {...}
-            }
-        ],
-        "function": {
-            "name": "withdrawBalance",
-            "source_mapping": {...}
-        },
-        "variables_written": [
-            {
-                "expression": "userBalance[msg.sender] = 0",
-                "name": "userBalance",
-                "source_mapping": {...}
-            }
-        ]
-    }
-]
-```
-- `external_calls` contains a list
-- `external_calls_sending_eth` contains a list
-- `variables` contains a list
-- `external_calls_sending_eth` can be empty
-
-### `assembly`
-
-```
-[
-    {
-        "assembly": [
-            {
-                "source_mapping": {...}
-            }
-        ],
-        "check": "assembly",
-        "function": {
-            "name": "at",
-            "source_mapping": {...}
-        }
-    }
-]
-```
-- `assembly` contains a list
