@@ -168,6 +168,7 @@ $ dot examples/printers/inheritances.sol.dot -Tsvg -o examples/printers/inherita
 ```
 
 Indicators:
+- If a contract has multiple inheritance, the connecting edges will be labelled in order of declaration.
 - Functions highlighted orange override a parent's function.
 - Functions which do not override each other directly (but collide due to multiple inheritance) will be emphasized at the bottom of the affected contract node in grey font.
 - Variables highlighted red overshadow a parent's variable declaration.
