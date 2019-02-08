@@ -1,7 +1,62 @@
 Slither allows printing contracts information through its printers.
 
+Num | Printer | Description
+--- | --- | ---
+1 | `call-graph` | Export the call-graph of the contracts to a dot file
+2 | `cfg` | Export the CFG of each functions
+3 | `contract-summary` | Print a summary of the contracts
+4 | `function-id` | Print the keccack256 signature of the functions
+5 | `function-summary` | Print a summary of the functions
+6 | `human-summary` | Print a human readable summary of the contracts
+7 | `inheritance` | Print the inheritance relations between contracts
+8 | `inheritance-graph` | Export the inheritance graph of each contract to a dot file
+9 | `slithir` | Print the slithIR representation of the functions
+10 | `slithir-ssa` | Print the slithIR representation of the functions
+11 | `variables-order` | Print the storage order of the state variables
+12 | `vars-and-auth` | Print the state variables written and the authorization of the functions
+
+## Call Graph
+`slither file.sol --print call-graph`
+
+Export the call-graph of the contracts to a dot file
+### Example
+```
+$ slither examples/printers/call_graph.sol --printers contract-summary
+```
+<img src="https://raw.githubusercontent.com/trailofbits/slither/master/examples/printers/call_graph.sol.dot.png?sanitize=true">
+
+The output format is [dot](https://www.graphviz.org/).
+To vizualize the graph:
+```
+xdot examples/printers/call_graph.sol.dot
+```
+To convert the file to svg:
+```
+dot examples/printers/call_graph.sol.dot -Tsvg -o examples/printers/call_graph.sol.png
+```
+
+
+## CFG
+Export the control flow graph of each functions
+
+`slither file.sol --print cfg`
+
+### Example
+
+The output format is [dot](https://www.graphviz.org/).
+To vizualize the graph:
+```
+xdot function.sol.dot
+```
+To convert the file to svg:
+```
+dot function.dot -Tsvg -o function.sol.png
+```
+
+
 ## Contract Summary
 `slither file.sol --print contract-summary`
+
 
 Output a quick summary of the contract.
 ### Example
