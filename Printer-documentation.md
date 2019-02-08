@@ -172,7 +172,7 @@ Indicators:
 - Functions highlighted orange override a parent's function.
 - Functions which do not override each other directly (but collide due to multiple inheritance) will be emphasized at the bottom of the affected contract node in grey font.
 - Variables highlighted red overshadow a parent's variable declaration.
-- Variable of type 'contract' specify the contract name in parentheses in a blue font.
+- Variables of type `contract` specify the contract name in parentheses in a blue font.
 
 <img src="https://raw.githubusercontent.com/trailofbits/slither/master/examples/printers/inheritances_graph.sol.png?sanitize=true">
 
