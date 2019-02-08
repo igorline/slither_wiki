@@ -166,6 +166,7 @@ To convert the file to svg:
 ```
 $ dot examples/printers/inheritances.sol.dot -Tsvg -o examples/printers/inheritances.sol.png
 ```
+<img src="https://raw.githubusercontent.com/trailofbits/slither/master/examples/printers/inheritances_graph.sol.png?sanitize=true">
 
 Indicators:
 - If a contract has multiple inheritance, the connecting edges will be labelled in order of declaration.
@@ -174,7 +175,6 @@ Indicators:
 - Variables highlighted red overshadow a parent's variable declaration.
 - Variables of type `contract` specify the contract name in parentheses in a blue font.
 
-<img src="https://raw.githubusercontent.com/trailofbits/slither/master/examples/printers/inheritances_graph.sol.png?sanitize=true">
 
 
 
