@@ -7,7 +7,7 @@ Num | Printer | Description
 3 | `contract-summary` | Print a summary of the contracts
 4 | `function-id` | Print the keccack256 signature of the functions
 5 | `function-summary` | Print a summary of the functions
-6 | `human-summary` | Print a human readable summary of the contracts
+6 | `human-summary` | Print a human-readable summary of the contracts
 7 | `inheritance` | Print the inheritance relations between contracts
 8 | `inheritance-graph` | Export the inheritance graph of each contract to a dot file
 9 | `slithir` | Print the slithIR representation of the functions
@@ -53,18 +53,22 @@ To convert the file to svg:
 dot function.dot -Tsvg -o function.sol.png
 ```
 
+## Function id
+`slither file.sol --print function-id`
+Print the keccack256 signature of the functions
 
-## Contract Summary
-`slither file.sol --print contract-summary`
-
-
-Output a quick summary of the contract.
-### Example
+### Examples
 ```
-$ slither examples/printers/quick_summary.sol --printers contract-summary
+$ slither examples/printers/authorization.sol --print function-id
+INFO:Printers:
+MyContract:
++---------------+------------+
+|      Name     |     ID     |
++---------------+------------+
+| constructor() | 0x90fa17bb |
+| mint(uint256) | 0xa0712d68 |
++---------------+------------+
 ```
-
-<img src="https://raw.githubusercontent.com/trailofbits/slither/master/examples/printers/quick_summary.sol.png?sanitize=true">
 
 ## Function Summary
 `slither file.sol --print function-summary`
@@ -96,6 +100,31 @@ Inheritances:: []
 +-----------+------------+------+-------+----------------+----------------+
 +-----------+------------+------+-------+----------------+----------------+
 ```
+
+## Human Summary
+`slither file.sol --print contract-summary`
+
+Print a human readable summary of the contracts
+
+### Example
+```
+slither examples/printers/human_printer.sol --print human-summary
+```
+
+<img src="https://raw.githubusercontent.com/trailofbits/slither/master/examples/printers/human_printer.sol.png?sanitize=true">
+
+
+## Contract Summary
+
+Output a quick summary of the contract.
+### Example
+```
+$ slither examples/printers/quick_summary.sol --printers contract-summary
+```
+
+<img src="https://raw.githubusercontent.com/trailofbits/slither/master/examples/printers/quick_summary.sol.png?sanitize=true">
+
+
 
 ## Inheritance Graph
 `slither file.sol --print inheritance-graph`
