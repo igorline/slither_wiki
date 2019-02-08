@@ -15,6 +15,11 @@ Num | Printer | Description
 11 | `variables-order` | Print the storage order of the state variables
 12 | `vars-and-auth` | Print the state variables written and the authorization of the functions
 
+Several printer require xdot installed for vizualization:
+```
+sudo apt install xdot
+```
+
 ## Call Graph
 `slither file.sol --print call-graph`
 
@@ -28,11 +33,11 @@ $ slither examples/printers/call_graph.sol --printers contract-summary
 The output format is [dot](https://www.graphviz.org/).
 To vizualize the graph:
 ```
-xdot examples/printers/call_graph.sol.dot
+$ xdot examples/printers/call_graph.sol.dot
 ```
 To convert the file to svg:
 ```
-dot examples/printers/call_graph.sol.dot -Tsvg -o examples/printers/call_graph.sol.png
+$ dot examples/printers/call_graph.sol.dot -Tsvg -o examples/printers/call_graph.sol.png
 ```
 
 
@@ -46,12 +51,25 @@ Export the control flow graph of each functions
 The output format is [dot](https://www.graphviz.org/).
 To vizualize the graph:
 ```
-xdot function.sol.dot
+$ xdot function.sol.dot
 ```
 To convert the file to svg:
 ```
-dot function.dot -Tsvg -o function.sol.png
+$ dot function.dot -Tsvg -o function.sol.png
 ```
+
+
+## Contract Summary
+
+Output a quick summary of the contract.
+### Example
+```
+$ slither examples/printers/quick_summary.sol --printers contract-summary
+```
+
+<img src="https://raw.githubusercontent.com/trailofbits/slither/master/examples/printers/quick_summary.sol.png?sanitize=true">
+
+
 
 ## Function id
 `slither file.sol --print function-id`
@@ -104,37 +122,32 @@ Inheritances:: []
 ## Human Summary
 `slither file.sol --print contract-summary`
 
-Print a human readable summary of the contracts
+Print a human-readable summary of the contracts
 
 ### Example
 ```
-slither examples/printers/human_printer.sol --print human-summary
+$ slither examples/printers/human_printer.sol --print human-summary
 ```
 
 <img src="https://raw.githubusercontent.com/trailofbits/slither/master/examples/printers/human_printer.sol.png?sanitize=true">
 
+## Inheritance
+`slither file.sol --print inheritance`
+Print the inheritance relations between contracts
 
-## Contract Summary
-
-Output a quick summary of the contract.
 ### Example
 ```
-$ slither examples/printers/quick_summary.sol --printers contract-summary
+$ slither examples/printers/inheritances.sol --print inheritance
 ```
 
-<img src="https://raw.githubusercontent.com/trailofbits/slither/master/examples/printers/quick_summary.sol.png?sanitize=true">
-
-
+<img src="https://raw.githubusercontent.com/trailofbits/slither/master/examples/printers/inheritances.sol.png?sanitize=true">
 
 ## Inheritance Graph
 `slither file.sol --print inheritance-graph`
 
 Output a graph showing the inheritance interaction between the contracts.
 
-This printer requires xdot installed for vizualization:
-```
-sudo apt install xdot
-```
+
 
 ### Example
 ```
@@ -146,41 +159,25 @@ INFO:PrinterInheritance:Inheritance Graph: examples/DAO.sol.dot
 The output format is [dot](https://www.graphviz.org/).
 To vizualize the graph:
 ```
-xdot examples/printers/inheritances.sol.dot
+$ xdot examples/printers/inheritances.sol.dot
 ```
 To convert the file to svg:
 ```
-dot examples/printers/inheritances.sol.dot -Tsvg -o examples/printers/inheritances.sol.png
+$ dot examples/printers/inheritances.sol.dot -Tsvg -o examples/printers/inheritances.sol.png
 ```
 
 Functions in orange override a parent's functions. If a variable points to another contract, the contract type is written in blue.
 
 <img src="https://raw.githubusercontent.com/trailofbits/slither/master/examples/printers/inheritances_graph.sol.png?sanitize=true">
 
-## Variables written and authorization
-`slither file.sol --print vars-and-auth`
 
-Print the variables written and the check on `msg.sender` of each function.
-### Example
-```
-...
-$ slither examples/printers/authorization.sol --print vars-and-auth
-[..]
-INFO:Printers:
-Contract MyContract
-+-------------+-------------------------+----------------------------------------+
-|   Function  | State variables written |        Conditions on msg.sender        |
-+-------------+-------------------------+----------------------------------------+
-| constructor |        ['owner']        |                   []                   |
-|     mint    |       ['balances']      | ['require(bool)(msg.sender == owner)'] |
-+-------------+-------------------------+----------------------------------------+
-```
 
 ## SlithIR
 `slither file.sol --printers slithir`
 
-Print the IR for every function
+Print the slithIR representation of the functions
 
+### Example
 ```
 $ slither examples/printers/slihtir.sol --print slithir
 Contract UnsafeMath
@@ -208,4 +205,48 @@ Contract MyContract
 			REF_1(uint256) -> balances[to]
 			TMP_1(uint256) = LIBRARY_CALL, dest:UnsafeMath, function:add, arguments:['REF_1', 'val'] 
 			REF_3 := TMP_1
+```
+
+## SlithIR-SSA
+`slither file.sol --printers slithir-ssa`
+
+Print the slithIR representation of the functions (SSA version)
+
+## Variables order
+`slither file.sol --print variables-order`
+
+Print the storage order of the state variables
+
+### Example
+```
+$ slither tests/check-upgradability/contractV2_bug.sol --print variables-order
+INFO:Printers:
+ContractV2:
++-------------+---------+
+|     Name    |   Type  |
++-------------+---------+
+| destination | uint256 |
+|    myFunc   | uint256 |
++-------------+---------+
+
+```
+
+
+## Variables written and authorization
+`slither file.sol --print vars-and-auth`
+
+Print the variables written and the check on `msg.sender` of each function.
+### Example
+```
+...
+$ slither examples/printers/authorization.sol --print vars-and-auth
+[..]
+INFO:Printers:
+Contract MyContract
++-------------+-------------------------+----------------------------------------+
+|   Function  | State variables written |        Conditions on msg.sender        |
++-------------+-------------------------+----------------------------------------+
+| constructor |        ['owner']        |                   []                   |
+|     mint    |       ['balances']      | ['require(bool)(msg.sender == owner)'] |
++-------------+-------------------------+----------------------------------------+
 ```
