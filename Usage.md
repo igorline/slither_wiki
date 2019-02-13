@@ -5,7 +5,7 @@
   - [solc](#solc)
   - [AST input](#ast-file)
 - [Options](#options)
-- [IDE integrations](#ide-integrations)
+- [IDE integrations](#ide-integration)
 
 ## How to run Slither
 
