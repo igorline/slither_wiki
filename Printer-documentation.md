@@ -5,15 +5,17 @@ Num | Printer | Description
 1 | `call-graph` | [Export the call-graph of the contracts to a dot file](https://github.com/trailofbits/slither/wiki/Printer-documentation#call-graph)
 2 | `cfg` | [Export the CFG of each functions](https://github.com/trailofbits/slither/wiki/Printer-documentation#cfg)
 3 | `contract-summary` | [Print a summary of the contracts](https://github.com/trailofbits/slither/wiki/Printer-documentation#contract-summary)
-4 | `function-id` | [Print the keccack256 signature of the functions](https://github.com/trailofbits/slither/wiki/Printer-documentation#function-id)
-5 | `function-summary` | [Print a summary of the functions](https://github.com/trailofbits/slither/wiki/Printer-documentation#function-summary)
-6 | `human-summary` | [Print a human-readable summary of the contracts](https://github.com/trailofbits/slither/wiki/Printer-documentation#human-summary)
-7 | `inheritance` | [Print the inheritance relations between contracts](https://github.com/trailofbits/slither/wiki/Printer-documentation#inheritance)
-8 | `inheritance-graph` | [Export the inheritance graph of each contract to a dot file](https://github.com/trailofbits/slither/wiki/Printer-documentation#inheritance-graph)
-9 | `slithir` | [Print the slithIR representation of the functions](https://github.com/trailofbits/slither/wiki/Printer-documentation#slithir)
-10 | `slithir-ssa` | [Print the slithIR representation of the functions](https://github.com/trailofbits/slither/wiki/Printer-documentation#slithir-ssa)
-11 | `variables-order` | [Print the storage order of the state variables](https://github.com/trailofbits/slither/wiki/Printer-documentation#variables-written-and-authorization)
-12 | `vars-and-auth` | [Print the state variables written and the authorization of the functions](https://github.com/trailofbits/slither/wiki/Printer-documentation#variables-written-and-authorization)
+4 | `data-dependency` | [Print the data dependencies of the variables](https://github.com/trailofbits/slither/wiki/Printer-documentation#data-dependencies)
+5 | `function-id` | [Print the keccack256 signature of the functions](https://github.com/trailofbits/slither/wiki/Printer-documentation#function-id)
+6 | `function-summary` | [Print a summary of the functions](https://github.com/trailofbits/slither/wiki/Printer-documentation#function-summary)
+7 | `human-summary` | [Print a human-readable summary of the contracts](https://github.com/trailofbits/slither/wiki/Printer-documentation#human-summary)
+8 | `inheritance` | [Print the inheritance relations between contracts](https://github.com/trailofbits/slither/wiki/Printer-documentation#inheritance)
+9 | `inheritance-graph` | [Export the inheritance graph of each contract to a dot file](https://github.com/trailofbits/slither/wiki/Printer-documentation#inheritance-graph)
+10 | `slithir` | [Print the slithIR representation of the functions](https://github.com/trailofbits/slither/wiki/Printer-documentation#slithir)
+11 | `slithir-ssa` | [Print the slithIR representation of the functions](https://github.com/trailofbits/slither/wiki/Printer-documentation#slithir-ssa)
+12 | `variables-order` | [Print the storage order of the state variables](https://github.com/trailofbits/slither/wiki/Printer-documentation#variables-written-and-authorization)
+13 | `vars-and-auth` | [Print the state variables written and the authorization of the functions](https://github.com/trailofbits/slither/wiki/Printer-documentation#variables-written-and-authorization)
+
 
 
 Several printer require xdot installed for vizualization:
@@ -27,7 +29,7 @@ sudo apt install xdot
 Export the call-graph of the contracts to a dot file
 ### Example
 ```
-$ slither examples/printers/call_graph.sol --printers contract-summary
+$ slither examples/printers/call_graph.sol --print contract-summary
 ```
 <img src="https://raw.githubusercontent.com/trailofbits/slither/master/examples/printers/call_graph.sol.dot.png?sanitize=true">
 
@@ -43,7 +45,7 @@ $ dot examples/printers/call_graph.sol.dot -Tsvg -o examples/printers/call_graph
 
 
 ## CFG
-Export the control flow graph of each functions
+Export the control flow graph of each function
 
 `slither file.sol --print cfg`
 
@@ -63,14 +65,56 @@ $ dot function.dot -Tsvg -o function.sol.png
 ## Contract Summary
 
 Output a quick summary of the contract.
+
+`slither file.sol --print contract-summary`
+
 ### Example
 ```
-$ slither examples/printers/quick_summary.sol --printers contract-summary
+$ slither examples/printers/quick_summary.sol --print contract-summary
 ```
 
 <img src="https://raw.githubusercontent.com/trailofbits/slither/master/examples/printers/quick_summary.sol.png?sanitize=true">
 
 
+## Data Dependencies
+
+Print the data dependencies of the variables
+`slither file.sol --print data-dependency`
+
+### Example
+```
+$ slither examples/printers/data_dependencies.sol --print data-dependency
+```
+```
+Contract MyContract
++----------+----------------------+
+| Variable |     Dependencies     |
++----------+----------------------+
+|    a     |     ['input_a']      |
+|    b     | ['input_b', 'input'] |
+|    c     |          []          |
++----------+----------------------+
+
+Function setA(uint256,uint256)
++--------------+--------------+
+|   Variable   | Dependencies |
++--------------+--------------+
+|   input_a    |      []      |
+|   input_b    |      []      |
+| MyContract:a | ['input_a']  |
+| MyContract:b |      []      |
+| MyContract:c |      []      |
++--------------+--------------+
+Function setB(uint256)
++--------------+----------------------+
+|   Variable   |     Dependencies     |
++--------------+----------------------+
+|    input     |     ['input_b']      |
+| MyContract:a |          []          |
+| MyContract:b | ['input_b', 'input'] |
+| MyContract:c |          []          |
++--------------+----------------------+
+```
 
 ## Function id
 `slither file.sol --print function-id`
@@ -179,7 +223,7 @@ Indicators:
 
 
 ## SlithIR
-`slither file.sol --printers slithir`
+`slither file.sol --print slithir`
 
 Print the slithIR representation of the functions
 
@@ -214,7 +258,7 @@ Contract MyContract
 ```
 
 ## SlithIR-SSA
-`slither file.sol --printers slithir-ssa`
+`slither file.sol --print slithir-ssa`
 
 Print the slithIR representation of the functions (SSA version)
 
