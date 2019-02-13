@@ -1,12 +1,8 @@
-## Adding a detector
+## Documentation
 
-1. Review the guide to [adding a detector](Adding-a-new-detector)
-2. Reference the complete [API documentation](API-examples)
-3. Reference the complete [SlithIR definition](SlithIR)
-
-## Using the printers
-
-Slither includes a set of "printers" to help visualize information in smart contracts. Review the [documentation on available printers](Printer-documentation).
+- [Usage](./Usage.md): How to use Slither
+- [Advanced Usage](./advanced-Usage.md): How to build custom analyses
+- [Developer installation](./Developer-installation.md): How to extend Slither
 
 ## Bounties
 
