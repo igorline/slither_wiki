@@ -60,7 +60,7 @@ slither file.sol --exclude naming-convention,unused-state,suicidal
 
 To exclude detectors with a informational or low severity, use `--exclude-informational` or `--exclude-low`.
 
-`--list-detectors` lists [available detectors](./Detectors-documentation.md).
+`--list-detectors` lists [available detectors](https://github.com/trailofbits/slither/wiki/Detectors-Documentation).
 
 ### Printers selection
 By default, no printer are run.
@@ -70,7 +70,7 @@ To run selected pritners, use `--print printer1,printer2`. For example:
 slither file.sol --print inheritance-graph
 ```
 
-`--list-printers` lists [available printers](./Printers-documentation.md).
+`--list-printers` lists [available printers](https://github.com/trailofbits/slither/wiki/Printers-Documentation).
 
 ## IDE integrations
 * Remix https://github.com/samparsky/remix-plugin-slither (http://remix.ethereum.org/ integration in progress)
