@@ -1,0 +1,12 @@
+  * [Home](./Home)
+  * [Usage](./Usage)
+    * [Detectors documentation](./Detectors-Documentation)
+    * [Printer documentation](./Printer-documentation)
+  * [Advanced Usages](./advanced-usages)
+    * [Data dependency](./data-dependency)
+    * [API examples](./API-examples)
+    * [SlithIR](./SlithIR)
+  * [Developer installation](./Developer-installation)
+    * [Adding a new detector](./Adding-a-new-detector)
+    * [JSON output](./JSON-output)
+
