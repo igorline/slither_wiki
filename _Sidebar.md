@@ -2,7 +2,7 @@
   * [Usage](./Usage)
     * [Detectors documentation](./Detectors-Documentation)
     * [Printer documentation](./Printer-documentation)
-  * [Advanced Usages](./advanced-usages)
+  * [Advanced Usage](./advanced-usage)
     * [Data dependency](./data-dependency)
     * [API examples](./API-examples)
     * [SlithIR](./SlithIR)
