@@ -1,8 +1,8 @@
 ## Documentation
 
-- [Usage](./Usage.md): How to use Slither
-- [Advanced Usage](./advanced-Usage.md): How to build custom analyses
-- [Developer installation](./Developer-installation.md): How to extend Slither
+- [Usage](./Usage): How to use Slither
+- [Advanced Usage](./advanced-usage): How to build custom analyses
+- [Developer installation](./Developer-installation): How to extend Slither
 
 ## Bounties
 
