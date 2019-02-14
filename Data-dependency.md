@@ -1,10 +1,8 @@
-[Work in progress]
-
 # Data dependency
 
 Data dependency allows knowing if the value of a given variable is influenced by another variable's value.
 
-Because smart contracts have a state machine based archicture, the results of the data depenency depends of the context (function/contract) of the analysis. Consider the following example:
+Because smart contracts have a state machine based architecture, the results of the data dependency depend on the context (function/contract) of the analysis. Consider the following example:
 ```solidity
 contract MyContract{
     uint a = 0;
@@ -48,3 +46,4 @@ b = myContract.get_state_variable_from_name('b')
 print(f'{b.name} is dependant from {input_a.name}?: {is_dependent(b, a, funcA)}')
 print(f'{b.name} is dependant from {input_a.name}?: {is_dependent(b, a, myContract)}')
 ```
+
