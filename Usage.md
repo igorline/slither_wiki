@@ -75,6 +75,20 @@ slither file.sol --print inheritance-graph
 
 `--list-printers` lists [available printers](https://github.com/trailofbits/slither/wiki/Printers-Documentation).
 
+### Path filtering
+
+`--filter-paths path1,path2` will exclude all the results that are only related to `path1` and `path2`. The path specified can be a path directory or a filename. It is used as a direct text comparison, and there is no regular expression supported.
+
+Examples:
+```
+slither . --filter-paths openzepellin
+```
+To filter all the results only related to openzepellin.
+```
+slither . --filter-paths SafeMath.sol
+```
+To filter all the results only related to the file `SafeMath.sol`.
+
 ### Configuration File
 Some options can be set through a json configuration file. By default,  `slither.conf.json` is used if present (it can be changed through `--config-file file.conf.json`).
 
