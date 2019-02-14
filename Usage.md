@@ -7,6 +7,7 @@
 - [Options](#options)
   - [Detectors selection](#detectors-selection)
   - [Printer selection](#printer-selection)
+  - [Path Filtering](#path-filtering)
   - [Configuration file](#configuration-file)
 - [IDE integrations](#ide-integration)
 
