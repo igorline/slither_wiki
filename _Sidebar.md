@@ -6,6 +6,7 @@
     * [Python API](./Python-API)
     * [Data dependency](./data-dependency)
     * [SlithIR](./SlithIR)
+    * [SSA](./SlithIR-SSA)
   * [Developer installation](./Developer-installation)
     * [Adding a new detector](./Adding-a-new-detector)
     * [JSON output](./JSON-output)
