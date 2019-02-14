@@ -5,6 +5,9 @@
   - [solc](#solc)
   - [AST input](#ast-file)
 - [Options](#options)
+  - [Detectors selection](#detectors-selection)
+  - [Printer selection](#printer-selection)
+  - [Configuration file](#configuration-file)
 - [IDE integrations](#ide-integration)
 
 ## How to run Slither
@@ -62,6 +65,16 @@ To exclude detectors with a informational or low severity, use `--exclude-inform
 
 `--list-detectors` lists [available detectors](https://github.com/trailofbits/slither/wiki/Detectors-Documentation).
 
+### Printers selection
+By default, no printer are run.
+
+To run selected pritners, use `--print printer1,printer2`. For example:
+```
+slither file.sol --print inheritance-graph
+```
+
+`--list-printers` lists [available printers](https://github.com/trailofbits/slither/wiki/Printers-Documentation).
+
 ### Configuration File
 Some options can be set through a json configuration file. By default,  `slither.conf.json` is used if present (it can be changed through `--config-file file.conf.json`).
 
@@ -90,15 +103,6 @@ The following flags are supported:
 }
 ```
 
-### Printers selection
-By default, no printer are run.
-
-To run selected pritners, use `--print printer1,printer2`. For example:
-```
-slither file.sol --print inheritance-graph
-```
-
-`--list-printers` lists [available printers](https://github.com/trailofbits/slither/wiki/Printers-Documentation).
 
 ## IDE integrations
 * Remix https://github.com/samparsky/remix-plugin-slither (http://remix.ethereum.org/ integration in progress)
