@@ -8,6 +8,7 @@
   - [Detectors selection](#detectors-selection)
   - [Printer selection](#printer-selection)
   - [Path Filtering](#path-filtering)
+  - [Triage mode](#triage-mode)
   - [Configuration file](#configuration-file)
 - [IDE integrations](#ide-integration)
 
