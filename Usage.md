@@ -62,14 +62,14 @@ To exclude detectors, use `--exclude detector1,detector2`. For example:
 slither file.sol --exclude naming-convention,unused-state,suicidal
 ```
 
-To exclude detectors with a informational or low severity, use `--exclude-informational` or `--exclude-low`.
+To exclude detectors with an informational or low severity, use `--exclude-informational` or `--exclude-low`.
 
 `--list-detectors` lists [available detectors](https://github.com/trailofbits/slither/wiki/Detectors-Documentation).
 
 ### Printers selection
 By default, no printer are run.
 
-To run selected pritners, use `--print printer1,printer2`. For example:
+To run selected printers, use `--print printer1,printer2`. For example:
 ```
 slither file.sol --print inheritance-graph
 ```
@@ -84,11 +84,31 @@ Examples:
 ```
 slither . --filter-paths openzepellin
 ```
-To filter all the results only related to openzepellin.
+Filter all the results only related to openzepellin.
 ```
 slither . --filter-paths SafeMath.sol
 ```
-To filter all the results only related to the file `SafeMath.sol`.
+Filter all the results only related to the file `SafeMath.sol`.
+
+### Triage mode
+
+`--triage-mode` run slither in its triage mode. For every finding, Slither will ask if the result should be shown for the next run.
+Results are saved in `slither.db.json`.
+
+Examples:
+```
+slither . --triage-mode
+[...]
+0: C.destination (test.sol#3) is never initialized. It is used in:
+	- f (test.sol#5-7)
+Reference: https://github.com/trailofbits/slither/wiki/Vulnerabilities-Description#uninitialized-state-variables
+Results to hide during next runs: "0,1,..." or "All" (enter to not hide results):  0
+[...]
+```
+
+The second run of Slither will hide the above result.
+
+To show the hidden results again, delete `slither.db.json`.
 
 ### Configuration File
 Some options can be set through a json configuration file. By default,  `slither.conf.json` is used if present (it can be changed through `--config-file file.conf.json`).
