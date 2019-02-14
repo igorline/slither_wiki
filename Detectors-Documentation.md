@@ -1,7 +1,6 @@
 # Public Detectors
 
 List of public detectors
-
 ## State variable shadowing
 ### Configuration
 * Check: `shadowing-state`
@@ -202,6 +201,28 @@ Bob uses the re-entrancy bug to call `withdrawBalance` two times, and withdraw m
 
 ### Recommendation
 Apply the [check-effects-interactions pattern](http://solidity.readthedocs.io/en/v0.4.21/security-considerations.html#re-entrancy).
+
+## Incorrect erc20 interface
+### Configuration
+* Check: `erc20-interface`
+* Severity: `Medium`
+* Confidence: `High`
+
+### Description
+Lack of return value for the ERC20 `approve`/`transfer`/`transferFrom` functions. A contract compiled with solidity > 0.4.22 interacting with these functions will fail to execute them, as the return value is missing.
+
+### Exploit Scenario:
+
+```solidity
+contract Token{
+    function transfer(address to, uint value) external;
+    //...
+}
+```
+`Token.transfer` does not return a boolean. Bob deploys the token. Alice creates a contract that interacts with it but assumes a correct ERC20 interface implementation. Alice's contract is unable to interact with Bob's contract.
+
+### Recommendation
+Return a boolean for the `approve`/`transfer`/`transferFrom` functions.
 
 ## Dangerous strict equalities
 ### Configuration
@@ -567,6 +588,73 @@ Constant state variable should be declared constant to save gas.
 
 ### Recommendation
 Add the `constant` attributes to the state variables that never change.
+
+## Deprecated Standards
+### Configuration
+* Check: `deprecated-standards`
+* Severity: `Informational`
+* Confidence: `High`
+
+### Description
+Detect the usage of deprecated standards (as defined by SWC-111), excluding only `constant` keyword detection on functions.
+
+### Exploit Scenario:
+
+```solidity
+contract ContractWithDeprecatedReferences {
+    // Deprecated: Change block.blockhash() -> blockhash()
+    bytes32 globalBlockHash = block.blockhash(0);
+
+    // Deprecated: Change constant -> view
+    function functionWithDeprecatedThrow() public constant {
+        // Deprecated: Change msg.gas -> gasleft()
+        if(msg.gas == msg.value) {
+            // Deprecated: Change throw -> revert()
+            throw;
+        }
+    }
+
+    // Deprecated: Change constant -> view
+    function functionWithDeprecatedReferences() public constant {
+        // Deprecated: Change sha3() -> keccak256()
+        bytes32 sha3Result = sha3("test deprecated sha3 usage");
+
+        // Deprecated: Change callcode() -> delegatecall()
+        address(this).callcode();
+
+        // Deprecated: Change suicide() -> selfdestruct()
+        suicide(address(0));
+    }
+}
+```
+
+### Recommendation
+Replace all uses of deprecated symbols.
+
+## Unindexed ERC20 Event Parameters
+### Configuration
+* Check: `erc20-indexed`
+* Severity: `Informational`
+* Confidence: `High`
+
+### Description
+Detects that events defined by the ERC20 specification which are meant to have some parameters as `indexed`, are not missing the `indexed` keyword.
+
+### Exploit Scenario:
+
+```solidity
+contract ERC20Bad {
+    // ...
+    event Transfer(address from, address to, uint value);
+    event Approval(address owner, address spender, uint value);
+
+    // ...
+}
+```
+In this case, Transfer and Approval events should have the 'indexed' keyword on their two first parameters, as defined by the ERC20 specification. Failure to include these keywords will not include the parameter data in the transaction/block's bloom filter. This may cause external tooling searching for these parameters to overlook them, and fail to index logs from this token contract.
+
+### Recommendation
+Add the `indexed` keyword to event parameters which should include it, according to the ERC20 specification.
 
 ## Public function that could be declared as external
 ### Configuration
