@@ -20,7 +20,7 @@ To run Slither on a Truffle directory:
 slither .
 ```
 
-Use `--ignore-truffle-compile` to not truffle compile with Slither.
+Use `--ignore-truffle-compile` to not run `truffle compile` with Slither.
 
 Use `--truffle-version truffle@x.x.x` to use a specific version of Truffle. For example:
 ```
