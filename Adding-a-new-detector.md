@@ -18,7 +18,15 @@ class Skeleton(AbstractDetector):
     IMPACT = DetectorClassification.HIGH
     CONFIDENCE = DetectorClassification.HIGH
 
-    def detect(self):
+
+    WIKI = ''
+
+    WIKI_TITLE = ''
+    WIKI_DESCRIPTION = ''
+    WIKI_EXPLOIT_SCENARIO = ''
+    WIKI_RECOMMENDATION = ''
+
+    def _detect(self):
         return []
 ```
 
