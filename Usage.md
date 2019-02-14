@@ -20,12 +20,14 @@ To run Slither on a Truffle directory:
 slither .
 ```
 
-To specify a version of Truffle, use `--truffle-version truffle@x.x.x`.
-For example:
+Use `--ignore-truffle-compile` to not truffle compile with Slither.
+
+Use `--truffle-version truffle@x.x.x` to use a specific version of Truffle. For example:
 ```
 slither . --truffle-version truffle@4.1.14
 ```
 Will run Slither with the latest 0.4 Truffle (through npx).
+
 
 ### solc
 To run Slither from a Solidity file:
