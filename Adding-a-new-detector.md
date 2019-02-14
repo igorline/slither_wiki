@@ -18,7 +18,6 @@ class Skeleton(AbstractDetector):
     IMPACT = DetectorClassification.HIGH
     CONFIDENCE = DetectorClassification.HIGH
 
-
     WIKI = ''
 
     WIKI_TITLE = ''
@@ -27,7 +26,10 @@ class Skeleton(AbstractDetector):
     WIKI_RECOMMENDATION = ''
 
     def _detect(self):
-        return []
+        info = 'This is an example!'
+
+        finding = self.generate_json_result(info)
+        return [finding]
 ```
 
 - `ARGUMENT` lets you run the detector from the command line
@@ -41,10 +43,19 @@ class Skeleton(AbstractDetector):
   - `DetectorClassification.LOW`
   - `DetectorClassification.MEDIUM`
   - `DetectorClassification.HIGH`
+- `WIKI` constants are used to generate automatically the documentation.
 
-`detect()` needs to return a list of findings. To facilitate the automation of Slither, a finding is a dictionary containing a `vuln` key associated with the vulnerability name and additional information according to the vulnerability itself.
+`_detect()` needs to return a list of findings. A finding is a dictionary that can be generated with `self.generate_json_result(info)`, where `info`  is the text that is going to be printed.
 
-An `AbstractDetector` object has the `slither` attribute, which returns the current `Slither` object, and the `log(str)` function to print the result.
+The following helper allows to add information to the finding, that can be used by a continuous integration system or an IDE to locate the bug:
+- `self.add_variable_to_json(variable)`
+- `self.add_variables_to_json(variables)`
+- `self.add_contract_to_json(contract)`
+- `self.add_function_to_json(function)`
+- `self.add_functions_to_json(functions)`
+- `self.add_nodes_to_json(nodes)`
+
+An `AbstractDetector` object has the `slither` attribute, which returns the current `Slither` object.
 
 # Integration
 
@@ -61,4 +72,4 @@ pip install deepdiff
 ```
 
 # Example
-[backdoor.py](https://github.com/trailofbits/slither/blob/0d1bbbebad52affcc8f6ee5855ab16e3b6bbbc74/slither/detectors/examples/backdoor.py) will detect any function with `backdoor` in its name.
+[backdoor.py](https://github.com/trailofbits/slither/blob/5cc07a3608a154a2fa022c3e064af4e699d63dda/slither/detectors/examples/backdoor.py) will detect any function with `backdoor` in its name.
