@@ -3,7 +3,7 @@
     * [Detectors documentation](./Detectors-Documentation)
     * [Printer documentation](./Printer-documentation)
   * [Advanced Usage](./advanced-usage)
-    * [API examples](./API-examples)
+    * [Python-API](./Python-API)
     * [Data dependency](./data-dependency)
     * [SlithIR](./SlithIR)
   * [Developer installation](./Developer-installation)
