@@ -62,6 +62,34 @@ To exclude detectors with a informational or low severity, use `--exclude-inform
 
 `--list-detectors` lists [available detectors](https://github.com/trailofbits/slither/wiki/Detectors-Documentation).
 
+### Configuration File
+Some options can be set through a json configuration file. By default,  `slither.conf.json` is used if present (it can be changed through `--config-file file.conf.json`).
+
+If an option is set by the configuration file and the command line, the command line option is selected;
+
+The following flags are supported:
+
+```
+{
+    "detectors_to_run": "detector1,detector2",
+    "printers_to_run": "printer1,printer2",
+    "detectors_to_exclude": "detector1,detector2",
+    "exclude_informational": false,
+    "exclude_low": false,
+    "exclude_medium": false,
+    "exclude_high": false,
+    "solc": "solc",
+    "solc_args": "",
+    "disable_solc_warnings": false,
+    "json": "",
+    "truffle_version": "truffle@x.x.x",
+    "disable_color": false,
+    "filter_paths": "file1.sol,file2.sol",
+    "ignore_truffle_compile": false,
+    "legacy_ast": false
+}
+```
+
 ### Printers selection
 By default, no printer are run.
 
