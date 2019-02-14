@@ -60,7 +60,7 @@ An `AbstractDetector` object has the `slither` attribute, which returns the curr
 # Integration
 
 You can integrate your detector into Slither by:
-- Adding it in [slither/detectors](https://github.com/trailofbits/slither/tree/20b8fdb7bc9227abe3c9c3a769f59eb5d1338849/slither/detectors) and in [__main__.py#L105-160](https://github.com/trailofbits/slither/blob/8f91c801c0bb903990c4fc9fa30611f157c6b0f9/slither/__main__.py#L105-L160)
+- Adding it in [slither/detectors/all_detectors.py](https://github.com/trailofbits/slither/blob/5cc07a3608a154a2fa022c3e064af4e699d63dda/slither/detectors/all_detectors.py)
 - or, by creating a plugin package (see the [skeleton example](https://github.com/trailofbits/slither/tree/8f91c801c0bb903990c4fc9fa30611f157c6b0f9/plugin_example)).
 
 ## Test the detector
