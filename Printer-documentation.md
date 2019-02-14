@@ -220,6 +220,49 @@ Indicators:
 - Variables of type `contract` specify the contract name in parentheses in a blue font.
 
 
+## Modifiers
+`slither file.sol --print modifiers`
+
+Print the modifiers called by each function.
+
+### Example
+```
+$ slither examples/printers/modifier.sol --print modifiers
+INFO:Printers:
+Contract C
++-------------+-------------+
+|   Function  |  Modifiers  |
++-------------+-------------+
+| constructor |      []     |
+|     set     | ['isOwner'] |
++-------------+-------------+
+```
+
+## Require
+`slither file.sol --print require`
+
+Print the require and assert calls of each function.
+
+### Example
+```
+$ slither examples/printers/require.sol --print require
+INFO:Printers:
+Contract Lib
++----------+--------------------------------------+
+| Function |          require or assert           |
++----------+--------------------------------------+
+|   set    | require(bool)(msg.sender == s.owner) |
++----------+--------------------------------------+
+INFO:Printers:
+Contract C
++-------------+--------------------------------------+
+|   Function  |          require or assert           |
++-------------+--------------------------------------+
+| constructor |                                      |
+|     set     | require(bool)(msg.sender == s.owner) |
++-------------+--------------------------------------+
+```
+
 
 
 ## SlithIR
