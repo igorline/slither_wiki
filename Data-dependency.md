@@ -21,8 +21,10 @@ contract MyContract{
 
 In this example, if we consider only `setA`, we have the following dependency:
 - `a` is dependent on `input_a` 
+
 If we consider only `setB`, we have:
 - `b` is dependent on `a`
+
 If we consider the contract entirely (with all the functions), we have:
 - `a` is dependent on `input_a` 
 - `b` is dependent on `a` and `input_a` (by transitivity)
