@@ -306,14 +306,14 @@ Contract MyContract
 
 Print the slithIR representation of the functions (SSA version)
 
-## Variables order
-`slither file.sol --print variables-order`
+## Variable order
+`slither file.sol --print variable-order`
 
 Print the storage order of the state variables
 
 ### Example
 ```
-$ slither tests/check-upgradability/contractV2_bug.sol --print variables-order
+$ slither tests/check-upgradability/contractV2_bug.sol --print variable-order
 INFO:Printers:
 ContractV2:
 +-------------+---------+
