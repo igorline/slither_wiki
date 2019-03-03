@@ -41,7 +41,7 @@ $ xdot examples/printers/call_graph.sol.dot
 ```
 To convert the file to svg:
 ```
-$ dot examples/printers/call_graph.sol.dot -Tsvg -o examples/printers/call_graph.sol.png
+$ dot examples/printers/call_graph.sol.dot -Tpng -o examples/printers/call_graph.sol.png
 ```
 
 
