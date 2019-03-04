@@ -3,6 +3,7 @@
     * [Detectors documentation](./Detectors-Documentation)
     * [Printer documentation](./Printer-documentation)
     * [Upgradability checks](./Upgradability-Checks)
+    * [Finding Paths Utility](./Finding-Paths-Utility)
   * [Advanced Usage](./advanced-usage)
     * [Python API](./Python-API)
     * [Data dependency](./data-dependency)
