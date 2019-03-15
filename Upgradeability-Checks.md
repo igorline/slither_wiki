@@ -1,4 +1,4 @@
-# Upgradability Checks
+# Upgradeability Checks
 
 `slither-check-upgradability` is meant to help to review contracts using the [delegatecall proxy pattern](https://blog.trailofbits.com/2018/09/05/contract-upgrade-anti-patterns/).
 
@@ -22,4 +22,3 @@ If a second version of the contract is to be checked, use:
 ```
 slither-check-upgradability proxy.sol ProxyName implem.sol ContractName implem_v2.sol ContractNameV2
 ```
-
