@@ -2,21 +2,21 @@ Slither allows printing contracts information through its printers.
 
 Num | Printer | Description
 --- | --- | ---
-1 | `call-graph` | [Export the call-graph of the contracts to a dot file](https://github.com/trailofbits/slither/wiki/Printer-documentation#call-graph)
-2 | `cfg` | [Export the CFG of each functions](https://github.com/trailofbits/slither/wiki/Printer-documentation#cfg)
-3 | `contract-summary` | [Print a summary of the contracts](https://github.com/trailofbits/slither/wiki/Printer-documentation#contract-summary)
-4 | `data-dependency` | [Print the data dependencies of the variables](https://github.com/trailofbits/slither/wiki/Printer-documentation#data-dependencies)
-5 | `function-id` | [Print the keccack256 signature of the functions](https://github.com/trailofbits/slither/wiki/Printer-documentation#function-id)
-6 | `function-summary` | [Print a summary of the functions](https://github.com/trailofbits/slither/wiki/Printer-documentation#function-summary)
-7 | `human-summary` | [Print a human-readable summary of the contracts](https://github.com/trailofbits/slither/wiki/Printer-documentation#human-summary)
-8 | `inheritance` | [Print the inheritance relations between contracts](https://github.com/trailofbits/slither/wiki/Printer-documentation#inheritance)
-9 | `inheritance-graph` | [Export the inheritance graph of each contract to a dot file](https://github.com/trailofbits/slither/wiki/Printer-documentation#inheritance-graph)
-10 | `modifiers` | [Print the modifiers called by each function](https://github.com/trailofbits/slither/wiki/Printer-documentation#modifiers)
-11 | `require` | [Print the require and assert calls of each function](https://github.com/trailofbits/slither/wiki/Printer-documentation#require)
-12 | `slithir` | [Print the slithIR representation of the functions](https://github.com/trailofbits/slither/wiki/Printer-documentation#slithir)
-13 | `slithir-ssa` | [Print the slithIR representation of the functions](https://github.com/trailofbits/slither/wiki/Printer-documentation#slithir-ssa)
-14 | `variables-order` | [Print the storage order of the state variables](https://github.com/trailofbits/slither/wiki/Printer-documentation#variables-order)
-15 | `vars-and-auth` | [Print the state variables written and the authorization of the functions](https://github.com/trailofbits/slither/wiki/Printer-documentation#variables-written-and-authorization)
+1 | `call-graph` | [Export the call-graph of the contracts to a dot file](https://github.com/crytic/slither/wiki/Printer-documentation#call-graph)
+2 | `cfg` | [Export the CFG of each functions](https://github.com/crytic/slither/wiki/Printer-documentation#cfg)
+3 | `contract-summary` | [Print a summary of the contracts](https://github.com/crytic/slither/wiki/Printer-documentation#contract-summary)
+4 | `data-dependency` | [Print the data dependencies of the variables](https://github.com/crytic/slither/wiki/Printer-documentation#data-dependencies)
+5 | `function-id` | [Print the keccack256 signature of the functions](https://github.com/crytic/slither/wiki/Printer-documentation#function-id)
+6 | `function-summary` | [Print a summary of the functions](https://github.com/crytic/slither/wiki/Printer-documentation#function-summary)
+7 | `human-summary` | [Print a human-readable summary of the contracts](https://github.com/crytic/slither/wiki/Printer-documentation#human-summary)
+8 | `inheritance` | [Print the inheritance relations between contracts](https://github.com/crytic/slither/wiki/Printer-documentation#inheritance)
+9 | `inheritance-graph` | [Export the inheritance graph of each contract to a dot file](https://github.com/crytic/slither/wiki/Printer-documentation#inheritance-graph)
+10 | `modifiers` | [Print the modifiers called by each function](https://github.com/crytic/slither/wiki/Printer-documentation#modifiers)
+11 | `require` | [Print the require and assert calls of each function](https://github.com/crytic/slither/wiki/Printer-documentation#require)
+12 | `slithir` | [Print the slithIR representation of the functions](https://github.com/crytic/slither/wiki/Printer-documentation#slithir)
+13 | `slithir-ssa` | [Print the slithIR representation of the functions](https://github.com/crytic/slither/wiki/Printer-documentation#slithir-ssa)
+14 | `variables-order` | [Print the storage order of the state variables](https://github.com/crytic/slither/wiki/Printer-documentation#variables-order)
+15 | `vars-and-auth` | [Print the state variables written and the authorization of the functions](https://github.com/crytic/slither/wiki/Printer-documentation#variables-written-and-authorization)
 
 
 Several printers require xdot installed for visualization:
