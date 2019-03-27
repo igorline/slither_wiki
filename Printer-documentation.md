@@ -32,7 +32,7 @@ Export the call-graph of the contracts to a dot file
 ```
 $ slither examples/printers/call_graph.sol --print contract-summary
 ```
-<img src="https://raw.githubusercontent.com/crytic/slither/master/examples/printers/call_graph.sol.dot.png?sanitize=true">
+<img src="https://raw.githubusercontent.com/crytic/slither/master/examples/printers/call_graph.sol.dot.png">
 
 The output format is [dot](https://www.graphviz.org/).
 To vizualize the graph:
@@ -74,7 +74,7 @@ Output a quick summary of the contract.
 $ slither examples/printers/quick_summary.sol --print contract-summary
 ```
 
-<img src="https://raw.githubusercontent.com/crytic/slither/master/examples/printers/quick_summary.sol.png?sanitize=true">
+<img src="https://raw.githubusercontent.com/crytic/slither/master/examples/printers/quick_summary.sol.png">
 
 
 ## Data Dependencies
@@ -175,7 +175,7 @@ Print a human-readable summary of the contracts
 $ slither examples/printers/human_printer.sol --print human-summary
 ```
 
-<img src="https://raw.githubusercontent.com/crytic/slither/master/examples/printers/human_printer.sol.png?sanitize=true">
+<img src="https://raw.githubusercontent.com/crytic/slither/master/examples/printers/human_printer.sol.png">
 
 ## Inheritance
 `slither file.sol --print inheritance`
@@ -186,7 +186,7 @@ Print the inheritance relations between contracts
 $ slither examples/printers/inheritances.sol --print inheritance
 ```
 
-<img src="https://raw.githubusercontent.com/crytic/slither/master/examples/printers/inheritances.sol.png?sanitize=true">
+<img src="https://raw.githubusercontent.com/crytic/slither/master/examples/printers/inheritances.sol.png">
 
 ## Inheritance Graph
 `slither file.sol --print inheritance-graph`
@@ -211,7 +211,7 @@ To convert the file to svg:
 ```
 $ dot examples/printers/inheritances.sol.dot -Tsvg -o examples/printers/inheritances.sol.png
 ```
-<img src="https://raw.githubusercontent.com/crytic/slither/master/examples/printers/inheritances_graph.sol.png?sanitize=true">
+<img src="https://raw.githubusercontent.com/crytic/slither/master/examples/printers/inheritances_graph.sol.png">
 
 Indicators:
 - If a contract has multiple inheritance, the connecting edges will be labelled in order of declaration.
