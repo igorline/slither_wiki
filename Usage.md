@@ -28,6 +28,7 @@ slither . --truffle-version truffle@4.1.14
 ```
 Will run Slither with the latest 0.4 Truffle (through npx).
 
+Use `--truffle-build-directory` to specify a [custom build directory](https://truffleframework.com/docs/truffle/reference/configuration#contracts_build_directory).
 
 ### solc
 To run Slither from a Solidity file:
@@ -133,6 +134,7 @@ The following flags are supported:
     "solc_args": "",
     "disable_solc_warnings": false,
     "json": "",
+    "truffle_build_directory": "custom/path",
     "truffle_version": "truffle@x.x.x",
     "disable_color": false,
     "filter_paths": "file1.sol,file2.sol",
