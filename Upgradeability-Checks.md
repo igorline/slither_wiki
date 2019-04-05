@@ -37,3 +37,11 @@ If the contract uses another schema, no check is performed. In that case, the to
 ```
 Initializable contract not found, the contract does not follow a standard initalization schema.
 ```
+
+## Functions ids checks
+
+<TODO>
+
+## Variables order checks
+
+<TODO>
