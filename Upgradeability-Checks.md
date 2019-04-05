@@ -3,9 +3,9 @@
 `slither-check-upgradability` is meant to help to review contracts using the [delegatecall proxy pattern](https://blog.trailofbits.com/2018/09/05/contract-upgrade-anti-patterns/).
 
 The tool checks that:
-- There is no function id collision
-- The order of variables is the same
-- The initialization is correct
+- [There is no function id collision](https://github.com/crytic/slither/wiki/Upgradeability-Checks#functions-ids-checks)
+- [The order of variables is the same](https://github.com/crytic/slither/wiki/Upgradeability-Checks#variables-order-checks)
+- [The initialization is correct](https://github.com/crytic/slither/wiki/Upgradeability-Checks#initialization-checks)
 
 ## Usage
 ```
