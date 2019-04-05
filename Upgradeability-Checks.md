@@ -34,7 +34,7 @@ cd node_modules/zos-lib
 npm install openzeppelin-solidity
 cp node_modules/openzeppelin-solidity/ . -r
 solc contracts/upgradeability/AdminUpgradeabilityProxy.sol  --allow-paths . --ast-compact-json > AdminUpgradeabilityProxy.json
-cd ..
+cd ../..
 slither-check-upgradability node_modules/openzeppelin-solidity/contracts/upgradeability/AdminUpgradeabilityProxy/json AdminUpgradeabilityProxy . MyImplementation
 ```
 
