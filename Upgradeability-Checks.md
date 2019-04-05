@@ -50,6 +50,7 @@ slither-check-upgradability node_modules/openzeppelin-solidity/contracts/upgrade
 - The variables are declared in the same order between the proxy and the implementation
 - The variables are declared in the implementation first and second version
 
+`slither-check-upgradeability` will warn if the proxy has state variables. Consider using the Unstructured storage pattern for those variables. 
 
 ### Initialization checks
 
