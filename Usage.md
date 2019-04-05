@@ -2,6 +2,7 @@
 
 - [How to run Slither](#how-to-run-slither)
   - [Truffle](#truffle) 
+  - [Embark](#embark) 
   - [solc](#solc)
   - [AST input](#ast-file)
 - [Options](#options)
@@ -20,7 +21,7 @@ To run Slither on a Truffle directory:
 slither .
 ```
 
-Use `--ignore-truffle-compile` to not run `truffle compile` with Slither.
+Use `--truffle-ignore-compile` to not run `truffle compile` with Slither.
 
 Use `--truffle-version truffle@x.x.x` to use a specific version of Truffle. For example:
 ```
@@ -31,7 +32,20 @@ Will run Slither with the latest 0.4 Truffle (through npx).
 Use `--truffle-build-directory` to specify a [custom build directory](https://truffleframework.com/docs/truffle/reference/configuration#contracts_build_directory).
 
 ### Embark
-<TODO>
+To run Slither on a Embark directory, on the first run, use:
+```
+slither . --embark-overwrite-config
+```
+
+It will:
+- install the [@trailofbits/embark-contract-plugin](https://github.com/crytic/embark-contract-info).
+- add `@trailofbits/embark-contract-plugin` to `embark.json` plugin list.
+
+Following runs will not need the `--embark-overwrite-config` flag (`slither .`).
+
+Alternatively, you can do those two steps manually, and run `slither .`
+
+Use `--embark-ignore-compile` to not run `embark build --contracts` with Slither.
 
 ### solc
 To run Slither from a Solidity file:
