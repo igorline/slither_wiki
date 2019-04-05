@@ -30,6 +30,9 @@ Will run Slither with the latest 0.4 Truffle (through npx).
 
 Use `--truffle-build-directory` to specify a [custom build directory](https://truffleframework.com/docs/truffle/reference/configuration#contracts_build_directory).
 
+### Embark
+<TODO>
+
 ### solc
 To run Slither from a Solidity file:
 
