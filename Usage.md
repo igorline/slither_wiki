@@ -38,7 +38,7 @@ slither . --embark-overwrite-config
 ```
 
 It will:
-- install the [@trailofbits/embark-contract-plugin](https://github.com/crytic/embark-contract-info).
+- install [@trailofbits/embark-contract-plugin](https://github.com/crytic/embark-contract-info).
 - add `@trailofbits/embark-contract-plugin` to `embark.json` plugin list.
 
 Following runs will not need the `--embark-overwrite-config` flag (`slither .`).
