@@ -41,9 +41,9 @@ It will:
 - install [@trailofbits/embark-contract-plugin](https://github.com/crytic/embark-contract-info).
 - add `@trailofbits/embark-contract-plugin` to `embark.json` plugin list.
 
-Following runs will not need the `--embark-overwrite-config` flag (`slither .`).
+Following runs will not need the `--embark-overwrite-config` flag, you can run Slither with `slither .`.
 
-Alternatively, you can do those two steps manually, and run `slither .`
+Alternatively, you can do those two steps manually, and run directly `slither .`
 
 Use `--embark-ignore-compile` to not run `embark build --contracts` with Slither.
 
