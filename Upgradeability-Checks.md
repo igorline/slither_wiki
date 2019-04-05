@@ -5,10 +5,7 @@
 The tool checks that:
 - There is no function id collision
 - The order of variables is the same
-- The initialization is correct (if `Initializable` is used):
-   - All the `initalize` functions call the `initializer` modifier 
-   - All the inherits `initalize` functions are called
-   - `initalize` functions are never called twice
+- The initialization is correct
 
 ## Usage
 ```
@@ -21,4 +18,22 @@ If a second version of the contract is to be checked, use:
 
 ```
 slither-check-upgradability proxy.sol ProxyName implem.sol ContractName implem_v2.sol ContractNameV2
+```
+
+
+## Initialization checks
+
+Contracts based on `delegatecallproxy` cannot be initialized through constructors. As a result, init functions must be used. These functions do not benefitfrom:
+- The Solidity C3 linearization. As a result, an init function can be called multiple times, or never.
+- The init functions must be calleable only once.
+- Race conditions can occur during deployement.
+
+If the contract uses the zos library (and the `Initializable` contract), the util checks that:
+ - All the `initalize` functions call the `initializer` modifier 
+ - All the inherits `initalize` functions are called
+ - `initalize` functions are never called twice
+
+If the contract uses another schema, no check is performed. In that case, the tool warns:
+```
+Initializable contract not found, the contract does not follow a standard initalization schema.
 ```
