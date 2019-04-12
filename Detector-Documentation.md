@@ -1,6 +1,50 @@
 # Public Detectors
 
 List of public detectors
+
+
+## Right-To-Left-Override character
+### Configuration
+* Check: `rtlo`
+* Severity: `High`
+* Confidence: `High`
+
+### Description
+An attacker can manipulate the logic of the contract by using a right-to-left-override character (U+202E)
+
+### Exploit Scenario:
+
+```solidity
+contract Token
+{
+
+    address payable o; // owner
+    mapping(address => uint) tokens;
+
+    function withdraw() external returns(uint)
+    {
+        uint amount = tokens[msg.sender];
+        address payable d = msg.sender;
+        tokens[msg.sender] = 0;
+        _withdraw(/*owner‮/*noitanitsed*/ d, o/*‭
+		        /*value */, amount);
+    }
+
+    function _withdraw(address payable fee_receiver, address payable destination, uint value) internal
+    {
+		fee_receiver.transfer(1);
+		destination.transfer(value);
+    }
+}
+```
+
+`Token` uses the right-to-left-override character when calling `_withdraw`. As a result, the fee is incorrectly sent to `msg.sender`, and the token balance is sent to the owner.
+
+
+
+### Recommendation
+Special control characters must not be allowed.
+
 ## State variable shadowing
 ### Configuration
 * Check: `shadowing-state`
@@ -54,11 +98,11 @@ Unprotected call to a function executing `selfdestruct`/`suicide`.
 ```solidity
 contract Suicidal{
     function kill() public{
-        selfdestruct(msg.value);
+        selfdestruct(msg.sender);
     }
 }
 ```
-Bob calls `kill` and destruct the contract.
+Bob calls `kill` and destructs the contract.
 
 ### Recommendation
 Protect access to all sensitive functions.
@@ -168,7 +212,7 @@ contract Delegatecall{
     }
 }
 ```
-Bob calls `delegate` and delegate the execution to its malicious contract. As a result, Bob withdraws the funds of the contract and destruct it.
+Bob calls `delegate` and delegates the execution to its malicious contract. As a result, Bob withdraws the funds of the contract and destructs it.
 
 ### Recommendation
 Avoid using `delegatecall`. Use only trusted destinations.
@@ -231,7 +275,7 @@ Return a boolean for the `approve`/`transfer`/`transferFrom` functions.
 * Confidence: `High`
 
 ### Description
-Use of strick equalities that can be easily manipulated by an attacker.
+Use of strict equalities that can be easily manipulated by an attacker.
 
 ### Exploit Scenario:
 
@@ -264,7 +308,7 @@ contract Locked{
     }
 }
 ```
-Every ethers send to `Locked` will be lost.
+Every ether sent to `Locked` will be lost.
 
 ### Recommendation
 Remove the payable attribute or add a withdraw function.
@@ -321,10 +365,10 @@ contract Constant{
 }
 ```
 `Constant` was deployed with Solidity 0.4.25. Bob writes a smart contract interacting with `Constant` in Solidity 0.5.0. 
-All the calls to `get` reverts, breaking Bob's smart contract execution.
+All the calls to `get` revert, breaking Bob's smart contract execution.
 
 ### Recommendation
-Ensure that the attributes of contracts compiled prior Solidity 0.5.0 are correct.
+Ensure that the attributes of contracts compiled prior to Solidity 0.5.0 are correct.
 
 ## Reentrancy vulnerabilities
 ### Configuration
@@ -372,10 +416,10 @@ contract TxOrigin {
         require(tx.origin == owner);
     }
 ```
-Bob is the owner of `TxOrigin`. Bob calls Eve's contract. Eve's contact calls `TxOrigin` and bypass the `tx.origin` protection.
+Bob is the owner of `TxOrigin`. Bob calls Eve's contract. Eve's contract calls `TxOrigin` and bypasses the `tx.origin` protection.
 
 ### Recommendation
-Do not use `tx.origin` for authentification.
+Do not use `tx.origin` for authorization.
 
 ## Uninitialized local variables
 ### Configuration
@@ -420,10 +464,10 @@ contract MyConc{
     }
 }
 ```
-`MyConc` call `add` of safemath, but does not store the result in `a`. As a result, the computation has no effect.
+`MyConc` calls `add` of SafeMath, but does not store the result in `a`. As a result, the computation has no effect.
 
 ### Recommendation
-Ensure that all the return value of the function call are stored in a local or state variable.
+Ensure that all the return values of the function calls are stored in a local or state variable.
 
 ## Builtin Symbol Shadowing
 ### Configuration
@@ -638,7 +682,7 @@ Replace all uses of deprecated symbols.
 * Confidence: `High`
 
 ### Description
-Detects that events defined by the ERC20 specification which are meant to have some parameters as `indexed`, are not missing the `indexed` keyword.
+Detects that events defined by the ERC20 specification which are meant to have some parameters as `indexed`, are missing the `indexed` keyword.
 
 ### Exploit Scenario:
 
@@ -716,7 +760,7 @@ Use one Solidity version.
 
 ### Description
 
-Solc frequently releases new compiler versions. Using an old version prevent access to new Solidity security checks.
+Solc frequently releases new compiler versions. Using an old version prevents access to new Solidity security checks.
 We recommend avoiding complex pragma statement.
 
 ### Recommendation
