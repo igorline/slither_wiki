@@ -16,7 +16,7 @@
 
 ## How to run Slither
 
-All the [`crytic-compile`](https://github.com/crytic/crytic-compile/wiki/Configuration) options are available by Slither.
+All the [`crytic-compile`](https://github.com/crytic/crytic-compile/wiki/Configuration) options are available through Slither.
 
 
 ### Truffle/Dapp/Etherlime
