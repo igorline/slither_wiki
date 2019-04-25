@@ -28,7 +28,10 @@ The json contains a list of vulnerability. A vulnerability is described followin
 `source_mapping` is:
 ```
 "source_mapping": {
- "filename": "tests/constant.sol",
+ "filename_relative": "contracts/tests/constant.sol",
+ "filename_absolute": "/tmp/contracts/tests/constant.sol",
+ "filename_short": "tests/constant.sol",
+ "filename_used": "contracts/tests/constant.sol",
  "length": 58,
  "lines": [
    5,
@@ -39,6 +42,9 @@ The json contains a list of vulnerability. A vulnerability is described followin
 }
 ```
 
+Notes:
+- `filename_short`: it is a shorted version of the path, which hides the platform-specific directories (ex: `node_modules`). 
+- `filename_used`: the path used by the platform. Its format is non-standard
 
 
 ## Expressions types
