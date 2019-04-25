@@ -43,7 +43,7 @@ The json contains a list of vulnerability. A vulnerability is described followin
 ```
 
 Notes:
-- `filename_short`: it is a shorted version of the path, which hides the platform-specific directories (ex: `node_modules`). 
+- `filename_short`: it is a shorter version of the path, which hides the platform-specific directories (ex: `node_modules`). 
 - `filename_used`: the path used by the platform. Its format is non-standard
 
 
