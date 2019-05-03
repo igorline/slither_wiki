@@ -13,7 +13,7 @@ class Skeleton(AbstractDetector):
     Documentation
     """
 
-    ARGUMENT = 'mydetector' # slither will launch the detector with slither.py --mydetector
+    ARGUMENT = 'mydetector' # slither will launch the detector with slither.py --detect mydetector
     HELP = 'Help printed by slither'
     IMPACT = DetectorClassification.HIGH
     CONFIDENCE = DetectorClassification.HIGH
