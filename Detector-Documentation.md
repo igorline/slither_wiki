@@ -777,3 +777,28 @@ Unused state variable.
 
 ### Recommendation
 Remove unused state variables.
+
+## Too many digits
+### Configuration
+* Check: `too-many-digits`
+* Severity: `Informational`
+* Confidence: `Medium`
+
+### Description
+Detect large digits that do not follow best practices
+
+### Exploit Scenario:
+
+```solidity
+contract MyContract{
+    uint 1_ether = 10000000000000000000; 
+```
+
+While `1_ether` looks like `1 ether`, it is `10 ether`.
+
+### Recommendation
+
+Use:
+- [Ether suffix](https://solidity.readthedocs.io/en/latest/units-and-global-variables.html#ether-units),
+- [Time suffix](https://solidity.readthedocs.io/en/latest/units-and-global-variables.html#time-units) or,
+- [The scientific notation](https://solidity.readthedocs.io/en/latest/types.html#rational-and-integer-literals)
