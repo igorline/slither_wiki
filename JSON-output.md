@@ -12,7 +12,7 @@ At the top level, the JSON output provided by slither will appear in the followi
 - `results` (result array, see below): If `success` is `true`, this will be an array populated with relevant slither findings.
 
 ## Vulnerability Results/Findings
-A vulnerability/result found in the `results` array above will be of the following format:
+A vulnerability result found in the `results` array above will be of the following format:
 
 ```json
 {
