@@ -1,3 +1,4 @@
+## Top level output format
 At the top level, the JSON output provided by slither will appear in the following format:
 ```json
 { 
@@ -10,6 +11,7 @@ At the top level, the JSON output provided by slither will appear in the followi
 - `error` (string | null): If `success` is `false`, this will be a string with relevant error information. Otherwise, it will be `null`.
 - `results` (result array, see below): If `success` is `true`, this will be an array populated with relevant slither findings.
 
+## Vulnerability results/findings
 A vulnerability/result found in the `results` array above will be of the following format:
 
 ```json
@@ -39,6 +41,7 @@ A vulnerability/result found in the `results` array above will be of the followi
   - NOTE: When writing a detector, the first element should be carefully chosen to represent the most significant portion of mapped code for the finding (the area of source on which external tooling should primarily focus for the issue).
 - `additional_info`: (OPTIONAL, any): Offers additional detector-specific information, does not always exist.
 
+## Vulnerability result elements
 Each element found in `elements` above is of the form:
 ```json
 {
@@ -54,8 +57,19 @@ Each element found in `elements` above is of the form:
   - For `pragma` types, this refers to a string representation of the `version` portion of the pragma (ie: `^0.5.0`).
 - `source_mapping` (source mapping, see below): Refers to a source mapping object which defines the source range which represents this element.
 - `additional_info`: (OPTIONAL, any): Offers additional detector-specific element information, does not always exist.
-  - For `pragma` type elements, a `directive` field will be added here, serializing the full pragma directive.
 
+Additionally, there are element type-specific fields included:
+- For `function`/`enum`/`struct`/`event` type elements:
+  - `contract` (contract element): The parent contract of the function.
+- For `variable` type elements:
+  - `contract` (OPTIONAL, contract element): The parent contract of the variable. Included if the variable is a state variable.
+  - `function` (OPTIONAL, function element): The parent function of the variable. Included if the variable is a local variable.
+- For `node` type elements:
+  - `function` (function element): The parent function of the node.
+- For `pragma` type elements:
+  - `directive` (string array): Fully serialized pragma directive (ie: `["solidity", "^", "0.4", ".9"]`)
+
+## Source mapping
 Each `source_mapping` object is used to map an element to some portion of source. It should be of the form:
 ```
 "source_mapping": {
@@ -84,22 +98,7 @@ Each `source_mapping` object is used to map an element to some portion of source
 - `starting_column` (integer): The starting column/character position for the first mapped source line. Begins from 1.
 - `ending_column` (integer): The ending column/character position for the last mapped source line. Begins from 1.
 
-## Expressions types
-- type `contract` has
-  - `"name":"contract_name"` 
-- `function` has
-  - `"name": "function_name"`
-  - `"contract": type contract`
-- `functions` has
-  - list of function
-- `variable` has 
-   - `"name": "variable_name"`
-- `variables` has
-  - list of variable
-- `expression` has
-  - `expression`: a string representation of the expression
-
-## Additional types
+## Detector specific additional_fields
 Some detectors have non standard elements
 - `constant-function`: `contain_assembly`: bool
 - `naming-convention`: "convention": "CapWords", "name": "contract_name", "target": "target_name"
