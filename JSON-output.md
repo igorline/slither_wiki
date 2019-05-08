@@ -1,22 +1,32 @@
-The json contains a list of vulnerability. A vulnerability is described following this format:
-
+The json contains the list of vulnerability in its `results field`. 
+```json
+{ 
+ "success": true,
+ "error": null, 
+ "results": []}
+}
 ```
+
+
+A vulnerability is described following this format:
+
+```json
 {
-     check: ...
-     impact: ...
-     confidence: ...
-     description: ...
-     elements: [     
+     "check": "...",
+     "impact": "...",
+     "confidence": "...",
+     "description": "...",
+     "elements": [     
       {
-          type: item0 
-          item0_additional_info: ...  
-          source_mapping : ...
+          "type": "item0", 
+          "item0_additional_info": "...", 
+          "source_mapping" : "..."
       },
       {
-          type: item1
-          item1_additional_info: ...  
-          source_mapping : ...
-      }
+          "type": "item1",
+          "item1_additional_info": "...",
+          "source_mapping" : "..."
+      }]
 }
 ```
 - `check`: slither flag (see the [list of flags](https://github.com/trailofbits/slither#detectors))
