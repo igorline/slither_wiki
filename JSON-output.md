@@ -14,23 +14,13 @@ At the top level, the JSON output provided by slither will appear in the followi
 ## Vulnerability Results/Findings
 A vulnerability result found in the `results` array above will be of the following format:
 
-```json
+```
 {
      "check": "...",
      "impact": "...",
      "confidence": "...",
      "description": "...",
-     "elements": [     
-      {
-          "type": "...", 
-          "name": "...", 
-          "source_mapping" : "..."
-      },
-      {
-          "type": "...",
-          "name": "...",
-          "source_mapping" : "..."
-      }]
+     "elements": []
 }
 ```
 - `check` (string): The detector identifier (see the [list of detectors](https://github.com/trailofbits/slither#detectors))
