@@ -51,32 +51,38 @@ Each element found in `elements` above is of the form:
 - `name` (string): Refers to the name of the element. 
   - For `contract`/`function`/`variable`/`enum`/`struct`/`event` types, this refers to the definition name. 
   - For `node` types, this refers to a string representation of any underlying expression. A blank string is used if there is no underlying expression.
-  - For `pragma`, this refers to a string representation of the `version` portion of the pragma (ie: `^0.5.0`).
+  - For `pragma` types, this refers to a string representation of the `version` portion of the pragma (ie: `^0.5.0`).
 - `source_mapping` (source mapping, see below): Refers to a source mapping object which defines the source range which represents this element.
 - `additional_info`: (OPTIONAL, any): Offers additional detector-specific element information, does not always exist.
   - For `pragma` type elements, a `directive` field will be added here, serializing the full pragma directive.
 
-`source_mapping` is:
+Each `source_mapping` object is used to map an element to some portion of source. It should be of the form:
 ```
 "source_mapping": {
+ "start": 45
+ "length": 58,
  "filename_relative": "contracts/tests/constant.sol",
  "filename_absolute": "/tmp/contracts/tests/constant.sol",
  "filename_short": "tests/constant.sol",
  "filename_used": "contracts/tests/constant.sol",
- "length": 58,
  "lines": [
    5,
    6,
    7
  ],
- "start": 45
+ "starting_column": 1,
+ "ending_column": 24,
 }
 ```
-
-Notes:
-- `filename_short`: it is a shorter version of the path, which hides the platform-specific directories (ex: `node_modules`). 
-- `filename_used`: the path used by the platform. Its format is non-standard
-
+- `start` (integer): Refers to the starting byte position of the mapped source.
+- `length` (integer): Refers to the byte-length of the mapped source.
+- `filename_relative` (string): A relative file path from the analysis directory.
+- `filename_absolute` (string): An absolute file path to the file.
+- `filename_short` (string): A short version of the filename used for display purposes. Hides platform-specific directories (ex: `node_modules`).
+- `filename_used` (string): The path used by the platform for analysis (non-standard).
+- `lines` (integer array): An array of line numbers which the mapped source spans. Line numbers begin from 1.
+- `starting_column` (integer): The starting column/character position for the first mapped source line. Begins from 1.
+- `ending_column` (integer): The ending column/character position for the last mapped source line. Begins from 1.
 
 ## Expressions types
 - type `contract` has
