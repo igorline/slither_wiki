@@ -88,7 +88,7 @@ Each `source_mapping` object is used to map an element to some portion of source
 - `starting_column` (integer): The starting column/character position for the first mapped source line. Begins from 1.
 - `ending_column` (integer): The ending column/character position for the last mapped source line. Begins from 1.
 
-## Detector-specific additional_fields
+## Detector-specific additional fields
 Some detectors have custom elements output via the `additional_fields` field of their result, or result elements. Annotations here will specify _result_ or _result-element_ to specify the location of the additional fields.
 - `constant-function`: 
   - `contain_assembly` (result, boolean): Specifies if the result is due to the function containing assembly.
