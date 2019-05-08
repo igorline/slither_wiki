@@ -25,8 +25,8 @@ Make sure that you are using pip3.6 or later. If you are running from inside a [
 
 All these examples will use the following files:
 
-* [etherscan_verified_contracts.bin](link)
-* [cache.npz](link)
+* [etherscan_verified_contracts.bin](https://drive.google.com/file/d/1oEhbIL4V9582Y5VKp4iiOURGq8qa4cBN/view?usp=sharing)
+* [cache.npz](https://drive.google.com/file/d/1vpwusbyzLn1JqqAvlFivHXtLvsEp0VqX/view?usp=sharing)
 * [MetaCoin.sol](link)
 
 Our tool has several modes:
@@ -63,3 +63,15 @@ index(uint256) binary(<) condition(temporary_variable) return index(uint256) bin
   0.06719872 -0.04520541  0.13745852  0.14690697 -0.03721125  0.00579037
 ...
 ```
+
+### Test mode
+
+...
+
+### Train mode
+
+...
+
+### Plot mode
+
+...
