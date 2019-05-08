@@ -1,14 +1,16 @@
-The json contains the list of vulnerability in its `results field`. 
+At the top level, the JSON output provided by slither will appear in the following format:
 ```json
 { 
  "success": true,
  "error": null, 
- "results": []}
+ "results": []
 }
 ```
+- `success` (boolean): `true` if `results` were output successfully, `false` if an `error` occurred.
+- `error` (string | null): If `success` is `false`, this will be a string with relevant error information. Otherwise, it will be `null`.
+- `results` (result array, see below): If `success` is `true`, this will be an array populated with relevant slither findings.
 
-
-A vulnerability is described following this format:
+A vulnerability/result found in the `results` array above will be of the following format:
 
 ```json
 {
@@ -29,11 +31,30 @@ A vulnerability is described following this format:
       }]
 }
 ```
-- `check`: slither flag (see the [list of flags](https://github.com/trailofbits/slither#detectors))
-- `impact`: string representation of the impact (`High`/ `Medium`/ `Low`/ `Informational`)
-- `confidence`: string representation of the confidence (`High`/ `Medium`/ `Low`)
-- `description`: string output of slither
-- `elements`: structure that changes according to the vulnerability class. Each element has at least its `type` (described below) and a `source_mapping` information. As a result, the additional info can be skiped to facilitate the parsing of the json
+- `check` (string): The detector identifier (see the [list of detectors](https://github.com/trailofbits/slither#detectors))
+- `impact` (string): representation of the impact (`High`/ `Medium`/ `Low`/ `Informational`)
+- `confidence` (string): representation of the confidence (`High`/ `Medium`/ `Low`)
+- `description` (string): output of the slither
+- `elements`: (element array, see below): an array of relevant items for this finding which map to some source code.
+  - NOTE: When writing a detector, the first element should be carefully chosen to represent the most significant portion of mapped code for the finding (the area of source on which external tooling should primarily focus for the issue).
+- `additional_info`: (OPTIONAL, any): Offers additional detector-specific information, does not always exist.
+
+Each element found in `elements` above is of the form:
+```json
+{
+	"type": "...",
+	"name": "...",
+	"source_mapping": { ... }
+}
+```
+- `type` (string): Refers to the type of element, this can be either: (`contract`, `function`, `variable`, `node`, `pragma`, `enum`, `struct`, `event`).
+- `name` (string): Refers to the name of the element. 
+  - For `contract`/`function`/`variable`/`enum`/`struct`/`event` types, this refers to the definition name. 
+  - For `node` types, this refers to a string representation of any underlying expression. A blank string is used if there is no underlying expression.
+  - For `pragma`, this refers to a string representation of the `version` portion of the pragma (ie: `^0.5.0`).
+- `source_mapping` (source mapping, see below): Refers to a source mapping object which defines the source range which represents this element.
+- `additional_info`: (OPTIONAL, any): Offers additional detector-specific element information, does not always exist.
+  - For `pragma` type elements, a `directive` field will be added here, serializing the full pragma directive.
 
 `source_mapping` is:
 ```
