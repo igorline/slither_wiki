@@ -69,6 +69,7 @@ slither file.ast.json
 - To disable the solc warnings: `--disable-solc-warnings`
 - To disable the output colorization: `--disable-color`
 - To export the result to a json file: `--json file.json`
+  - To export to stdout instead of a file, simply replace the filename with `-`
 
 ### Detectors selection
 By default, slither run all the detectors.
