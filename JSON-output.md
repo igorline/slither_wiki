@@ -70,7 +70,7 @@ Additionally, there are element type-specific fields included:
   - `directive` (string array): Fully serialized pragma directive (ie: `["solidity", "^", "0.4", ".9"]`)
 
 ## Source Mapping
-Each `source_mapping` object is used to map an element to some portion of source. It should be of the form:
+Each `source_mapping` object is used to map an element to some portion of source. It is of the form:
 ```
 "source_mapping": {
  "start": 45
