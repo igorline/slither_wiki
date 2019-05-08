@@ -1,4 +1,4 @@
-## Top level output format
+## Top-level Output Format
 At the top level, the JSON output provided by slither will appear in the following format:
 ```json
 { 
@@ -11,7 +11,7 @@ At the top level, the JSON output provided by slither will appear in the followi
 - `error` (string | null): If `success` is `false`, this will be a string with relevant error information. Otherwise, it will be `null`.
 - `results` (result array, see below): If `success` is `true`, this will be an array populated with relevant slither findings.
 
-## Vulnerability results/findings
+## Vulnerability Results/Findings
 A vulnerability/result found in the `results` array above will be of the following format:
 
 ```json
@@ -41,7 +41,7 @@ A vulnerability/result found in the `results` array above will be of the followi
   - NOTE: When writing a detector, the first element should be carefully chosen to represent the most significant portion of mapped code for the finding (the area of source on which external tooling should primarily focus for the issue).
 - `additional_info`: (OPTIONAL, any): Offers additional detector-specific information, does not always exist.
 
-## Vulnerability result elements
+## Vulnerability Result Elements
 Each element found in `elements` above is of the form:
 ```json
 {
@@ -69,7 +69,7 @@ Additionally, there are element type-specific fields included:
 - For `pragma` type elements:
   - `directive` (string array): Fully serialized pragma directive (ie: `["solidity", "^", "0.4", ".9"]`)
 
-## Source mapping
+## Source Mapping
 Each `source_mapping` object is used to map an element to some portion of source. It should be of the form:
 ```
 "source_mapping": {
@@ -98,16 +98,17 @@ Each `source_mapping` object is used to map an element to some portion of source
 - `starting_column` (integer): The starting column/character position for the first mapped source line. Begins from 1.
 - `ending_column` (integer): The ending column/character position for the last mapped source line. Begins from 1.
 
-## Detector specific additional_fields
-Some detectors have non standard elements
-- `constant-function`: `contain_assembly`: bool
-- `naming-convention`: "convention": "CapWords", "name": "contract_name", "target": "target_name"
-  - `convention` can be:
+## Detector-specific additional_fields
+Some detectors have custom elements output via the `additional_fields` field of their result, or result elements. Annotations here will specify _result_ or _result-element_ to specify the location of the additional fields.
+- `constant-function`: 
+  - `contain_assembly` (result, boolean): Specifies if the result is due to the function containing assembly.
+- `naming-convention`: 
+  - `convention` (result-element, string): Used to denote the convention used to find the result element/issue. Valid conventions are:
     - `CapWords`
     - `mixedCase`
     - `l_O_I_should_not_be_used`
     - `UPPER_CASE_WITH_UNDERSCORES`
-  - `target` can be:
+  - `target` (result-element, string): Used to denote the type of finding (constant, parameter, etc). Valid targets are:
     - `contract`
     - `structure`
     - `event`
@@ -119,7 +120,4 @@ Some detectors have non standard elements
     - `modifier`
 
 - `reentrancy` (all variants): 
-  - list of "external_calls": `expression`/`source_mapping`
-  - list of "external_calls_sending_eth": `expression`/`source_mapping` 
-  - list of "variables_written": `expression`/`source_mapping`/`name`
-
+  - `underlying_type` (result-element, string): Specifies the type of result element. Is one of `external_calls`, `external_calls_sending_eth`, or `variables_written`.
