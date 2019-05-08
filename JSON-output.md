@@ -22,13 +22,13 @@ A vulnerability result found in the `results` array above will be of the followi
      "description": "...",
      "elements": [     
       {
-          "type": "item0", 
-          "item0_additional_info": "...", 
+          "type": "...", 
+          "name": "...", 
           "source_mapping" : "..."
       },
       {
-          "type": "item1",
-          "item1_additional_info": "...",
+          "type": "...",
+          "name": "...",
           "source_mapping" : "..."
       }]
 }
@@ -39,7 +39,7 @@ A vulnerability result found in the `results` array above will be of the followi
 - `description` (string): output of the slither
 - `elements`: (element array, see below): an array of relevant items for this finding which map to some source code.
   - NOTE: When writing a detector, the first element should be carefully chosen to represent the most significant portion of mapped code for the finding (the area of source on which external tooling should primarily focus for the issue).
-- `additional_info`: (OPTIONAL, any): Offers additional detector-specific information, does not always exist.
+- `additional_fields`: (OPTIONAL, any): Offers additional detector-specific information, does not always exist.
 
 ## Vulnerability Result Elements
 Each element found in `elements` above is of the form:
@@ -56,7 +56,7 @@ Each element found in `elements` above is of the form:
   - For `node` types, this refers to a string representation of any underlying expression. A blank string is used if there is no underlying expression.
   - For `pragma` types, this refers to a string representation of the `version` portion of the pragma (ie: `^0.5.0`).
 - `source_mapping` (source mapping, see below): Refers to a source mapping object which defines the source range which represents this element.
-- `additional_info`: (OPTIONAL, any): Offers additional detector-specific element information, does not always exist.
+- `additional_fields`: (OPTIONAL, any): Offers additional detector-specific element information, does not always exist.
 
 Additionally, there are element type-specific fields included:
 - For `function`/`enum`/`struct`/`event` type elements:
