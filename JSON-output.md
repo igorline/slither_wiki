@@ -46,7 +46,9 @@ Each element found in `elements` above is of the form:
 {
 	"type": "...",
 	"name": "...",
-	"source_mapping": {}
+	"source_mapping": {},
+	"type_specific_fields": {},
+	"additional_fields": {}
 }
 ```
 - `type` (string): Refers to the type of element, this can be either: (`contract`, `function`, `variable`, `node`, `pragma`, `enum`, `struct`, `event`).
@@ -55,14 +57,19 @@ Each element found in `elements` above is of the form:
   - For `node` types, this refers to a string representation of any underlying expression. A blank string is used if there is no underlying expression.
   - For `pragma` types, this refers to a string representation of the `version` portion of the pragma (ie: `^0.5.0`).
 - `source_mapping` (source mapping, see below): Refers to a source mapping object which defines the source range which represents this element.
-- `parent`: (OPTIONAL, result-element):
-  - For `function`/`enum`/`struct`/`event` type elements: The parent contract of the function.
+- `type_specific_fields` (OPTIONAL, any): 
+  - For `function`/`event` type elements:
+    - `parent` (result-element): Refers to the parent contract of this definition.
+    - `signature` (string): Refers to the full signature of this function
+  - For `enum`/`struct` type elements:
+    - `parent` (result-element): Refers to the parent contract of this definition.
   - For `variable` type elements: 
-    - If state variable: The parent contract
-    - If local variable: The parent function
-  - For `node` type elements: The parent function of the node.
-  - For `pragma` type elements: Fully serialized pragma directive (ie: `["solidity", "^", "0.4", ".9"]`)
-- `additional_fields`: (OPTIONAL, any): Offers additional detector-specific element information, does not always exist.
+    - `parent` (result-element): Refers to the parent contract if this variable is a state variable. Refers to the parent function if this variable is a local variable.
+  - For `node` type elements:
+    - `parent` (result-element): Refers to the parent function of this node.
+  - For `pragma` type elements: 
+    - `directive` (string array): Fully serialized pragma directive (ie: `["solidity", "^", "0.4", ".9"]`)
+- `additional_fields` (OPTIONAL, any): Offers additional detector-specific element information, does not always exist.
 
 ## Source Mapping
 Each `source_mapping` object is used to map an element to some portion of source. It is of the form:
