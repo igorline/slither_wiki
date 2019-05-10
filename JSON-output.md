@@ -1,26 +1,35 @@
-## Top-level Output Format
+## Top-level Command Output
 At the top level, the JSON output provided by slither will appear in the following format:
 ```json
 { 
- "success": true,
- "error": null, 
- "results": []
+	"success": true,
+	"error": null, 
+	"results": {}
 }
 ```
 - `success` (boolean): `true` if `results` were output successfully, `false` if an `error` occurred.
 - `error` (string | null): If `success` is `false`, this will be a string with relevant error information. Otherwise, it will be `null`.
-- `results` (result array, see below): If `success` is `true`, this will be an array populated with relevant slither findings.
+- `results` (command-results, see below): If `success` is `true`, this will be an object populated with different types of results, depending on the JSON arguments specified.
 
-## Vulnerability Results/Findings
-A vulnerability result found in the `results` array above will be of the following format:
+## Command Results
+The underlying `results` item above will appear in the following format:
+```json
+{ 
+	"detectors": []
+}
+```
+- `detectors` (OPTIONAL, vulnerability-results, see below): The results of any detector analysis.
+
+## Detector Results
+A detector result found in the `detectors` array above will be of the following format:
 
 ```
 {
-     "check": "...",
-     "impact": "...",
-     "confidence": "...",
-     "description": "...",
-     "elements": []
+	"check": "...",
+	"impact": "...",
+	"confidence": "...",
+	"description": "...",
+	"elements": []
 }
 ```
 - `check` (string): The detector identifier (see the [list of detectors](https://github.com/trailofbits/slither#detectors))
@@ -31,13 +40,13 @@ A vulnerability result found in the `results` array above will be of the followi
   - NOTE: When writing a detector, the first element should be carefully chosen to represent the most significant portion of mapped code for the finding (the area of source on which external tooling should primarily focus for the issue).
 - `additional_fields`: (OPTIONAL, any): Offers additional detector-specific information, does not always exist.
 
-## Vulnerability Result Elements
+## Detector Result Elements
 Each element found in `elements` above is of the form:
 ```json
 {
 	"type": "...",
 	"name": "...",
-	"source_mapping": { ... }
+	"source_mapping": {}
 }
 ```
 - `type` (string): Refers to the type of element, this can be either: (`contract`, `function`, `variable`, `node`, `pragma`, `enum`, `struct`, `event`).
@@ -59,19 +68,19 @@ Each element found in `elements` above is of the form:
 Each `source_mapping` object is used to map an element to some portion of source. It is of the form:
 ```
 "source_mapping": {
- "start": 45
- "length": 58,
- "filename_relative": "contracts/tests/constant.sol",
- "filename_absolute": "/tmp/contracts/tests/constant.sol",
- "filename_short": "tests/constant.sol",
- "filename_used": "contracts/tests/constant.sol",
- "lines": [
-   5,
-   6,
-   7
- ],
- "starting_column": 1,
- "ending_column": 24,
+	"start": 45
+	"length": 58,
+	"filename_relative": "contracts/tests/constant.sol",
+	"filename_absolute": "/tmp/contracts/tests/constant.sol",
+	"filename_short": "tests/constant.sol",
+	"filename_used": "contracts/tests/constant.sol",
+	"lines": [
+		5,
+		6,
+		7
+ 	],
+ 	"starting_column": 1,
+ 	"ending_column": 24,
 }
 ```
 - `start` (integer): Refers to the starting byte position of the mapped source.
