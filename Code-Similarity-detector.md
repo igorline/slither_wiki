@@ -28,8 +28,7 @@ All these examples will use the following files:
 * [cache.npz](https://drive.google.com/file/d/1vpwusbyzLn1JqqAvlFivHXtLvsEp0VqX/view?usp=sharing)
 * [MetaCoin.sol](link)
 
-Our tool has several modes:
-- `info`: prints the raw representation of a function and its information about a function
+Our tool has several modes: `info`, `test`, `test` and `plot`.
 
 ### Info mode
 
@@ -65,9 +64,16 @@ index(uint256) binary(<) condition(temporary_variable) return index(uint256) bin
 
 ### Test mode
 
-The more important mode of slither-simil is test. This mode allows to transform one particular function into a vector and find the more similar functions, given a list of them (usually a large amount of contracts in a directory).
+The more important mode of `slither-simil` is test. This mode allows to transform one particular function into a vector used to find the more similar functions, given a list of them (usually as a large amount of contracts in a directory).
 
-Test mode will requieres a pre-trained model, a filename, a contract name, a function name and an input directory or file. The input can be either a directory with contracts or special cache file with a pre-computed list of vectors for every contract. It is very recommended to use the cache to avoid longer processing times compiling and vectorizing the input contracts.  
+Test mode requires the following parameters: 
+1. A pre-trained model
+2. A contract filename
+3. A function name (e.g. `SafeMath.add` or `add`) 
+4. An input directory or file (this can be either a directory with contracts or special cache file with a pre-computed list of vectors for every contract).
+
+It is very recommended to use the cache to avoid longer processing times compiling and vectorizing the input contracts.  
+To find similar functions to the `sendCoin` in MetaCoin, we execute:
 
 ```
 $ $ slither-simil test etherscan_verified_contracts.bin --filename MetaCoin.sol --contract MetaCoin --fname sendCoin --input cache.npz --ntop 25 --solc solc-0.4.25 
@@ -105,8 +111,31 @@ Search similar functions in more than 800,000 functions only takes 20 seconds.
 
 ### Train mode
 
-...
+Train mode allows to train new models used to vectorize functions. In order to do that, we will need a large amount of contracts/functions.
+
+```
+$ slither-simil train model.bin --input contracts --ext '.json' 
+INFO:Slither-simil:Saving extracted data into last_data_train.txt
+INFO:Slither-simil:Starting training
+Read 0M words
+Number of words:  348
+Number of labels: 0
+Progress: 100.0% words/sec/thread:   53124 lr:  0.000000 loss:  2.066949 ETA:   0h 0m
+INFO:Slither-simil:Training complete
+INFO:Slither-simil:Saving model
+INFO:Slither-simil:Saving cache in cache.npz
+INFO:Slither-simil:Done!
+```
+
+After it runs, the tool will output the `model.bin` file, with the trained model.
+Additionally, it will produce two additional files: 
+- A `cache.npz` file with the cache of every function that can be used in test mode to get results significantly faster 
+- A `last_data_train.txt` file with all the SlithIR representation of every function used to train. This file is useful for debugging, to verify that the IR conversion works as expected.
+
+ 
 
 ### Plot mode
+
+
 
 ...
