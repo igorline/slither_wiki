@@ -17,7 +17,7 @@ $ pip3 install pybind11 --user
 $ pip3 install https://github.com/facebookresearch/fastText/archive/0.2.0.zip --user
 ```
 
-Make sure that you are using pip3.6 or later. If you are running from inside a [virtualenv](https://virtualenv.pypa.io/en/latest/), remove the `--user` parameter.
+Make sure that you are using `pip3.6` or later. If you are running from inside a [virtualenv](https://virtualenv.pypa.io/en/latest/), remove the `--user` parameter.
 
 ## Usage
 
