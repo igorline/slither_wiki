@@ -67,16 +67,16 @@ index(uint256) binary(<) condition(temporary_variable) return index(uint256) bin
 The more important mode of `slither-simil` is test. This mode allows to transform one particular function into a vector used to find the more similar functions, given a list of them (usually as a large amount of contracts in a directory).
 
 Test mode requires the following parameters: 
-1. A pre-trained model
-2. A contract filename
-3. A function name (e.g. `SafeMath.add` or `add`) 
+1. A pre-trained model,
+2. A contract filename,
+3. A function name (e.g. `SafeMath.add` or `add`), 
 4. An input directory or file (this can be either a directory with contracts or special cache file with a pre-computed list of vectors for every contract).
 
 It is very recommended to use the cache to avoid longer processing times compiling and vectorizing the input contracts.  
-To find similar functions to the `sendCoin` in MetaCoin, we execute:
+To find similar functions to the `sendCoin` in `MetaCoin` (compiled with `solc-0.4.25`), we execute:
 
 ```
-$ $ slither-simil test etherscan_verified_contracts.bin --filename MetaCoin.sol --contract MetaCoin --fname sendCoin --input cache.npz --ntop 25 --solc solc-0.4.25 
+$ slither-simil test etherscan_verified_contracts.bin --filename MetaCoin.sol --fname MetaCoin.sendCoin --input cache.npz --ntop 25 --solc solc-0.4.25
 INFO:Slither-simil:Reviewed 825062 functions, listing the 25 most similar ones:
 INFO:Slither-simil:filename                                                          contract             function             score     
 INFO:Slither-simil:0x954b5de09a55e59755acbda29e1eb74a45d30175_Fluz.sol               Fluz                 transfer             1.0       
@@ -103,7 +103,7 @@ INFO:Slither-simil:0x2bec16b164725efc192b7ec0296f838c61317514_eda.sol           
 INFO:Slither-simil:0xb7cb1c96db6b22b0d3d9536e0108d062bd488f74_WaltonToken.sol        StandardToken        transfer             0.991     
 INFO:Slither-simil:0x346c3be6aebEBaF5Cb766a75aDc9827EfbB7E41A_DelphiToken.sol        StandardToken        transfer             0.991     
 INFO:Slither-simil:0xf5068761511594c82328102f4fde4650ed9ea6c4_WHP.sol                WHP                  transfer             0.991     
-INFO:Slither-simil:0x5f9f2ae7150d0beef3bb50ac8d8f4b43e6a6cc57_NABC.sol               NABC                 transfer             0.991 
+INFO:Slither-simil:0x5f9f2ae7150d0beef3bb50ac8d8f4b43e6a6cc57_NABC.sol               NABC                 transfer             0.991     
 ```
 
 Search similar functions in more than 800,000 functions only takes 20 seconds.
@@ -114,7 +114,7 @@ Search similar functions in more than 800,000 functions only takes 20 seconds.
 Train mode allows to train new models used to vectorize functions. In order to do that, we will need a large amount of contracts/functions.
 
 ```
-$ slither-simil train model.bin --input contracts --ext '.json' 
+$ slither-simil train model.bin --input contracts
 INFO:Slither-simil:Saving extracted data into last_data_train.txt
 INFO:Slither-simil:Starting training
 Read 0M words
@@ -136,6 +136,26 @@ Additionally, it will produce two additional files:
 
 ### Plot mode
 
+Plot mode allows to plot sets of functions, to detect cluster of similar ones. Before start using this mode, make sure you install the required packages:
 
+```
+$ pip3 install sklearn matplotlib --user
+```
 
-...
+For instance, to plot all the functions named `add` from contracts named `SafeMath` sampling 500 random contracts, we execute:
+
+```
+$ slither-simil plot etherscan_verified_contracts.bin --fname SafeMath.add --input cache.npz --nsamples 500 
+INFO:Slither-simil:Loading data..
+INFO:Slither-simil:Procesing data..
+INFO:Slither-simil:Plotting data..
+INFO:Slither-simil:Saving figure to plot.png..
+```
+
+The resulting plot is here:
+
+![plot](https://user-images.githubusercontent.com/31542053/57525857-3d794f80-7302-11e9-9677-b4eb3f6a5c20.png)
+
+This mode performs dimentionality reduction using PCA, so the axes you see here [are **not** associated with any particular unit](https://stats.stackexchange.com/questions/137813/the-meaning-of-units-on-the-axes-of-a-pca-plot). 
+
+Plot mode can be also used to plot sets of functions using only a name from any contract name (e.g. `burn`) .
