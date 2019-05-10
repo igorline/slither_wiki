@@ -46,18 +46,14 @@ Each element found in `elements` above is of the form:
   - For `node` types, this refers to a string representation of any underlying expression. A blank string is used if there is no underlying expression.
   - For `pragma` types, this refers to a string representation of the `version` portion of the pragma (ie: `^0.5.0`).
 - `source_mapping` (source mapping, see below): Refers to a source mapping object which defines the source range which represents this element.
+- `parent`: (OPTIONAL, result-element):
+  - For `function`/`enum`/`struct`/`event` type elements: The parent contract of the function.
+  - For `variable` type elements: 
+    - If state variable: The parent contract
+    - If local variable: The parent function
+  - For `node` type elements: The parent function of the node.
+  - For `pragma` type elements: Fully serialized pragma directive (ie: `["solidity", "^", "0.4", ".9"]`)
 - `additional_fields`: (OPTIONAL, any): Offers additional detector-specific element information, does not always exist.
-
-Additionally, there are element type-specific fields included:
-- For `function`/`enum`/`struct`/`event` type elements:
-  - `contract` (contract element): The parent contract of the function.
-- For `variable` type elements:
-  - `contract` (OPTIONAL, contract element): The parent contract of the variable. Included if the variable is a state variable.
-  - `function` (OPTIONAL, function element): The parent function of the variable. Included if the variable is a local variable.
-- For `node` type elements:
-  - `function` (function element): The parent function of the node.
-- For `pragma` type elements:
-  - `directive` (string array): Fully serialized pragma directive (ie: `["solidity", "^", "0.4", ".9"]`)
 
 ## Source Mapping
 Each `source_mapping` object is used to map an element to some portion of source. It is of the form:
