@@ -15,7 +15,6 @@ Before start using `slither-simil`, install the required packages:
 ```
 $ pip3 install pybind11 --user
 $ pip3 install https://github.com/facebookresearch/fastText/archive/0.2.0.zip --user
-$ pip3 install matplotlib --user
 ```
 
 Make sure that you are using pip3.6 or later. If you are running from inside a [virtualenv](https://virtualenv.pypa.io/en/latest/), remove the `--user` parameter.
@@ -36,29 +35,29 @@ This mode has two features. You can either inspect the internal information abou
 
 ```
 $ slither-simil info etherscan_verified_contracts.bin 
-etherscan_verified_contracts.bin uses the following words:
-</s>
-index(uint256)
-return
-condition(temporary_variable)
-member
-solidity_call(require(bool))
-library_call
-binary(+)
-event
-(local_solc_variable(default)):=(temporary_variable)
-binary(==)
+INFO:Slither-simil:etherscan_verified_contracts.bin uses the following words:
+INFO:Slither-simil:</s>
+INFO:Slither-simil:index(uint256)
+INFO:Slither-simil:return
+INFO:Slither-simil:condition(temporary_variable)
+INFO:Slither-simil:member
+INFO:Slither-simil:solidity_call(require(bool))
+INFO:Slither-simil:library_call
+INFO:Slither-simil:binary(+)
+INFO:Slither-simil:event
+INFO:Slither-simil:(local_solc_variable(default)):=(temporary_variable)
 ...
 ```
 
 or examine the internal representation of function:
 
 ```
-$ slither-simil info etherscan_verified_contracts.bin --filename MetaCoin.sol --contract MetaCoin --fname sendCoin
-Function sendCoin in contract MetaCoin is encoded as:
-index(uint256) binary(<) condition(temporary_variable) return index(uint256) binary(-) index(uint256) binary(+) event return
-[ 0.00689753 -0.05349572 -0.06854086 -0.01667773  0.1259813  -0.05974023
+$ slither-simil info etherscan_verified_contracts.bin --filename MetaCoin.sol --fname MetaCoin.sendCoin --solc solc-0.4.25
+INFO:Slither-simil:Function sendCoin in contract MetaCoin is encoded as:
+INFO:Slither-simil:index(uint256) binary(<) condition(temporary_variable) return index(uint256) binary(-) index(uint256) binary(+) event return
+INFO:Slither-simil:[ 0.00689753 -0.05349572 -0.06854086 -0.01667773  0.1259813  -0.05974023
   0.06719872 -0.04520541  0.13745852  0.14690697 -0.03721125  0.00579037
+  0.06865194 -0.03804035  0.01224702 -0.1014601  -0.02655532 -0.15334933
 ...
 ```
 
@@ -132,11 +131,10 @@ Additionally, it will produce two additional files:
 - A `cache.npz` file with the cache of every function that can be used in test mode to get results significantly faster 
 - A `last_data_train.txt` file with all the SlithIR representation of every function used to train. This file is useful for debugging, to verify that the IR conversion works as expected.
 
- 
 
 ### Plot mode
 
-Plot mode allows to plot sets of functions, to detect cluster of similar ones. Before start using this mode, make sure you install the required packages:
+Plot mode allows to plot sets of functions, to visually detect cluster of similar ones. Before start using this mode, make sure you install the required packages:
 
 ```
 $ pip3 install sklearn matplotlib --user
