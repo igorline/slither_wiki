@@ -253,7 +253,7 @@ Apply the [check-effects-interactions pattern](http://solidity.readthedocs.io/en
 * Confidence: `High`
 
 ### Description
-Lack of return value for the ERC20 `approve`/`transfer`/`transferFrom` functions. A contract compiled with solidity > 0.4.22 interacting with these functions will fail to execute them, as the return value is missing.
+Incorrect return values for ERC20 functions. A contract compiled with solidity > 0.4.22 interacting with these functions will fail to execute them, as the return value is missing.
 
 ### Exploit Scenario:
 
@@ -266,7 +266,29 @@ contract Token{
 `Token.transfer` does not return a boolean. Bob deploys the token. Alice creates a contract that interacts with it but assumes a correct ERC20 interface implementation. Alice's contract is unable to interact with Bob's contract.
 
 ### Recommendation
-Return a boolean for the `approve`/`transfer`/`transferFrom` functions.
+Set the appropriate return values and value-types for the defined ERC20 functions.
+
+## Incorrect erc721 interface
+### Configuration
+* Check: `erc721-interface`
+* Severity: `Medium`
+* Confidence: `High`
+
+### Description
+Incorrect return values for ERC721 functions. A contract compiled with solidity > 0.4.22 interacting with these functions will fail to execute them, as the return value is missing.
+
+### Exploit Scenario:
+
+```solidity
+contract Token{
+    function ownerOf(uint256 _tokenId) external view returns (bool);
+    //...
+}
+```
+`Token.ownerOf` does not return an address as ERC721 expects. Bob deploys the token. Alice creates a contract that interacts with it but assumes a correct ERC721 interface implementation. Alice's contract is unable to interact with Bob's contract.
+
+### Recommendation
+Set the appropriate return values and value-types for the defined ERC721 functions.
 
 ## Dangerous strict equalities
 ### Configuration
@@ -421,6 +443,56 @@ Bob is the owner of `TxOrigin`. Bob calls Eve's contract. Eve's contract calls `
 ### Recommendation
 Do not use `tx.origin` for authorization.
 
+## Unchecked low-level calls
+### Configuration
+* Check: `unchecked-lowlevel`
+* Severity: `Medium`
+* Confidence: `Medium`
+
+### Description
+The return value of a low-level call is not checked.
+
+### Exploit Scenario:
+
+```solidity
+contract MyConc{
+    function my_func(address payable dst) public payable{
+        dst.call.value(msg.value)("");
+    }
+}
+```
+The return value of the low-level call is not checked. As a result if the callfailed, the ether will be locked in the contract.
+If the low level is used to prevent blocking operations, consider logging failed calls.
+    
+
+### Recommendation
+Ensure that the return value of low-level call is checked or logged.
+
+## Unchecked Send
+### Configuration
+* Check: `unchecked-send`
+* Severity: `Medium`
+* Confidence: `Medium`
+
+### Description
+The return value of a send is not checked.
+
+### Exploit Scenario:
+
+```solidity
+contract MyConc{
+    function my_func(address payable dst) public payable{
+        dst.send(msg.value);
+    }
+}
+```
+The return value of `send` is not checked. As a result if the send failed, the ether will be locked in the contract.
+If `send` is used to prevent blocking operations, consider logging the failed sent.
+    
+
+### Recommendation
+Ensure that the return value of send is checked or logged.
+
 ## Uninitialized local variables
 ### Configuration
 * Check: `uninitialized-local`
@@ -467,7 +539,7 @@ contract MyConc{
 `MyConc` calls `add` of SafeMath, but does not store the result in `a`. As a result, the computation has no effect.
 
 ### Recommendation
-Ensure that all the return values of the function calls are stored in a local or state variable.
+Ensure that all the return values of the function calls are used.
 
 ## Builtin Symbol Shadowing
 ### Configuration
@@ -764,7 +836,8 @@ Solc frequently releases new compiler versions. Using an old version prevents ac
 We recommend avoiding complex pragma statement.
 
 ### Recommendation
-Use Solidity 0.4.25 or 0.5.2.
+
+Use Solidity 0.4.25 or 0.5.3. Consider using the latest version of Solidity for testing the compilation, and a trusted version for deploying.
 
 ## Unused state variables
 ### Configuration
@@ -797,7 +870,7 @@ contract MyContract{
 }
 ```
 
-While `1_ether` looks like `1 ether`, it is `10 ether`. As a result, its usage is likely to be incorrect. 
+While `1_ether` looks like `1 ether`, it is `10 ether`. As a result, its usage is likely to be incorrect.
 
 
 ### Recommendation
