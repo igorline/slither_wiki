@@ -4,6 +4,7 @@
     * [Printer documentation](./Printer-documentation)
     * [Upgradeability checks](./Upgradeability-Checks)
     * [Finding Paths Utility](./Finding-Paths-Utility)
+    * [Code Similarity](./Code-Similarity-detector)
   * [Advanced Usage](./advanced-usage)
     * [Python API](./Python-API)
     * [Data dependency](./data-dependency)
