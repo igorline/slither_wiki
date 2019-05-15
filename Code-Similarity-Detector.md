@@ -47,7 +47,7 @@ Test mode requires the following parameters:
 
 Use the cache to avoid long processing times to compile and vectorize the input contracts.  
 
-Here's an example that finds functions similar to `sendCoin` in `MetaCoin` (compiled with `solc-0.4.25`). Searching for similar functions in more than 800,000 functions takes only 20 seconds.
+Here's an example that finds functions similar to `sendCoin` in `MetaCoin` (compiled with `solc-0.4.25`). Searching for similar functions among more than 800,000 functions takes only 20 seconds.
 
 ```
 $ slither-simil test etherscan_verified_contracts.bin --filename MetaCoin.sol --fname MetaCoin.sendCoin --input cache.npz --ntop 25 --solc solc-0.4.25
