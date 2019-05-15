@@ -32,6 +32,7 @@ Note that these examples will use the following files:
 `slither-simil` has three modes:
 - `test` - finds similar functions to your own in a dataset of contracts
 - `plot` - provide a visual representation of similarity of multiple sampled functions
+- `train` - builds new models of large datasets of contracts
 - `info` - inspects the internal information of the pre-trained model or the assessed code
 
 ### Test mode
@@ -81,7 +82,7 @@ INFO:Slither-simil:0x5f9f2ae7150d0beef3bb50ac8d8f4b43e6a6cc57_NABC.sol          
 
 ### Train mode
 
-Train mode allows to train new models used to vectorize functions. In order to do that, we will need a large amount of contracts/functions.
+Train mode trains new models used to vectorize functions. You will need a large amount of contracts/functions if you plan to train a new model.
 
 ```
 $ slither-simil train model.bin --input contracts
@@ -97,11 +98,7 @@ INFO:Slither-simil:Saving cache in cache.npz
 INFO:Slither-simil:Done!
 ```
 
-After it runs, the tool will output the `model.bin` file, with the trained model.
-Additionally, it will produce two additional files: 
-- A `cache.npz` file with the cache of every function that can be used in test mode to get results significantly faster 
-- A `last_data_train.txt` file with all the SlithIR representation of every function used to train. This file is useful for debugging, to verify that the IR conversion works as expected.
-
+After it runs, the `slither-simil` will output the the trained model in `model.bin`, a cache of every function for use in test mode in `cache.npz`, and the SlithIR of every function for debugging in `last_data_train.txt`.
 
 ### Plot mode
 
