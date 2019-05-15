@@ -25,7 +25,7 @@ Note that these examples will use the following files:
 
 * [etherscan_verified_contracts.bin](https://drive.google.com/file/d/1oEhbIL4V9582Y5VKp4iiOURGq8qa4cBN/view?usp=sharing)
 * [cache.npz](https://drive.google.com/file/d/1vpwusbyzLn1JqqAvlFivHXtLvsEp0VqX/view?usp=sharing)
-* [MetaCoin.sol](link)
+* [MetaCoin.sol](https://github.com/crytic/slither/wiki/MetacoinExample)
 
 `slither-simil` has three modes:
 - `test` - finds similar functions to your own in a dataset of contracts
