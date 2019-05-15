@@ -1,6 +1,6 @@
 # Code Similarity Detector
 
-`slither-simil` uses state-of-the-art machine learning to detect similar Solidity functions. We have provided a pretrained model from [etherscan_verified_contracts](https://github.com/thec00n/etherscan_verified_contracts) with 60,000 contracts and more than 850,000 functions since it requires training from a large corpus of contracts to work.
+`slither-simil` uses state-of-the-art machine learning to detect similar Solidity functions. We have provided a pretrained model from [etherscan_verified_contracts](https://github.com/thec00n/etherscan_verified_contracts) with 60,000 contracts and more than 850,000 functions to get you started quickly. We included the capability to easily train new models if you have access to larger or different datasets.
 
 `slither-simil` uses [FastText](https://github.com/facebookresearch/fastText), a vector embedding technique, to generate compact numerical representations of every function. We used FastText because it:
 
