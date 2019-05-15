@@ -1,69 +1,42 @@
 # Code Similarity Detector
 
-`slither-simil` is a tool designed to use state-of-the-art Machine Learning to detect similar Solidity functions.
-Our tool should be trained with a large corpus of contracts to work. We offer a pretrained model from [etherscan_verified_contracts](https://github.com/thec00n/etherscan_verified_contracts) with 60,000 contracts counting more than 850,000 functions.
-`slither-simil` uses a vector embedding technique called [FastText](https://github.com/facebookresearch/fastText) to generate a compact numerical representation of every function. We use this library because:
-* it implements several state-of-the-art techniques such as nbow and skipgrams,
-* it has high performance (it is C++ code with Python bindings),
-* it has MIT license,
-* it is well maintained (by Facebook).
- 
-## Requierements
+`slither-simil` uses state-of-the-art Machine Learning to detect similar Solidity functions. We have provided a pretrained model from [etherscan_verified_contracts](https://github.com/thec00n/etherscan_verified_contracts) with 60,000 contracts and more than 850,000 functions since it requires training from a large corpus of contracts to work.
 
-Before start using `slither-simil`, install the required packages:
+`slither-simil` uses [FastText](https://github.com/facebookresearch/fastText), a vector embedding technique, to generate compact numerical representations of every function. We used FastText because it:
+
+* implements several state-of-the-art techniques such as nbow and skipgrams,
+* has high performance (it is C++ code with Python bindings),
+* has MIT license, and
+* is well maintained (by Facebook).
+ 
+## Requirements
+
+Install the required packages before using `slither-simil`:
 
 ```
 $ pip3 install pybind11 --user
 $ pip3 install https://github.com/facebookresearch/fastText/archive/0.2.0.zip --user
+$ pip3 install sklearn matplotlib --user # for plot mode
 ```
 
 Make sure that you are using `pip3.6` or later. If you are running from inside a [virtualenv](https://virtualenv.pypa.io/en/latest/), remove the `--user` parameter.
 
 ## Usage
 
-All these examples will use the following files:
+Note that these examples will use the following files:
 
 * [etherscan_verified_contracts.bin](https://drive.google.com/file/d/1oEhbIL4V9582Y5VKp4iiOURGq8qa4cBN/view?usp=sharing)
 * [cache.npz](https://drive.google.com/file/d/1vpwusbyzLn1JqqAvlFivHXtLvsEp0VqX/view?usp=sharing)
 * [MetaCoin.sol](link)
 
-Our tool has several modes: `info`, `test`, `test` and `plot`.
-
-### Info mode
-
-This mode has two features. You can either inspect the internal information about a pre-trained model:
-
-```
-$ slither-simil info etherscan_verified_contracts.bin 
-INFO:Slither-simil:etherscan_verified_contracts.bin uses the following words:
-INFO:Slither-simil:</s>
-INFO:Slither-simil:index(uint256)
-INFO:Slither-simil:return
-INFO:Slither-simil:condition(temporary_variable)
-INFO:Slither-simil:member
-INFO:Slither-simil:solidity_call(require(bool))
-INFO:Slither-simil:library_call
-INFO:Slither-simil:binary(+)
-INFO:Slither-simil:event
-INFO:Slither-simil:(local_solc_variable(default)):=(temporary_variable)
-...
-```
-
-or examine the internal representation of function:
-
-```
-$ slither-simil info etherscan_verified_contracts.bin --filename MetaCoin.sol --fname MetaCoin.sendCoin --solc solc-0.4.25
-INFO:Slither-simil:Function sendCoin in contract MetaCoin is encoded as:
-INFO:Slither-simil:index(uint256) binary(<) condition(temporary_variable) return index(uint256) binary(-) index(uint256) binary(+) event return
-INFO:Slither-simil:[ 0.00689753 -0.05349572 -0.06854086 -0.01667773  0.1259813  -0.05974023
-  0.06719872 -0.04520541  0.13745852  0.14690697 -0.03721125  0.00579037
-  0.06865194 -0.03804035  0.01224702 -0.1014601  -0.02655532 -0.15334933
-...
-```
+`slither-simil` has three modes:
+- `test` - finds similar functions to your own in a dataset of contracts
+- `plot` - provide a visual representation of similarity of multiple sampled functions
+- `info` - inspects the internal information of the pre-trained model or the assessed code
 
 ### Test mode
 
-The more important mode of `slither-simil` is test. This mode allows to transform one particular function into a vector used to find the more similar functions, given a list of them (usually as a large amount of contracts in a directory).
+This mode transforms a function into a vector and uses it to find similar functions.
 
 Test mode requires the following parameters: 
 1. A pre-trained model,
@@ -71,8 +44,9 @@ Test mode requires the following parameters:
 3. A function name (e.g. `SafeMath.add` or `add`), 
 4. An input directory or file (this can be either a directory with contracts or special cache file with a pre-computed list of vectors for every contract).
 
-It is very recommended to use the cache to avoid longer processing times compiling and vectorizing the input contracts.  
-To find similar functions to the `sendCoin` in `MetaCoin` (compiled with `solc-0.4.25`), we execute:
+Use the cache to avoid long processing times to compile and vectorize the input contracts.  
+
+Here's an example that finds functions similar to `sendCoin` in `MetaCoin` (compiled with `solc-0.4.25`). Searching for similar functions in more than 800,000 functions takes only 20 seconds.
 
 ```
 $ slither-simil test etherscan_verified_contracts.bin --filename MetaCoin.sol --fname MetaCoin.sendCoin --input cache.npz --ntop 25 --solc solc-0.4.25
@@ -105,9 +79,6 @@ INFO:Slither-simil:0xf5068761511594c82328102f4fde4650ed9ea6c4_WHP.sol           
 INFO:Slither-simil:0x5f9f2ae7150d0beef3bb50ac8d8f4b43e6a6cc57_NABC.sol               NABC                 transfer             0.991     
 ```
 
-Search similar functions in more than 800,000 functions only takes 20 seconds.
-
-
 ### Train mode
 
 Train mode allows to train new models used to vectorize functions. In order to do that, we will need a large amount of contracts/functions.
@@ -134,13 +105,9 @@ Additionally, it will produce two additional files:
 
 ### Plot mode
 
-Plot mode allows to plot sets of functions, to visually detect cluster of similar ones. Before start using this mode, make sure you install the required packages:
+Plot mode plots sets of functions to visually detect clusters of similar ones.
 
-```
-$ pip3 install sklearn matplotlib --user
-```
-
-For instance, to plot all the functions named `add` from contracts named `SafeMath` sampling 500 random contracts, we execute:
+Here's an example to plot all the functions named `add` from contracts named `SafeMath` sampling from 500 random contracts:
 
 ```
 $ slither-simil plot etherscan_verified_contracts.bin --fname SafeMath.add --input cache.npz --nsamples 500 
@@ -150,10 +117,40 @@ INFO:Slither-simil:Plotting data..
 INFO:Slither-simil:Saving figure to plot.png..
 ```
 
-The resulting plot is here:
-
 ![plot](https://user-images.githubusercontent.com/31542053/57525857-3d794f80-7302-11e9-9677-b4eb3f6a5c20.png)
 
-This mode performs dimentionality reduction using PCA, so the axes you see here [are **not** associated with any particular unit](https://stats.stackexchange.com/questions/137813/the-meaning-of-units-on-the-axes-of-a-pca-plot). 
+This mode performs dimensionality reduction using PCA, so the axes you see here [are **not** associated with any particular unit](https://stats.stackexchange.com/questions/137813/the-meaning-of-units-on-the-axes-of-a-pca-plot). 
 
-Plot mode can be also used to plot sets of functions using only a name from any contract name (e.g. `burn`) .
+It can can be also used to plot sets of functions using only a name from any contract (e.g. `burn`) .
+
+### Info mode
+
+This mode has two features. You can inspect the internal information about a pre-trained model. Info mode is typically used for debugging.
+
+```
+$ slither-simil info etherscan_verified_contracts.bin 
+INFO:Slither-simil:etherscan_verified_contracts.bin uses the following words:
+INFO:Slither-simil:</s>
+INFO:Slither-simil:index(uint256)
+INFO:Slither-simil:return
+INFO:Slither-simil:condition(temporary_variable)
+INFO:Slither-simil:member
+INFO:Slither-simil:solidity_call(require(bool))
+INFO:Slither-simil:library_call
+INFO:Slither-simil:binary(+)
+INFO:Slither-simil:event
+INFO:Slither-simil:(local_solc_variable(default)):=(temporary_variable)
+...
+```
+
+... or examine the internal representation of function:
+
+```
+$ slither-simil info etherscan_verified_contracts.bin --filename MetaCoin.sol --fname MetaCoin.sendCoin --solc solc-0.4.25
+INFO:Slither-simil:Function sendCoin in contract MetaCoin is encoded as:
+INFO:Slither-simil:index(uint256) binary(<) condition(temporary_variable) return index(uint256) binary(-) index(uint256) binary(+) event return
+INFO:Slither-simil:[ 0.00689753 -0.05349572 -0.06854086 -0.01667773  0.1259813  -0.05974023
+  0.06719872 -0.04520541  0.13745852  0.14690697 -0.03721125  0.00579037
+  0.06865194 -0.03804035  0.01224702 -0.1014601  -0.02655532 -0.15334933
+...
+```
