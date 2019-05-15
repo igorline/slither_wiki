@@ -38,10 +38,10 @@ Note that these examples will use the following files:
 This mode transforms a function into a vector and uses it to find similar functions.
 
 Test mode requires the following parameters: 
-1. A pre-trained model: this file will be used to transform every function into a vector, you can [train your own](#train-mode) or [use our pre-trained one. (etherscan_verified_contracts.bin)](#usage)
-2. A contract filename,
+1. A pre-trained model: this file will be used to transform every function into a vector, you can [train your own](#train-mode) or [use our pre-trained one (etherscan_verified_contracts.bin)](#usage).
+2. A contract filename: this file will contain the code that you want to compare,
 3. A function name (e.g. `SafeMath.add` or `add`), 
-4. An input directory or file (this can be either a directory with contracts or special cache file with a pre-computed list of vectors for every contract).
+4. An input directory or file: this can be either a directory with contracts or a [cache file with a pre-computed list of vectors for every contract (cache.npz)](#usage).
 
 Use the cache to avoid long processing times to compile and vectorize the input contracts.  
 
