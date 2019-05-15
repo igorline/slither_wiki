@@ -1,5 +1,4 @@
-# Finding Paths Utility
-`slither-find-paths` allows you to find all the paths that reach a given target.
+`slither-find-paths` finds all the paths that reach a given target.
 
 ## Usage
 ```
