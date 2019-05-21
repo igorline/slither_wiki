@@ -24,19 +24,24 @@ slither-check-upgradability . ProxyName . ContractName
 ```
 
 ### Proxy contract
-If you use zos, you will have the proxy and the contract in different directory and Solidity version.
-To allow `slither-check-upgradability` to work, you can compile manually the proxy contract to its AST form (`solc file.sol --ast-compact-json > file.json`), and provides the generated file to `slither-check-upgradability`. Use [`solc-select`](https://github.com/crytic/solc-select) to switch between Solidity version.
+If you use zos, you will have the proxy and the contract in different directories.
 
-For example:
+Likely, you will use one of the proxy from https://github.com/zeppelinos/zos. Clone the `zos`, and install the dependencies:
 ```
-cd my_contracts
-cd node_modules/zos-lib
-npm install openzeppelin-solidity
-cp node_modules/openzeppelin-solidity/ . -r
-solc contracts/upgradeability/AdminUpgradeabilityProxy.sol  --allow-paths . --ast-compact-json > AdminUpgradeabilityProxy.json
-cd ../..
-slither-check-upgradability node_modules/openzeppelin-solidity/contracts/upgradeability/AdminUpgradeabilityProxy/json AdminUpgradeabilityProxy . MyImplementation
+git clone https://github.com/zeppelinos/zos
+cd zos/packages/lib
+npm install
+rm contracts/mocks/WithConstructorImplementation.sol
 ```
+Note:  `contracts/mocks/WithConstructorImplementation.sol` must be removed as it contains a [name clash collision](https://github.com/crytic/slither/wiki#keyerror-or-nonetype-error)  with `contracts/mocks/Invalid.sol`
+
+Then from your project directory:
+```
+slither-check-upgradeability /path/to/zos/packages/lib/ UpgradeabilityProxy . MyContract
+```
+
+According to your setup, you might choose another proxy name than `UpgradeabilityProxy`.
+
 
 ## Checks
 
