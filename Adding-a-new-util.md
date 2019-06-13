@@ -4,7 +4,7 @@ Official utils are present in https://github.com/crytic/slither/tree/master/util
 We recommend following the [developper installation](https://github.com/crytic/slither/wiki/Developer-installation).
 
 ## Skeleton
-The skeleton util is present in (utils/demo)[https://github.com/crytic/slither/tree/master/utils/demo]
+The skeleton util is present in [utils/demo](https://github.com/crytic/slither/tree/master/utils/demo)
 
 ## Integration
 
