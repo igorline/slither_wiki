@@ -12,5 +12,6 @@
     * [SSA](./SlithIR-SSA)
   * [Developer installation](./Developer-installation)
     * [Adding a new detector](./Adding-a-new-detector)
+    * [Adding a new utility](./Adding-a-new-utility)
     * [JSON output](./JSON-output)
 
