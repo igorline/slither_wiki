@@ -1,4 +1,4 @@
-Slither can be used as a library to create new utils.
+Slither can be used as a library to create new utilities.
 Official utils are present in https://github.com/crytic/slither/tree/master/utils
 
 We recommend following the [developper installation](https://github.com/crytic/slither/wiki/Developer-installation).
