@@ -11,5 +11,11 @@ The skeleton util is present in [utils/demo](https://github.com/crytic/slither/t
 To enable an util from the command line, update `entry_points` in [setup.py](https://github.com/crytic/slither/blob/master/setup.py).
 Installing Slither will then install the util.
 
+## Guidelines
+
+- Favor the `logging` module rather than `print`
+- Favor raising an exception rather than `sys.exit`
+- Add unit-tests (ex: [scripts/travis_test_find_paths.sh](https://github.com/crytic/slither/blob/master/scripts/travis_test_find_paths.sh))
+
 ## Getting Help
 Join our [slack channel](https://empireslacking.herokuapp.com/) to get any help (#ethereum).
