@@ -6,17 +6,18 @@ Num | Printer | Description
 2 | `cfg` | [Export the CFG of each functions](https://github.com/crytic/slither/wiki/Printer-documentation#cfg)
 3 | `contract-summary` | [Print a summary of the contracts](https://github.com/crytic/slither/wiki/Printer-documentation#contract-summary)
 4 | `data-dependency` | [Print the data dependencies of the variables](https://github.com/crytic/slither/wiki/Printer-documentation#data-dependencies)
-5 | `function-id` | [Print the keccack256 signature of the functions](https://github.com/crytic/slither/wiki/Printer-documentation#function-id)
-6 | `function-summary` | [Print a summary of the functions](https://github.com/crytic/slither/wiki/Printer-documentation#function-summary)
-7 | `human-summary` | [Print a human-readable summary of the contracts](https://github.com/crytic/slither/wiki/Printer-documentation#human-summary)
-8 | `inheritance` | [Print the inheritance relations between contracts](https://github.com/crytic/slither/wiki/Printer-documentation#inheritance)
-9 | `inheritance-graph` | [Export the inheritance graph of each contract to a dot file](https://github.com/crytic/slither/wiki/Printer-documentation#inheritance-graph)
-10 | `modifiers` | [Print the modifiers called by each function](https://github.com/crytic/slither/wiki/Printer-documentation#modifiers)
-11 | `require` | [Print the require and assert calls of each function](https://github.com/crytic/slither/wiki/Printer-documentation#require)
-12 | `slithir` | [Print the slithIR representation of the functions](https://github.com/crytic/slither/wiki/Printer-documentation#slithir)
-13 | `slithir-ssa` | [Print the slithIR representation of the functions](https://github.com/crytic/slither/wiki/Printer-documentation#slithir-ssa)
-14 | `variables-order` | [Print the storage order of the state variables](https://github.com/crytic/slither/wiki/Printer-documentation#variables-order)
-15 | `vars-and-auth` | [Print the state variables written and the authorization of the functions](https://github.com/crytic/slither/wiki/Printer-documentation#variables-written-and-authorization)
+5 | `evm` | [Print the EVM assembly instructions of the functions](https://github.com/crytic/slither/wiki/Printer-documentation#evm)
+6 | `function-id` | [Print the keccack256 signature of the functions](https://github.com/crytic/slither/wiki/Printer-documentation#function-id)
+7 | `function-summary` | [Print a summary of the functions](https://github.com/crytic/slither/wiki/Printer-documentation#function-summary)
+8 | `human-summary` | [Print a human-readable summary of the contracts](https://github.com/crytic/slither/wiki/Printer-documentation#human-summary)
+9 | `inheritance` | [Print the inheritance relations between contracts](https://github.com/crytic/slither/wiki/Printer-documentation#inheritance)
+10 | `inheritance-graph` | [Export the inheritance graph of each contract to a dot file](https://github.com/crytic/slither/wiki/Printer-documentation#inheritance-graph)
+11 | `modifiers` | [Print the modifiers called by each function](https://github.com/crytic/slither/wiki/Printer-documentation#modifiers)
+12 | `require` | [Print the require and assert calls of each function](https://github.com/crytic/slither/wiki/Printer-documentation#require)
+13 | `slithir` | [Print the slithIR representation of the functions](https://github.com/crytic/slither/wiki/Printer-documentation#slithir)
+14 | `slithir-ssa` | [Print the slithIR representation of the functions](https://github.com/crytic/slither/wiki/Printer-documentation#slithir-ssa)
+15 | `variables-order` | [Print the storage order of the state variables](https://github.com/crytic/slither/wiki/Printer-documentation#variables-order)
+16 | `vars-and-auth` | [Print the state variables written and the authorization of the functions](https://github.com/crytic/slither/wiki/Printer-documentation#variables-written-and-authorization)
 
 
 Several printers require xdot installed for visualization:
@@ -115,6 +116,69 @@ Function setB(uint256)
 | MyContract:b | ['input_b', 'input'] |
 | MyContract:c |          []          |
 +--------------+----------------------+
+```
+
+## EVM
+`slither file.sol --print evm`
+
+Print the EVM representation of the functions
+
+### Example
+```
+$ slither examples/printers/evm.sol --print evm
+
+INFO:Printers:Contract Test
+	Function Test.foo()
+		Node: ENTRY_POINT None
+		Source line 5:   function foo() public returns (address) {
+		EVM Instructions:
+			0x44: JUMPDEST
+			0x45: CALLVALUE
+			0x50: POP
+			0x51: PUSH1 0x56
+			0x53: PUSH1 0x98
+			0x55: JUMP
+			0x56: JUMPDEST
+			0x57: PUSH1 0x40
+			0x59: MLOAD
+			0x5a: DUP1
+			0x5b: DUP3
+			0x5c: PUSH20 0xffffffffffffffffffffffffffffffffffffffff
+			0x71: AND
+			0x72: PUSH20 0xffffffffffffffffffffffffffffffffffffffff
+			0x87: AND
+			0x88: DUP2
+			0x89: MSTORE
+			0x8a: PUSH1 0x20
+			0x8c: ADD
+			0x8d: SWAP2
+			0x8e: POP
+			0x8f: POP
+			0x90: PUSH1 0x40
+			0x92: MLOAD
+			0x93: DUP1
+			0x94: SWAP2
+			0x95: SUB
+			0x96: SWAP1
+			0x97: RETURN
+			0x98: JUMPDEST
+			0x99: PUSH1 0x0
+			0xa2: POP
+			0xa3: SWAP1
+                        0xa4: JUMP
+                Node: NEW VARIABLE from = msg.sender
+                Source line 6:     address from = msg.sender;
+                EVM Instructions:
+                        0x9b: DUP1
+                        0x9c: CALLER
+                        0x9d: SWAP1
+                        0x9e: POP
+                Node: RETURN (from)
+                Source line 7:     return(from);
+                EVM Instructions:
+                        0x9f: DUP1
+                        0xa0: SWAP2
+                        0xa1: POP
 ```
 
 ## Function id
