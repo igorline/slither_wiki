@@ -52,7 +52,7 @@ slither file.sol
 To run Slither from a contract hosted on Etherscan, run
 
 ```
-slither 0x7F37f78cBD74481E593F9C737776F7113d76B31
+slither 0x7F37f78cBD74481E593F9C737776F7113d76B315
 ```
 
 We recommend installing [solc-select](https://github.com/crytic/solc-select/), so Slither can switch to the expected solc version automatically.
