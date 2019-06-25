@@ -587,7 +587,7 @@ Detection of shadowing using local variables.
 pragma solidity ^0.4.24;
 
 contract Bug {
-    uint owner;
+    address owner;
 
     function sensitive_function(address owner) public {
         // ...
@@ -601,7 +601,7 @@ contract Bug {
     }
 }
 ```
-`sensitive_function.owner` shadows `Bug.owner`. As a result, the use of `owner` inside `sensitive_function` might be incorrect.
+`alternate_sensitive_function.owner` shadows `Bug.owner`. As a result, the use of `owner` inside `alternate_sensitive_function` might be incorrect.
 
 ### Recommendation
 Rename the local variable so as not to mistakenly overshadow any state variable/function/modifier/event definitions.
