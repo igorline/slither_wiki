@@ -66,7 +66,7 @@ slither file.ast.json
 
 ## Options
 
-- To disable the solc warnings: `--disable-solc-warnings`
+- To disable the solc warnings: `--solc-disable-warnings`
 - To disable the output colorization: `--disable-color`
 - To export the result to a json file: `--json file.json`
   - To export to stdout instead of a file, simply replace the filename with `-`
@@ -133,7 +133,7 @@ The second run of Slither will hide the above result.
 To show the hidden results again, delete `slither.db.json`.
 
 ### Configuration File
-Some options can be set through a json configuration file. By default,  `slither.conf.json` is used if present (it can be changed through `--config-file file.conf.json`).
+Some options can be set through a json configuration file. By default,  `slither.config.json` is used if present (it can be changed through `--config-file file.conf.json`).
 
 If an option is set by the configuration file and the command line, the command line option is selected;
 
@@ -150,7 +150,7 @@ The following flags are supported:
     "exclude_high": false,
     "solc": "solc",
     "solc_args": "",
-    "disable_solc_warnings": false,
+    "solc_disable_warnings": false,
     "json": "",
     "truffle_build_directory": "custom/path",
     "truffle_version": "truffle@x.x.x",
