@@ -133,7 +133,7 @@ The second run of Slither will hide the above result.
 To show the hidden results again, delete `slither.db.json`.
 
 ### Configuration File
-Some options can be set through a json configuration file. By default,  `slither.config.json` is used if present (it can be changed through `--config-file file.conf.json`).
+Some options can be set through a json configuration file. By default,  `slither.config.json` is used if present (it can be changed through `--config-file file.config.json`).
 
 If an option is set by the configuration file and the command line, the command line option is selected;
 
