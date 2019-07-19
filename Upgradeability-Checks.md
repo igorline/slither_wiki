@@ -65,7 +65,7 @@ According to your setup, you might choose another proxy name than `Upgradeabilit
 
 Contracts based on `delegatecallproxy` cannot be initialized through constructors. As a result, init functions must be used. These functions do not benefit from:
 
-* The Solidity C3 linearization. As a result, an init function can be called multiple times, or never.
+* Solidity C3 linearization: an init function can be called multiple times, or never.
 * The init functions must be calleable only once.
 * Race conditions can occur during deployment.
 
