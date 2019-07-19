@@ -9,7 +9,7 @@ The tool checks that:
 
 ## Usage
 ```
-slither-check-upgradability proxy.sol ProxyName implem.sol ContractName
+slither-check-upgradeability proxy.sol ProxyName implem.sol ContractName
 ```
 
 If a second version of the contract is to be checked, use:
@@ -20,7 +20,7 @@ slither-check-upgradeability proxy.sol ProxyName implem.sol ContractName implem_
 
 `proxy.sol`/`implem.sol` can be a Truffle directory, for example: 
 ```
-slither-check-upgradability . ProxyName . ContractName
+slither-check-upgradeability . ProxyName . ContractName
 ```
 
 ### Proxy contract
@@ -59,10 +59,10 @@ According to your setup, you might choose another proxy name than `Upgradeabilit
 
 ### Initialization checks
 
-Contracts based on `delegatecallproxy` cannot be initialized through constructors. As a result, init functions must be used. These functions do not benefitfrom:
+Contracts based on `delegatecallproxy` cannot be initialized through constructors. As a result, init functions must be used. These functions do not benefit from:
 - The Solidity C3 linearization. As a result, an init function can be called multiple times, or never.
 - The init functions must be calleable only once.
-- Race conditions can occur during deployement.
+- Race conditions can occur during deployment.
 
 If the contract uses the zos library (and the `Initializable` contract), the util checks that:
  - All the `initalize` functions call the `initializer` modifier 
@@ -73,7 +73,7 @@ Additionally, `slither-check-upgradeability` prints the functions that must be c
 
 If the contract uses another schema, no check is performed. In that case, the tool warns:
 ```
-Initializable contract not found, the contract does not follow a standard initalization schema.
+Initializable contract not found, the contract does not follow a standard initialization schema.
 ```
 
 
