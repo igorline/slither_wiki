@@ -3,9 +3,9 @@
 `slither-check-upgradability` is meant to help to review contracts using the [delegatecall proxy pattern](https://blog.trailofbits.com/2018/09/05/contract-upgrade-anti-patterns/).
 
 The tool checks that:
-- [There is no function id collision](https://github.com/crytic/slither/wiki/Upgradeability-Checks#functions-ids-checks)
-- [The order of variables is the same](https://github.com/crytic/slither/wiki/Upgradeability-Checks#variables-order-checks)
-- [The initialization is correct](https://github.com/crytic/slither/wiki/Upgradeability-Checks#initialization-checks)
+* [There is no function id collision](https://github.com/crytic/slither/wiki/Upgradeability-Checks#function-id-checks)
+* [The order of variables is the same](https://github.com/crytic/slither/wiki/Upgradeability-Checks#variable-order-checks)
+* [The initialization is correct](https://github.com/crytic/slither/wiki/Upgradeability-Checks#initialization-checks)
 
 ## Usage
 ```
@@ -45,29 +45,35 @@ According to your setup, you might choose another proxy name than `Upgradeabilit
 
 ## Checks
 
-### Functions ids checks
-`slither-check-upgradeability` checks that:
-- There is no function id collision between the proxy and the implementation
-- The proxy does not shadow any functions from the implementation
+### Function ID checks
 
-### Variables order checks
 `slither-check-upgradeability` checks that:
-- The variables are declared in the same order between the proxy and the implementation
-- The variables are declared in the implementation first and second version
+
+* There is no function id collision between the proxy and the implementation
+ * The proxy does not shadow any functions from the implementation
+
+### Variable order checks
+
+`slither-check-upgradeability` checks that:
+
+* The variables are declared in the same order between the proxy and the implementation
+* The variables are declared in the implementation first and second version
 
 `slither-check-upgradeability` will warn if the proxy has state variables. Consider using the Unstructured storage pattern for those variables. 
 
 ### Initialization checks
 
 Contracts based on `delegatecallproxy` cannot be initialized through constructors. As a result, init functions must be used. These functions do not benefit from:
-- The Solidity C3 linearization. As a result, an init function can be called multiple times, or never.
-- The init functions must be calleable only once.
-- Race conditions can occur during deployment.
+
+* The Solidity C3 linearization. As a result, an init function can be called multiple times, or never.
+* The init functions must be calleable only once.
+* Race conditions can occur during deployment.
 
 If the contract uses the zos library (and the `Initializable` contract), the util checks that:
- - All the `initalize` functions call the `initializer` modifier 
- - All the inherits `initalize` functions are called
- - `initialize` functions are never called twice
+
+* All the `initialize` functions call the `initializer` modifier 
+* All the inherits `initialize` functions are called
+* `initialize` functions are never called twice
 
 Additionally, `slither-check-upgradeability` prints the functions that must be called during initialization.
 
