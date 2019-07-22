@@ -4,7 +4,7 @@ pip3 install virtualenvwrapper
 source /usr/local/bin/virtualenvwrapper.sh
 mkvirtualenv --python=`which python3` slither-dev
 git clone https://github.com/crytic/crytic-compile.git && cd crytic-compile
-ython setup.py develop
+python setup.py develop
 cd ..
 git clone https://github.com/trailofbits/slither
 cd slither
