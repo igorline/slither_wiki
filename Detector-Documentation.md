@@ -617,13 +617,15 @@ Detect the call to a constructor not implemented
 
 ### Exploit Scenario:
 
-    ```solidity
+```solidity
 contract A{}
 contract B is A{
     constructor() public A(){}
 }
 ```
 By reading B's constructor definition, the reader might assume that `A()` initiate the contract, while no code is executed.
+
+
 
 ### Recommendation
 Remove the constructor call.
