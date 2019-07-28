@@ -587,7 +587,7 @@ Detection of shadowing using local variables.
 pragma solidity ^0.4.24;
 
 contract Bug {
-    address owner;
+    uint owner;
 
     function sensitive_function(address owner) public {
         // ...
@@ -601,10 +601,32 @@ contract Bug {
     }
 }
 ```
-`alternate_sensitive_function.owner` shadows `Bug.owner`. As a result, the use of `owner` inside `alternate_sensitive_function` might be incorrect.
+`sensitive_function.owner` shadows `Bug.owner`. As a result, the use of `owner` inside `sensitive_function` might be incorrect.
 
 ### Recommendation
 Rename the local variable so as not to mistakenly overshadow any state variable/function/modifier/event definitions.
+
+## Void Constructor
+### Configuration
+* Check: `void-cst`
+* Severity: `Low`
+* Confidence: `High`
+
+### Description
+Detect the call to a constructor not implemented
+
+### Exploit Scenario:
+
+    ```solidity
+contract A{}
+contract B is A{
+    constructor() public A(){}
+}
+```
+By reading B's constructor definition, the reader might assume that `A()` initiate the contract, while no code is executed.
+
+### Recommendation
+Remove the constructor call.
 
 ## Calls inside a loop
 ### Configuration
@@ -693,18 +715,6 @@ The use of assembly is error-prone and should be avoided.
 ### Recommendation
 Do not use evm assembly.
 
-## State variables that could be declared constant
-### Configuration
-* Check: `constable-states`
-* Severity: `Informational`
-* Confidence: `High`
-
-### Description
-Constant state variable should be declared constant to save gas.
-
-### Recommendation
-Add the `constant` attributes to the state variables that never change.
-
 ## Deprecated Standards
 ### Configuration
 * Check: `deprecated-standards`
@@ -771,18 +781,6 @@ In this case, Transfer and Approval events should have the 'indexed' keyword on 
 
 ### Recommendation
 Add the `indexed` keyword to event parameters which should include it, according to the ERC20 specification.
-
-## Public function that could be declared as external
-### Configuration
-* Check: `external-function`
-* Severity: `Informational`
-* Confidence: `High`
-
-### Description
-`public` functions that are never called by the contract should be declared `external` to save gas.
-
-### Recommendation
-Use the `external` attribute for functions never called from the contract.
 
 ## Low level calls
 ### Configuration
@@ -879,3 +877,28 @@ Use:
 - [Ether suffix](https://solidity.readthedocs.io/en/latest/units-and-global-variables.html#ether-units)
 - [Time suffix](https://solidity.readthedocs.io/en/latest/units-and-global-variables.html#time-units), or
 - [The scientific notation](https://solidity.readthedocs.io/en/latest/types.html#rational-and-integer-literals)
+
+
+## State variables that could be declared constant
+### Configuration
+* Check: `constable-states`
+* Severity: `Optimization`
+* Confidence: `High`
+
+### Description
+Constant state variable should be declared constant to save gas.
+
+### Recommendation
+Add the `constant` attributes to the state variables that never change.
+
+## Public function that could be declared as external
+### Configuration
+* Check: `external-function`
+* Severity: `Optimization`
+* Confidence: `High`
+
+### Description
+`public` functions that are never called by the contract should be declared `external` to save gas.
+
+### Recommendation
+Use the `external` attribute for functions never called from the contract.
