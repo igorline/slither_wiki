@@ -3,7 +3,7 @@
     * [Detector documentation](./Detector-Documentation)
     * [Printer documentation](./Printer-documentation)
     * [Upgradeability checks](./Upgradeability-Checks)
-    * [Finding Paths Utility](./Finding-Paths-Utility)
+    * [Path Finding Utility](./Path-Finding-Utility)
     * [Code Similarity](./Code-Similarity-detector)
   * [Advanced Usage](./advanced-usage)
     * [Python API](./Python-API)
