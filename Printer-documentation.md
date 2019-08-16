@@ -118,6 +118,54 @@ Function setB(uint256)
 +--------------+----------------------+
 ```
 
+## Constructor Calls
+`slither file.sol --print constructor-calls`
+
+Print the calling sequence of constructors based on C3 linearization.
+
+### Example
+```
+...
+$ slither examples/printers/constructors.sol --print constructor-calls
+[..]
+
+Contact Name: test2
+        Constructor Call Sequence:   test--> test2
+ Constructor Definitions:
+
+  contract name : test2
+     constructor()public{
+        a=10;
+    }
+
+  contract name : test
+     constructor()public{
+        a =5;
+    }
+
+
+Contact Name: test3
+        Constructor Call Sequence:   test--> test2--> test3
+ Constructor Definitions:
+
+  contract name : test3
+     constructor(bytes32 _name)public{
+        owner = msg.sender;
+        name = _name;
+        a=20;
+    }
+
+  contract name : test2
+     constructor()public{
+        a=10;
+    }
+
+  contract name : test
+     constructor()public{
+        a =5;
+    }
+```
+
 ## EVM
 `slither file.sol --print evm`
 
