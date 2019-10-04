@@ -5,6 +5,7 @@
     * [Upgradeability checks](./Upgradeability-Checks)
     * [Path Finding Utility](./Path-Finding-Utility)
     * [Code Similarity](./Code-Similarity-detector)
+    * [Contract Flattening](./Contract-Flattening)
   * [Advanced Usage](./advanced-usage)
     * [Python API](./Python-API)
     * [Data dependency](./data-dependency)
