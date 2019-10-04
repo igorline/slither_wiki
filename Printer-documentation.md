@@ -7,7 +7,7 @@ Num | Printer | Description
 3 | `constructor-calls` | [Print the constructors executed](https://github.com/crytic/slither/wiki/Printer-documentation#constructor-calls)
 4 | `contract-summary` | [Print a summary of the contracts](https://github.com/trailofbits/slither/wiki/Printer-documentation#contract-summary)
 5 | `data-dependency` | [Print the data dependencies of the variables](https://github.com/trailofbits/slither/wiki/Printer-documentation#data-dependencies)
-6 | `echidna` | [Output Echidna guiding information](https://github.com/trailofbits/slither/wiki/Printer-documentation#echidna)
+6 | `echidna` | [Output guidance for Echidna](https://github.com/trailofbits/slither/wiki/Printer-documentation#echidna)
 7 | `function-id` | [Print the keccack256 signature of the functions](https://github.com/trailofbits/slither/wiki/Printer-documentation#function-id)
 8 | `function-summary` | [Print a summary of the functions](https://github.com/trailofbits/slither/wiki/Printer-documentation#function-summary)
 9 | `human-summary` | [Print a human-readable summary of the contracts](https://github.com/trailofbits/slither/wiki/Printer-documentation#human-summary)
@@ -172,7 +172,7 @@ Contact Name: test3
 
 ## Echidna
 
-This printer is meant to improve [Echidna](https://github.com/crytic/echidna code coverage. The printer is a wip and is not yet used by Echidna.
+This printer is meant to improve [Echidna](https://github.com/crytic/echidna) code coverage. The printer is a WIP and is not yet used by Echidna.
 
 ## EVM
 `slither file.sol --print evm`
