@@ -2,22 +2,25 @@ Slither allows printing contracts information through its printers.
 
 Num | Printer | Description
 --- | --- | ---
-1 | `call-graph` | [Export the call-graph of the contracts to a dot file](https://github.com/crytic/slither/wiki/Printer-documentation#call-graph)
-2 | `cfg` | [Export the CFG of each functions](https://github.com/crytic/slither/wiki/Printer-documentation#cfg)
-3 | `contract-summary` | [Print a summary of the contracts](https://github.com/crytic/slither/wiki/Printer-documentation#contract-summary)
-4 | `data-dependency` | [Print the data dependencies of the variables](https://github.com/crytic/slither/wiki/Printer-documentation#data-dependencies)
-5 | `evm` | [Print the EVM assembly instructions of the functions](https://github.com/crytic/slither/wiki/Printer-documentation#evm)
-6 | `function-id` | [Print the keccack256 signature of the functions](https://github.com/crytic/slither/wiki/Printer-documentation#function-id)
-7 | `function-summary` | [Print a summary of the functions](https://github.com/crytic/slither/wiki/Printer-documentation#function-summary)
-8 | `human-summary` | [Print a human-readable summary of the contracts](https://github.com/crytic/slither/wiki/Printer-documentation#human-summary)
-9 | `inheritance` | [Print the inheritance relations between contracts](https://github.com/crytic/slither/wiki/Printer-documentation#inheritance)
-10 | `inheritance-graph` | [Export the inheritance graph of each contract to a dot file](https://github.com/crytic/slither/wiki/Printer-documentation#inheritance-graph)
-11 | `modifiers` | [Print the modifiers called by each function](https://github.com/crytic/slither/wiki/Printer-documentation#modifiers)
-12 | `require` | [Print the require and assert calls of each function](https://github.com/crytic/slither/wiki/Printer-documentation#require)
-13 | `slithir` | [Print the slithIR representation of the functions](https://github.com/crytic/slither/wiki/Printer-documentation#slithir)
-14 | `slithir-ssa` | [Print the slithIR representation of the functions](https://github.com/crytic/slither/wiki/Printer-documentation#slithir-ssa)
-15 | `variables-order` | [Print the storage order of the state variables](https://github.com/crytic/slither/wiki/Printer-documentation#variables-order)
-16 | `vars-and-auth` | [Print the state variables written and the authorization of the functions](https://github.com/crytic/slither/wiki/Printer-documentation#variables-written-and-authorization)
+1 | `call-graph` | [Export the call-graph of the contracts to a dot file](https://github.com/trailofbits/slither/wiki/Printer-documentation#call-graph)
+2 | `cfg` | [Export the CFG of each functions](https://github.com/trailofbits/slither/wiki/Printer-documentation#cfg)
+3 | `constructor-calls` | [Print the constructors executed](https://github.com/crytic/slither/wiki/Printer-documentation#constructor-calls)
+4 | `contract-summary` | [Print a summary of the contracts](https://github.com/trailofbits/slither/wiki/Printer-documentation#contract-summary)
+5 | `data-dependency` | [Print the data dependencies of the variables](https://github.com/trailofbits/slither/wiki/Printer-documentation#data-dependencies)
+6 | `echidna` | [Output Echidna guiding information](https://github.com/trailofbits/slither/wiki/Printer-documentation#echidna)
+7 | `function-id` | [Print the keccack256 signature of the functions](https://github.com/trailofbits/slither/wiki/Printer-documentation#function-id)
+8 | `function-summary` | [Print a summary of the functions](https://github.com/trailofbits/slither/wiki/Printer-documentation#function-summary)
+9 | `human-summary` | [Print a human-readable summary of the contracts](https://github.com/trailofbits/slither/wiki/Printer-documentation#human-summary)
+10 | `inheritance` | [Print the inheritance relations between contracts](https://github.com/trailofbits/slither/wiki/Printer-documentation#inheritance)
+11 | `inheritance-graph` | [Export the inheritance graph of each contract to a dot file](https://github.com/trailofbits/slither/wiki/Printer-documentation#inheritance-graph)
+12 | `modifiers` | [Print the modifiers called by each function](https://github.com/trailofbits/slither/wiki/Printer-documentation#modifiers)
+13 | `require` | [Print the require and assert calls of each function](https://github.com/trailofbits/slither/wiki/Printer-documentation#require)
+14 | `slithir` | [Print the slithIR representation of the functions](https://github.com/trailofbits/slither/wiki/Printer-documentation#slithir)
+15 | `slithir-ssa` | [Print the slithIR representation of the functions](https://github.com/trailofbits/slither/wiki/Printer-documentation#slithir-ssa)
+16 | `variable-order` | [Print the storage order of the state variables](https://github.com/trailofbits/slither/wiki/Printer-documentation#variable-order)
+17 | `vars-and-auth` | [Print the state variables written and the authorization of the functions](https://github.com/trailofbits/slither/wiki/Printer-documentation#variables-written-and-authorization)
+
+
 
 
 Several printers require xdot installed for visualization:
@@ -165,6 +168,10 @@ Contact Name: test3
         a =5;
     }
 ```
+
+## Echidna
+
+This printer is meant to improve [Echidna](https://github.com/crytic/echidna code coverage. The printer is a wip and is not yet used by Echidna.
 
 ## EVM
 `slither file.sol --print evm`
