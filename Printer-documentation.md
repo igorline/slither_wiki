@@ -169,7 +169,8 @@ Contact Name: test3
     }
 ```
 
-## Echidna
+
+## Echidna
 
 This printer is meant to improve [Echidna](https://github.com/crytic/echidna code coverage. The printer is a wip and is not yet used by Echidna.
 
