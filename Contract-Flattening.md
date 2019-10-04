@@ -1,5 +1,7 @@
 `slither-flat` produces a flattened version of the codebase.
 
+`slither-flat` is experimental. Please [report](https://github.com/crytic/slither/issues) any issues encountered.
+
 ## Usage
 `slither-flat target`
 
