@@ -6,6 +6,7 @@
     * [Path Finding Utility](./Path-Finding-Utility)
     * [Code Similarity](./Code-Similarity-detector)
     * [Contract Flattening](./Contract-Flattening)
+    * [Format](./Slither-format)
   * [Advanced Usage](./advanced-usage)
     * [Python API](./Python-API)
     * [Data dependency](./data-dependency)
