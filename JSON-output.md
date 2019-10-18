@@ -177,8 +177,8 @@ The underlying `results` item above will appear in the following format:
 
 ```json
 {
-        "extra-variable": ["Extra variable in the proxy: <Details>", ..],
-        "different-variables": ["Different variables between proxy and implem: <Details>", ..]
+        "extra-variable": ["Extra variable in the proxy: <Details>"],
+        "different-variables": ["Different variables between proxy and implem: <Details>"]
 }
 ```
 
@@ -186,8 +186,8 @@ The underlying `results` item above will appear in the following format:
 
 ```json
 {
-        "missing-variable": ["Missing variable in the new version: <Details>", ..],
-        "different-variables": ["Different variables between v1 and v2: <Details>", ..]
+        "missing-variable": ["Missing variable in the new version: <Details>"],
+        "different-variables": ["Different variables between v1 and v2: <Details>"]
 }
 ```
 
