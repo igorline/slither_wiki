@@ -123,3 +123,30 @@ Some detectors have custom elements output via the `additional_fields` field of 
 
 - `reentrancy` (all variants): 
   - `underlying_type` (result-element, string): Specifies the type of result element. Is one of `external_calls`, `external_calls_sending_eth`, or `variables_written`.
+
+
+## Slither Check Upgradeability 
+
+The `slither-check-upgradeability` tool also produces JSON output (with the use of the `--json` option). At the top level, this JSON output will appear in the format similar to that of Slither above:
+```json
+{ 
+	"success": true,
+	"error": null, 
+	"results": {}
+}
+```
+- `success` (boolean): `true` if `results` were output successfully, `false` if an `error` occurred.
+- `error` (string | null): If `success` is `false`, this will be a string with relevant error information. Otherwise, it will be `null`.
+- `results` (command-results, see below): If `success` is `true`, this will be an object populated with the different upgradeability checks.
+
+## Command Results
+The underlying `results` item above will appear in the following format:
+```json
+{ 
+	"check-initialization": {},
+        "check-initialization-v2": {},
+        "compare-function-ids": {},
+        "compare-variables-order-proxy": {},
+        "compare-variables-order-implementation": {}
+}
+```
