@@ -173,4 +173,22 @@ The underlying `results` item above will appear in the following format:
 }
 ```
 
+`compare-variables-order-proxy` may contain up to two fields:
+
+```json
+{
+        "extra-variable": ["Extra variable in the proxy: <Details>", ..],
+        "different-variables": ["Different variables between proxy and implem: <Details>", ..]
+}
+```
+
+`compare-variables-order-implementation` may contain up to two fields:
+
+```json
+{
+        "missing-variable": ["Missing variable in the new version: <Details>", ..],
+        "different-variables": ["Different variables between v1 and v2: <Details>", ..]
+}
+```
+
 
