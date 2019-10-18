@@ -151,7 +151,7 @@ The underlying `results` item above will appear in the following format:
 }
 ```
 
-`check-initialization` and `check-initialization-v2` may contain four fields:
+`check-initialization` and `check-initialization-v2` may contain up to four fields:
 
 ```json
 {
@@ -161,3 +161,16 @@ The underlying `results` item above will appear in the following format:
         "multiple-calls": "Function is called multiple times in Contract"
 }
 ```
+
+`compare-function-ids` may contain up to four fields:
+
+```json
+{
+        "implementation-contract-not-found": "<Details>",
+        "proxy-contract-not-found": "<Details>",
+        "function-id-collision": "Function id collision found <Details>",
+        "shadowing": "Shadowing between proxy and implementation found <Details>"
+}
+```
+
+
