@@ -151,7 +151,7 @@ The underlying `results` item above will appear in the following format:
 }
 ```
 
-`check-initialization` and `check-initialization-v2` may contain up to four fields:
+`check-initialization` and `check-initialization-v2` may contain multiple instances of these four fields:
 
 ```json
 {
@@ -162,7 +162,7 @@ The underlying `results` item above will appear in the following format:
 }
 ```
 
-`compare-function-ids` may contain up to four fields:
+`compare-function-ids` may contain multiple instances of these four fields:
 
 ```json
 {
