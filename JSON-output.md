@@ -156,9 +156,9 @@ The underlying `results` item above will appear in the following format:
 ```json
 {
         "absent": "Initializable contract not found, the contract does not follow a standard initalization schema.",
-        "missing-initializer-call": "Function does not call initializer",
-        "missing-call": "Missing call to Function in Contract",
-        "multiple-calls": "Function is called multiple times in Contract"
+        "missing-initializer-call": "<Function Details> does not call initializer",
+        "missing-call": "Missing call to <Function Details> in Contract <Contract Details>",
+        "multiple-calls": "<Function Details> is called multiple times in <Contract Details>"
 }
 ```
 
