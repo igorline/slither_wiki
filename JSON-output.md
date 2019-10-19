@@ -132,15 +132,17 @@ The `slither-check-upgradeability` tool also produces JSON output (with the use 
 { 
 	"success": true,
 	"error": null, 
-	"results": {}
+	"results": {
+                     "upgradeability-check": {}
+                   }
 }
 ```
 - `success` (boolean): `true` if `results` were output successfully, `false` if an `error` occurred.
 - `error` (string | null): If `success` is `false`, this will be a string with relevant error information. Otherwise, it will be `null`.
-- `results` (command-results, see below): If `success` is `true`, this will be an object populated with the different upgradeability checks.
+- `results` (upgradeability-check-results, see below): If `success` is `true`, this will contain an `upgradeability-check` object populated with the different upgradeability checks. If `success` is `false`, `upgradeability-check` object will be empty.
 
 ## Command Results
-The underlying `results` item above will appear in the following format:
+The underlying `upgradeability-check` item above will appear in the following format:
 ```json
 { 
 	"check-initialization": {},
