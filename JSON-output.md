@@ -19,10 +19,12 @@ At the top level, the JSON output provided by slither will appear in the followi
 The underlying `results` item above will appear in the following format:
 ```json
 { 
-	"detectors": []
-}
+	"detectors": [],
+        "upgradeability-check": {}     
+} 
 ```
 - `detectors` (OPTIONAL, vulnerability-results, see below): The results of any detector analysis.
+- `upgradeability-check` (OPTIONAL, upgradeability-results, see below): The results of `slither-check-upgradeability`.
 
 ## Detector Results
 A detector result found in the `detectors` array above will be of the following format:
