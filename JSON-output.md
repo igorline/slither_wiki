@@ -1,3 +1,7 @@
+- [Top-level Command Output](https://github.com/crytic/slither/wiki/JSON-output#top-level-command-output): Standard top-level (for detectors, printers and tools)
+- [Detectors output](https://github.com/crytic/slither/wiki/JSON-output#detector-results)
+- [Upgradeability output](https://github.com/crytic/slither/wiki/JSON-output#slither-check-upgradeability)
+
 ## Top-level Command Output
 At the top level, the JSON output provided by slither will appear in the following format:
 ```json
