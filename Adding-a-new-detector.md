@@ -1,6 +1,6 @@
 Slither's plugin architecture lets you integrate new detectors that run from the command line.
 
-# Detector Skeleton
+## Detector Skeleton
 
 The skeleton for a detector is:
 
@@ -57,13 +57,13 @@ The following helper allows to add information to the finding, that can be used 
 
 An `AbstractDetector` object has the `slither` attribute, which returns the current `Slither` object.
 
-# Integration
+## Integration
 
 You can integrate your detector into Slither by:
 - Adding it in [slither/detectors/all_detectors.py](https://github.com/trailofbits/slither/blob/5cc07a3608a154a2fa022c3e064af4e699d63dda/slither/detectors/all_detectors.py)
 - or, by creating a plugin package (see the [skeleton example](https://github.com/trailofbits/slither/tree/8f91c801c0bb903990c4fc9fa30611f157c6b0f9/plugin_example)).
 
-## Test the detector
+### Test the detector
 If you want to add your detector to [trailofbits/slither](https://github.com/trailofbits/slither), create a unit-test in [tests](https://github.com/trailofbits/slither/tree/master/tests) and update [scripts/travis_test_4.sh](https://github.com/trailofbits/slither/blob/master/scripts/travis_test_4.sh#L92) to run the unit-test automatically.
 
 [deepdiff](https://github.com/seperman/deepdiff) is needed to run `travis_test.sh`:
@@ -71,5 +71,5 @@ If you want to add your detector to [trailofbits/slither](https://github.com/tra
 pip install deepdiff
 ```
 
-# Example
+## Example
 [backdoor.py](https://github.com/trailofbits/slither/blob/5cc07a3608a154a2fa022c3e064af4e699d63dda/slither/detectors/examples/backdoor.py) will detect any function with `backdoor` in its name.
