@@ -8,6 +8,9 @@ The tool checks that:
 * [The initialization is correct](https://github.com/crytic/slither/wiki/Upgradeability-Checks#initialization-checks)
 
 ## Usage
+
+[This section is out of date]
+
 ```
 slither-check-upgradeability proxy.sol ProxyName implem.sol ContractName
 ```
