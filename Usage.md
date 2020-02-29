@@ -159,9 +159,9 @@ The following flags are supported:
     "json": "",
     "truffle_build_directory": "custom/path",
     "truffle_version": "truffle@x.x.x",
+    "truffle_ignore_compile": false,
     "disable_color": false,
     "filter_paths": "file1.sol,file2.sol",
-    "ignore_truffle_compile": false,
     "legacy_ast": false
 }
 ```
