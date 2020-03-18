@@ -48,41 +48,477 @@ According to your setup, you might choose another proxy name than `Upgradeabilit
 
 ## Checks
 
-### Function ID checks
+## Variables that should not be constant
+### Configuration
+* Check: `became-constant`
+* Severity: `High`
 
-`slither-check-upgradeability` checks that:
+### Description
 
-* There is no function id collision between the proxy and the implementation
- * The proxy does not shadow any functions from the implementation
+Detect state variables that should not be `constant̀`.
 
-### Variable order checks
 
-`slither-check-upgradeability` checks that:
+### Exploit Scenario:
 
-* The variables are declared in the same order between the proxy and the implementation
-* The variables are declared in the implementation first and second version
+```solidity
+contract Contract{
+    uint variable1;
+    uint variable2;
+    uint variable3;
+}
 
-`slither-check-upgradeability` will warn if the proxy has state variables. Consider using the Unstructured storage pattern for those variables. 
-
-### Initialization checks
-
-Contracts based on `delegatecallproxy` cannot be initialized through constructors. As a result, init functions must be used. These functions do not benefit from:
-
-* Solidity C3 linearization: an init function can be called multiple times, or never.
-* The init functions must be calleable only once.
-* Race conditions can occur during deployment.
-
-If the contract uses the zos library (and the `Initializable` contract), the util checks that:
-
-* All the `initialize` functions call the `initializer` modifier 
-* All the inherits `initialize` functions are called
-* `initialize` functions are never called twice
-
-Additionally, `slither-check-upgradeability` prints the functions that must be called during initialization.
-
-If the contract uses another schema, no check is performed. In that case, the tool warns:
+contract ContractV2{
+    uint variable1;
+    uint constant variable2;
+    uint variable3;
+}
 ```
-Initializable contract not found, the contract does not follow a standard initialization schema.
+Because `variable2` is now a `constant`, the storage location of `variable3` will be different.
+As a result, `ContractV2` will have a corrupted storage layout.
+
+
+### Recommendation
+
+Do not make an existing state variable `constant`.
+
+
+## Functions ids collisions
+### Configuration
+* Check: `function-id-collision`
+* Severity: `High`
+
+### Description
+
+Detect function id collision between the contract and the proxy.
+
+
+### Exploit Scenario:
+
+```solidity
+contract Contract{
+    function gsf() public {
+        // ...
+    }
+}
+
+contract Proxy{
+    function tgeo() public {
+        // ...
+    }
+}
 ```
+`Proxy.tgeo()` and `Contract.gsf()` have the same function id (0x67e43e43). 
+As a result, `Proxy.tgeo()` will shadow Contract.gsf()`.  
 
 
+### Recommendation
+
+Rename the function. Avoid public functions in the proxy.
+
+
+## Functions shadowing
+### Configuration
+* Check: `function-shadowing`
+* Severity: `High`
+
+### Description
+
+Detect function shadowing between the contract and the proxy.
+
+
+### Exploit Scenario:
+
+```solidity
+contract Contract{
+    function get() public {
+        // ...
+    }
+}
+
+contract Proxy{
+    function get() public {
+        // ...
+    }
+}
+```
+`Proxy.get` will shadow any call to `get()`. As a result `get()` is never executed in the logic contract and cannot be updated.
+
+
+### Recommendation
+
+Rename the function. Avoid public functions in the proxy.
+
+
+## Initialize functions are not called
+### Configuration
+* Check: `missing-calls`
+* Severity: `High`
+
+### Description
+
+Detect missing calls to initialize functions.
+
+
+### Exploit Scenario:
+
+```solidity
+contract Base{
+    function initialize() public{
+        ///
+    }
+}
+contract Derived is Base{
+    function initialize() public{
+        ///
+    }
+}
+
+```
+`Derived.initialize` does not call `Base.initialize` leading the contract to not be correctly initialized.  
+
+
+### Recommendation
+
+Ensure all the initialize functions are reached by the most derived initialize function.
+
+
+## initializer() is not called
+### Configuration
+* Check: `missing-init-modifier`
+* Severity: `High`
+
+### Description
+
+Detect if `Initializable.initializer()` is called.
+
+
+### Exploit Scenario:
+
+```solidity
+contract Contract{
+    function initialize() public{
+        ///
+    }
+}
+
+```
+`initialize` should have the `initializer` modifier to prevent someone from initializing the contract multiple times.  
+
+
+### Recommendation
+
+Use `Initializable.initializer()`.
+
+
+## Initialize functions are called multiple times
+### Configuration
+* Check: `multiple-calls`
+* Severity: `High`
+
+### Description
+
+Detect multiple calls to a initialize function.
+
+
+### Exploit Scenario:
+
+```solidity
+contract Base{
+    function initialize(uint) public{
+        ///
+    }
+}
+contract Derived is Base{
+    function initialize(uint a, uint b) public{
+        initialize(a);
+    }
+}
+
+contract DerivedDerived is Derived{
+    function initialize() public{
+        initialize(0);
+        initialize(0, 1 );
+    }
+}
+
+```
+`Base.initialize(uint)` is called two times in `DerivedDerived.initiliaze` execution, leading to a potential corruption.
+
+
+### Recommendation
+
+Call only one time every initialize function.
+
+
+## Incorrect variables with the v2
+### Configuration
+* Check: `order-vars-contracts`
+* Severity: `High`
+
+### Description
+
+Detect variables that are different between the original contract and the updated one.
+
+
+### Exploit Scenario:
+
+```solidity
+contract Contract{
+    uint variable1;
+}
+
+contract ContractV2{
+    address variable1;
+}
+```
+`Contract` and `ContractV2` do not have the same storage layout. As a result the storage of both contracts can be corrupted.
+
+
+### Recommendation
+
+Respect the variable order of the original contract in the updated contract.
+
+
+## Incorrect variables with the proxy
+### Configuration
+* Check: `order-vars-proxy`
+* Severity: `High`
+
+### Description
+
+Detect variables that are different between the contract and the proxy.
+
+
+### Exploit Scenario:
+
+```solidity
+contract Contract{
+    uint variable1;
+}
+
+contract Proxy{
+    address variable1;
+}
+```
+`Contract` and `Proxy` do not have the same storage layout. As a result the storage of both contracts can be corrupted.
+
+
+### Recommendation
+
+Avoid variables in the proxy. If a variable is in the proxy, ensure it has the same layout than in the contract.
+
+
+## State variable initialized
+### Configuration
+* Check: `variables-initialized`
+* Severity: `High`
+
+### Description
+
+Detect state variables that are initialized.
+
+
+### Exploit Scenario:
+
+```solidity
+contract Contract{
+    uint variable = 10;
+}
+```
+Using `Contract` will the delegatecall proxy pattern will lead `variable` to be 0 when called through the proxy.
+
+
+### Recommendation
+
+Using initialize functions to write initial values in state variables.
+
+
+## Variables that should be constant
+### Configuration
+* Check: `were-constant`
+* Severity: `High`
+
+### Description
+
+Detect state variables that should be `constant̀`.
+
+
+### Exploit Scenario:
+
+```solidity
+contract Contract{
+    uint variable1;
+    uint constant variable2;
+    uint variable3;
+}
+
+contract ContractV2{
+    uint variable1;
+    uint variable2;
+    uint variable3;
+}
+```
+Because `variable2` is not anymore a `constant`, the storage location of `variable3` will be different.
+As a result, `ContractV2` will have a corrupted storage layout.
+
+
+### Recommendation
+
+Do not remove `constant` from a state variables during an update.
+
+
+## Extra variables in the proxy
+### Configuration
+* Check: `extra-vars-proxy`
+* Severity: `Medium`
+
+### Description
+
+Detect variables that are in the proxy and not in the contract.
+
+
+### Exploit Scenario:
+
+```solidity
+contract Contract{
+    uint variable1;
+}
+
+contract Proxy{
+    uint variable1;
+    uint variable2;
+}
+```
+`Proxy` contains additional variables. A future update of `Contract` is likely to corrupt the proxy.
+
+
+### Recommendation
+
+Avoid variables in the proxy. If a variable is in the proxy, ensure it has the same layout than in the contract.
+
+
+## Missing variables
+### Configuration
+* Check: `missing-variables`
+* Severity: `Medium`
+
+### Description
+
+Detect variables that were present in the original contracts but are not in the updated one.
+
+
+### Exploit Scenario:
+
+```solidity
+contract V1{
+    uint variable1;
+    uint variable2;
+}
+
+contract V2{
+    uint variable1;
+}
+```
+The new version, `V2` does not contain `variable1`. 
+If a new variable is added in an update of `V2`, this variable will hold the latest value of `variable2` and
+will be corrupted.
+
+
+### Recommendation
+
+Do not change the order of the state variables in the updated contract.
+
+
+## Extra variables in the v2
+### Configuration
+* Check: `extra-vars-v2`
+* Severity: `Informational`
+
+### Description
+
+Show new variables in the updated contract. 
+
+This finding does not have an immediate security impact and is informative.
+
+
+### Exploit Scenario:
+
+```solidity
+contract Contract{
+    uint variable1;
+}
+
+contract Proxy{
+    uint variable1;
+    uint variable2;
+}
+```
+`Proxy` contains additional variables. A future update of `Contract` is likely to corrupt the proxy.
+
+
+### Recommendation
+
+Ensure that all the new variables are expected.
+
+
+## Initializable is not inherited
+### Configuration
+* Check: `init-inherited`
+* Severity: `Informational`
+
+### Description
+
+Detect if `Initializable` is inherited.
+
+
+### Recommendation
+
+Review manually the contract's initialization. Consider inheriting `Initializable`.
+
+
+## Initializable
+### Configuration
+* Check: `init-missing`
+* Severity: `Informational`
+
+### Description
+
+Detect if a contract `Initializable` is present.
+
+
+### Recommendation
+
+Review manually the contract's initialization..
+Consider using a `Initializable` contract to follow [standard practice](https://docs.openzeppelin.com/upgrades/2.7/writing-upgradeable).
+
+
+## Initialize function
+### Configuration
+* Check: `initialize_target`
+* Severity: `Informational`
+
+### Description
+
+Show the function that must be called at deployment. 
+
+This finding does not have an immediate security impact and is informative.
+
+
+### Recommendation
+
+Ensure that the function is called at deployment.
+
+
+## initializer() is missing
+### Configuration
+* Check: `initializer-missing`
+* Severity: `Informational`
+
+### Description
+
+Detect the lack of `Initializable.initializer()` modifier.
+
+
+### Recommendation
+
+Review manually the contract's initialization. Consider inheriting a `Initializable.initializer()` modifier.
