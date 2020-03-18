@@ -60,7 +60,7 @@ Note:  `contracts/mocks/WithConstructorImplementation.sol` must be removed as it
 
 Then from your project directory:
 ```
-slither-check-upgradeability /path/to/zos/packages/lib/ UpgradeabilityProxy . ContractName
+slither-check-upgradeability . ContractName --proxy-filename /path/to/zos/packages/lib/ --proxy-name UpgradeabilityProxy 
 ```
 
 According to your setup, you might choose another proxy name than `UpgradeabilityProxy`.
