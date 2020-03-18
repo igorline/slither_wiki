@@ -24,7 +24,6 @@ Num |  Check |   What it Detects  |   Impact  | Proxy | Contract V2
 15 | `init-missing` | [Initializable is missing](https://github.com/crytic/slither/wiki/Upgradeability-Checks#initializable-is-missing) | Informational |  | 
 16 | `initialize-target` | [Initialize function that must be called](https://github.com/crytic/slither/wiki/Upgradeability-Checks#initialize-function) | Informational |  | 
 17 | `initializer-missing` | [initializer() is missing](tohttps://github.com/crytic/slither/wiki/Upgradeability-Checks#initializer-is-missingdo) | Informational |  | 
-       |
 
 ## Usage
 
