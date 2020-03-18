@@ -2,31 +2,52 @@
 
 `slither-check-upgradability` is meant to help to review contracts using the [delegatecall proxy pattern](https://blog.trailofbits.com/2018/09/05/contract-upgrade-anti-patterns/).
 
-The tool checks that:
-* [There is no function id collision](https://github.com/crytic/slither/wiki/Upgradeability-Checks#function-id-checks)
-* [The order of variables is the same](https://github.com/crytic/slither/wiki/Upgradeability-Checks#variable-order-checks)
-* [The initialization is correct](https://github.com/crytic/slither/wiki/Upgradeability-Checks#initialization-checks)
+## Checks 
+
+
+Num |  Check |   What it Detects  |   Impact  | Proxy | Contract V2 
+--- | ---    | ---                | ---        | ---   | --- 
+1 | `became-constant` | [Variables that should not be constant](https://github.com/crytic/slither/wiki/Upgradeability-Checks#variables-that-should-not-be-constant) | High |  | X
+2 | `function-id-collision` | [Functions ids collision](https://github.com/crytic/slither/wiki/Upgradeability-Checks#functions-ids-collisions) | High | X | 
+3 | `function-shadowing` | [Functions shadowing](https://github.com/crytic/slither/wiki/Upgradeability-Checks#functions-shadowing) | High | X | 
+4 | `missing-calls` | [Missing calls to init functions](https://github.com/crytic/slither/wiki/Upgradeability-Checks#initialize-functions-are-not-called) | High |  | 
+5 | `missing-init-modifier` | [initializer() is not called](https://github.com/crytic/slither/wiki/Upgradeability-Checks#initializer-is-not-called) | High |  | 
+6 | `multiple-calls` | [Init functions called multiple times](https://github.com/crytic/slither/wiki/Upgradeability-Checks#initialize-functions-are-called-multiple-times) | High |  | 
+7 | `order-vars-contracts` | [Incorrect vars order with the v2](https://github.com/crytic/slither/wiki/Upgradeability-Checks#incorrect-variables-with-the-v2) | High |  | X
+8 | `order-vars-proxy` | [Incorrect vars order with the proxy](https://github.com/crytic/slither/wiki/Upgradeability-Checks#incorrect-variables-with-the-proxy) | High | X | 
+9 | `variables-initialized` | [State variables with an initial value](https://github.com/crytic/slither/wiki/Upgradeability-Checks#state-variable-initialized) | High |  | 
+10 | `were-constant` | [Variables that should be constant](https://github.com/crytic/slither/wiki/Upgradeability-Checks#variables-that-should-be-constant) | High |  | X
+11 | `extra-vars-proxy` | [Extra vars in the proxy](https://github.com/crytic/slither/wiki/Upgradeability-Checks#extra-variables-in-the-proxy) | Medium | X | 
+12 | `missing-variables` | [Variable missing in the v2](https://github.com/crytic/slither/wiki/Upgradeability-Checks#missing-variables) | Medium |  | X
+13 | `extra-vars-v2` | [Extra vars in the v2](https://github.com/crytic/slither/wiki/Upgradeability-Checks#extra-variables-in-the-v2) | Informational |  | X
+14 | `init-inherited` | [Initializable is not inherited](https://github.com/crytic/slither/wiki/Upgradeability-Checks#initializable-is-not-inherited) | Informational |  | 
+15 | `init-missing` | [Initializable is missing](https://github.com/crytic/slither/wiki/Upgradeability-Checks#initializable-is-missing) | Informational |  | 
+16 | `initialize-target` | [Initialize function that must be called](https://github.com/crytic/slither/wiki/Upgradeability-Checks#initialize-function) | Informational |  | 
+17 | `initializer-missing` | [initializer() is missing](tohttps://github.com/crytic/slither/wiki/Upgradeability-Checks#initializer-is-missingdo) | Informational |  | 
+       |
 
 ## Usage
 
-[This section is out of date]
+```
+slither-check-upgradeability project ContractName
+```
+- `project` can be a Solidity file, or a platform (truffle/embark/..) directory
 
-```
-slither-check-upgradeability proxy.sol ProxyName implem.sol ContractName
-```
+### Contract updated
+If you want to check the contract and its update, use:
+- `--new-contract-name ContractName`
+- `--new-contract-filename contract_project`
 
-If a second version of the contract is to be checked, use:
+`--new-contract-filename` is not needed if the new contract is in the same codebase than the original one.
 
-```
-slither-check-upgradeability proxy.sol ProxyName implem.sol ContractName implem_v2.sol ContractNameV2
-```
+### Proxy
+If you want to check also the proxy, use:
+- `--proxy-name ProxyName`
+- `--proxy-filename proxy_project`
 
-`proxy.sol`/`implem.sol` can be a Truffle directory, for example: 
-```
-slither-check-upgradeability . ProxyName . ContractName
-```
+`--proxy-filename` is not needed if the proxy is in the same codebase than the targeted contract.
 
-### Proxy contract
+#### ZOS
 If you use zos, you will have the proxy and the contract in different directories.
 
 Likely, you will use one of the proxy from https://github.com/zeppelinos/zos. Clone the `zos`, and install the dependencies:
@@ -46,7 +67,9 @@ slither-check-upgradeability /path/to/zos/packages/lib/ UpgradeabilityProxy . Co
 According to your setup, you might choose another proxy name than `UpgradeabilityProxy`.
 
 
-## Checks
+## Checks Description
+
+
 
 ## Variables that should not be constant
 ### Configuration
@@ -476,7 +499,7 @@ Detect if `Initializable` is inherited.
 Review manually the contract's initialization. Consider inheriting `Initializable`.
 
 
-## Initializable
+## Initializable is missing
 ### Configuration
 * Check: `init-missing`
 * Severity: `Informational`
@@ -494,7 +517,7 @@ Consider using a `Initializable` contract to follow [standard practice](https://
 
 ## Initialize function
 ### Configuration
-* Check: `initialize_target`
+* Check: `initialize-target`
 * Severity: `Informational`
 
 ### Description
