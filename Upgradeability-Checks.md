@@ -32,7 +32,7 @@ slither-check-upgradeability project ContractName
 ```
 - `project` can be a Solidity file, or a platform (truffle/embark/..) directory
 
-### Contract updated
+### Contract V2
 If you want to check the contract and its update, use:
 - `--new-contract-name ContractName`
 - `--new-contract-filename contract_project`
