@@ -2,6 +2,25 @@
 
 List of public detectors
 
+## Name reused
+### Configuration
+* Check: `name-reused`
+* Severity: `High`
+* Confidence: `High`
+
+### Description
+If a codebase has two contracts with the similar name, the compilation artifacts
+will not contain one of the contract with the dupplicate name.
+
+### Exploit Scenario:
+
+Bob's truffle codebase has two contracts named `ERC20`.
+When `truffle compile` runs, only one of the two contract will generate artifacts in `build/contracts`.
+As a result, the second contract cannot be analyzed.
+
+
+### Recommendation
+Rename the contract.
 
 ## Right-To-Left-Override character
 ### Configuration
@@ -360,6 +379,74 @@ contract DerivedContract is BaseContract{
 ### Recommendation
 Remove the state variable shadowing.
 
+## Tautology or contradiction
+### Configuration
+* Check: `tautology`
+* Severity: `Medium`
+* Confidence: `High`
+
+### Description
+Detects expressions that are tautologies or contradictions.
+
+### Exploit Scenario:
+
+```solidity
+contract A {
+	function f(uint x) public {
+		// ...
+        if (x >= 0) { // bad -- always true
+           // ...
+        }
+		// ...
+	}
+
+	function g(uint8 y) public returns (bool) {
+		// ...
+        return (y < 512); // bad!
+		// ...
+	}
+}
+```
+`x` is an `uint256`, as a result `x >= 0` will be always true.
+`y` is an `uint8`, as a result `y <512` will be always true.  
+
+
+### Recommendation
+Fix the incorrect comparison by chaning the value type or the comparison.
+
+## Misuse of a Boolean constant
+### Configuration
+* Check: `boolean-cst`
+* Severity: `Medium`
+* Confidence: `Medium`
+
+### Description
+Detects the misuse of a Boolean constant.
+
+### Exploit Scenario:
+
+```solidity
+contract A {
+	function f(uint x) public {
+		// ...
+        if (false) { // bad!
+           // ...
+        }
+		// ...
+	}
+
+	function g(bool b) public returns (bool) {
+		// ...
+        return (b || true); // bad!
+		// ...
+	}
+}
+```
+Boolean constants in code have only a few legitimate uses.  Other uses (in complex expressions, as conditionals) indicate either an error or (most likely) the persistence of debugging/development code that is likely faulty.
+
+### Recommendation
+Verify and simplify the condition.
+
 ## Constant functions using assembly code
 ### Configuration
 * Check: `constant-function-asm`
@@ -423,6 +510,31 @@ All the calls to `get` revert, breaking Bob's smart contract execution.
 
 ### Recommendation
 Ensure that the attributes of contracts compiled prior to Solidity 0.5.0 are correct.
+
+## Divide before multiply
+### Configuration
+* Check: `divide-before-multiply`
+* Severity: `Medium`
+* Confidence: `Medium`
+
+### Description
+Solidity integeer division will might truncate. As a result, performing a multiply before a divison might lead to loss of precision.
+
+### Exploit Scenario:
+
+```solidity
+contract A {
+	function f(uint n) public {
+        coins = (oldSupply / n) * interest;
+    }
+}
+```
+If `n` is greater than `oldSupply`, `coins` will be zero. For example, with `oldSupply = 5; n = 10, interest = 2`, coins will be zero.  
+If `(oldSupply * interest / n)` was used, `coins` would have been `1`.   
+In general, it's usually a good idea to re-arrange arithmetic to perform multiply before divide, unless the limit of a smaller type makes this dangerous.
+
+### Recommendation
+Consider ordering multiplication prior division.
 
 ## Reentrancy vulnerabilities
 ### Configuration
@@ -772,6 +884,33 @@ The use of assembly is error-prone and should be avoided.
 
 ### Recommendation
 Do not use evm assembly.
+
+## Boolean Equality
+### Configuration
+* Check: `boolean-equal`
+* Severity: `Informational`
+* Confidence: `High`
+
+### Description
+Detects the comparison to boolean constant.
+
+### Exploit Scenario:
+
+```solidity
+contract A {
+	function f(bool x) public {
+		// ...
+        if (x == true) { // bad!
+           // ...
+        }
+		// ...
+	}
+}
+```
+Boolean can be used directly and do not need to be compare to `true` or `false`.
+
+### Recommendation
+Remove the equality to the boolean constant.
 
 ## Deprecated Standards
 ### Configuration
