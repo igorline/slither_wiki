@@ -105,17 +105,17 @@ slither file.sol --print inheritance-graph
 
 ### Path filtering
 
-`--filter-paths path1,path2` will exclude all the results that are only related to `path1` and `path2`. The path specified can be a path directory or a filename. It is used as a direct text comparison, and there is no regular expression supported.
+`--filter-paths path1` will exclude all the results that are only related to `path1`. The path specified can be a path directory or a filename. Direct string comparison and [Python regular expression](https://docs.python.org/3/library/re.html) are used.
 
 Examples:
 ```
-slither . --filter-paths openzepellin
+slither . --filter-paths "openzepellin"
 ```
 Filter all the results only related to openzepellin.
 ```
-slither . --filter-paths SafeMath.sol
+slither . --filter-paths "Migrations.sol|ConvertLib.sol"
 ```
-Filter all the results only related to the file `SafeMath.sol`.
+Filter all the results only related to the file `SafeMath.sol` or `ConvertLib.sol`.
 
 ### Triage mode
 
