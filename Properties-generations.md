@@ -30,7 +30,7 @@ slither-prop . --contract ContractName
 - One Truffle migration file
 - Two Truffle unit-test files
 
-For example on .
+For example on [examples/slither-prop](https://github.com/crytic/slither/tree/9623a2781faa4e7759f06d2e8c4adcd45078af69/examples/slither-prop).
 ```
 Write contracts/crytic/interfaces.sol
 Write contracts/crytic/PropertiesERC20BuggyTransferable.sol
@@ -53,7 +53,7 @@ To run Echidna:
 ## 2. Constructor configuration
 Before running any test or Echidna, update the constructor in `contracts/crytic/TestX.sol`:
 
-In the example [.], update the constructor as follow:
+On [examples/slither-prop/contracts](https://github.com/crytic/slither/tree/9623a2781faa4e7759f06d2e8c4adcd45078af69/examples/slither-prop), update the constructor as follow:
 
 ```solidity
 	constructor() public{
