@@ -2,13 +2,21 @@
 
 For now `slither-prop` supports only Truffle, support of other platforms is planned.
 
-# How to use
+- [How to Use](#how-to-use)
+- [Scenarios](#scenarios)
+- [All Properties](#all-properties)
+
+Join our [Slack channel](https://empireslacking.herokuapp.com/) (#ethereum) if you have any questions.
+
+Consider using [crytic.io/](https://crytic.io/) for GitHub integration.
+
+# How to Use
 
 There are four steps:
-- 1 - Files generation
-- 2 - Constructor configuration
-- 3 - Unit tests
-- 4 - Echidna
+- [1 - Files generation](#1-files-generations)
+- [2 - Constructor configuration](#2-constructor-configuration
+- [3 - Unit tests](#2-unit-tests)
+- [4 - Echidna](#4-echidna)
 
 
 ## 1. Files generations
@@ -16,7 +24,7 @@ There are four steps:
 slither-prop . --contract ContractName
 ```
 
-`slither-prop` will generates:
+`slither-prop` will generate:
 - Multiple solidity files containing the properties
 - `echidna_config.yaml` to configure Echidna
 - One Truffle migration file
@@ -66,7 +74,7 @@ In the example [.], update the constructor as follow:
 	}
 ```
 
-##3. Unit tests
+## 3. Unit tests
 
 The first unit test file, named `InitializationX.js` will check that the constructor has been correctly initialized: 
 ```
