@@ -1,6 +1,6 @@
 `slither-prop` generates automatically code properties that can be tested with unit tests or [Echidna](https://github.com/crytic/echidna/).
 
-For now `slither-prop` supports only Truffle, support of other platforms is planned.
+For now `slither-prop` supports only Truffle, support for other platforms is planned.
 
 - [How to Use](#how-to-use)
 - [Scenarios](#scenarios)
