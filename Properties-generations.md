@@ -14,7 +14,7 @@ Consider using [crytic.io/](https://crytic.io/) for GitHub integration.
 
 There are four steps:
 - [1 - Files generation](#1-files-generations)
-- [2 - Constructor configuration](#2-constructor-configuration
+- [2 - Constructor configuration](#2-constructor-configuration)
 - [3 - Unit tests](#2-unit-tests)
 - [4 - Echidna](#4-echidna)
 
