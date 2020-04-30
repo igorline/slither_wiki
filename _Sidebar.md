@@ -8,7 +8,7 @@
     * [Contract Flattening](./Contract-Flattening)
     * [Format](./Slither-format)
     * [ERC Conformance](./ERC-Conformance)
-    * [Properties Generation](./Properties-generation)
+    * [Property Generation](./Property-generation)
   * [Advanced Usage](./advanced-usage)
     * [Python API](./Python-API)
     * [Data dependency](./data-dependency)
