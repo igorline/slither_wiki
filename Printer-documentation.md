@@ -18,7 +18,7 @@ Num | Printer | Description
 14 | `slithir` | [Print the slithIR representation of the functions](https://github.com/trailofbits/slither/wiki/Printer-documentation#slithir)
 15 | `slithir-ssa` | [Print the slithIR representation of the functions](https://github.com/trailofbits/slither/wiki/Printer-documentation#slithir-ssa)
 16 | `variable-order` | [Print the storage order of the state variables](https://github.com/trailofbits/slither/wiki/Printer-documentation#variable-order)
-17 | `vars-and-auth` | [Print the state variables written and the authorization of the functions](https://github.com/trailofbits/slither/wiki/Printer-documentation#variables-written-and-authorization)
+17 | `vars-and-auth` | [Print authorization and writes to state variables](https://github.com/trailofbits/slither/wiki/Printer-documentation#variables-written-and-authorization)
 
 
 
