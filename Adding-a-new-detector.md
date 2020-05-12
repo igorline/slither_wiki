@@ -27,9 +27,9 @@ class Skeleton(AbstractDetector):
 
     def _detect(self):
         info = 'This is an example!'
+        res = self.generate_result(info)
 
-        finding = self.generate_json_result(info)
-        return [finding]
+        return [res]
 ```
 
 - `ARGUMENT` lets you run the detector from the command line
@@ -45,15 +45,7 @@ class Skeleton(AbstractDetector):
   - `DetectorClassification.HIGH`
 - `WIKI` constants are used to generate automatically the documentation.
 
-`_detect()` needs to return a list of findings. A finding is a dictionary that can be generated with `self.generate_json_result(info)`, where `info`  is the text that is going to be printed.
-
-The following helper allows to add information to the finding, that can be used by a continuous integration system or an IDE to locate the bug:
-- `self.add_variable_to_json(variable)`
-- `self.add_variables_to_json(variables)`
-- `self.add_contract_to_json(contract)`
-- `self.add_function_to_json(function)`
-- `self.add_functions_to_json(functions)`
-- `self.add_nodes_to_json(nodes)`
+`_detect()` needs to return a list of findings. A finding is an element generated with `self.generate_result(info)`, where `info`  is a list of text or contract's object (contract, function, node, ...)
 
 An `AbstractDetector` object has the `slither` attribute, which returns the current `Slither` object.
 
