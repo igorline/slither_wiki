@@ -64,4 +64,4 @@ pip install deepdiff
 ```
 
 ## Example
-[backdoor.py](https://github.com/trailofbits/slither/blob/5cc07a3608a154a2fa022c3e064af4e699d63dda/slither/detectors/examples/backdoor.py) will detect any function with `backdoor` in its name.
+[backdoor.py](https://github.com/crytic/slither/blob/bfaa9a51ea76d3e118c494cb8f9c9c48fec3903b/slither/detectors/examples/backdoor.py) will detect any function with `backdoor` in its name.
