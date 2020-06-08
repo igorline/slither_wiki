@@ -27,7 +27,7 @@ Default: `MostDerived`
 ### Export option
 - `--dir DirName`: output directory
 - `--json file.json`: export the results to a json file (`--json -` output to the standard output
-- `-zip file.zip`: export to a zip file 
+- `--zip file.zip`: export to a zip file 
 - `--zip-type type`: Zip compression type (default lzma))
 
 
