@@ -1,6 +1,6 @@
-`slither-prop` generates automatically code properties that can be tested with unit tests or [Echidna](https://github.com/crytic/echidna/).
+`slither-prop` automatically generates code properties (e.g., invariants) that can be tested with unit tests or [Echidna](https://github.com/crytic/echidna/).
 
-For now `slither-prop` supports only Truffle, support for other platforms is planned.
+`slither-prop` currently only supports Truffle. Support for other platforms is planned.
 
 - [How to Use](#how-to-use)
 - [Scenarios](#scenarios)
@@ -120,7 +120,7 @@ $ echidna-test . --contract TestERC20BuggyTransferable --config echidna_config.y
 ```
 
 # Scenarios
-`slither-prop` contains different scenarios, that can be specified with the `--scenario NAME` flag.
+`slither-prop` contains different scenarios that can be specified with the `--scenario NAME` flag.
 Available scenarios:
 ```
 #################### ERC20 ####################
