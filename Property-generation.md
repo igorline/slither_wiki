@@ -6,10 +6,10 @@ Note: `slither-prop` currently only supports Truffle, however, we'll be adding s
 
 There are four steps:
 
-1. [Generate the tests](#1-generate-the-tests)
-1. [Constructor configuration](#2-constructor-configuration)
-1. [Run the Unit tests](#2-unit-tests)
-1. [Run the Echidna tests](#4-echidna)
+1. [Generate the tests](#step-1-generate-the-tests)
+1. [Constructor configuration](#step-2-customize-the-constructor)
+1. [Run the Unit tests](#step-3-run-the-unit-tests-with-truffle)
+1. [Run the Echidna tests](#step-4-run-the-property-tests-with-echidna)
 
 ### Step 1. Generate the tests
 
@@ -69,7 +69,7 @@ On [examples/slither-prop/contracts](https://github.com/crytic/slither/tree/9623
 	}
 ```
 
-## Step 3. Run the unit tests with Truffle
+### Step 3. Run the unit tests with Truffle
 
 The first unit test file, named `InitializationX.js` will check that the constructor has been correctly initialized:
 
