@@ -1,31 +1,30 @@
-`slither-prop` automatically generates code properties (e.g., invariants) that can be tested with unit tests or [Echidna](https://github.com/crytic/echidna/).
+`slither-prop` generates code properties (e.g., invariants) that can be tested with unit tests or [Echidna](https://github.com/crytic/echidna/), entirely automatically. Please consider using [Crytic](https://crytic.io/) to continuously test these properties through our Github App..
 
-`slither-prop` currently only supports Truffle. Support for other platforms is planned.
+Note: `slither-prop` currently only supports Truffle, however, we'll be adding support for other frameworks soon!
 
 - [How to Use](#how-to-use)
 - [Scenarios](#scenarios)
 - [All Properties](#all-properties)
 
-Join our [Slack channel](https://empireslacking.herokuapp.com/) (#ethereum) if you have any questions.
-
-Consider using [crytic.io/](https://crytic.io/) for GitHub integration.
-
-# How to Use
+## How to Use Slither's Property Generator
 
 There are four steps:
-- [1 - Files generation](#1-files-generations)
-- [2 - Constructor configuration](#2-constructor-configuration)
-- [3 - Unit tests](#2-unit-tests)
-- [4 - Echidna](#4-echidna)
+
+# [File generation](#1-file-generation)
+# [Constructor configuration](#2-constructor-configuration)
+# [Run the Unit tests](#2-unit-tests)
+# [Run the Echidna tests](#4-echidna)
 
 
-## 1. Files generations
+### 1. Generate the tests
+
 ```
 slither-prop . --contract ContractName
 ```
 
 `slither-prop` will generate:
-- Multiple solidity files containing the properties
+
+- Solidity files containing the properties
 - `echidna_config.yaml` to configure Echidna
 - One Truffle migration file
 - Two Truffle unit-test files
@@ -50,8 +49,9 @@ To run Echidna:
 	 echidna-test . --contract TestERC20BuggyTransferable --config echidna_config.yaml
 ```
 
-## 2. Constructor configuration
-Before running any test or Echidna, update the constructor in `contracts/crytic/TestX.sol`:
+### 2. Customize the constructor
+
+Next, update the constructor in `contracts/crytic/TestX.sol`:
 
 On [examples/slither-prop/contracts](https://github.com/crytic/slither/tree/9623a2781faa4e7759f06d2e8c4adcd45078af69/examples/slither-prop), update the constructor as follow:
 
@@ -74,9 +74,10 @@ On [examples/slither-prop/contracts](https://github.com/crytic/slither/tree/9623
 	}
 ```
 
-## 3. Unit tests
+## 3. Run the unit tests with Truffle
 
-The first unit test file, named `InitializationX.js` will check that the constructor has been correctly initialized: 
+The first unit test file, named `InitializationX.js` will check that the constructor has been correctly initialized:
+
 ```
 $ truffle test test/crytic/InitializationTestERC20BuggyTransferable.js
 [..]
@@ -90,7 +91,7 @@ $ truffle test test/crytic/InitializationTestERC20BuggyTransferable.js
 
 ```
 
-If all the tests passed, run the properties tests:
+If all the unit tests passed, run the property tests:
 ```
 $ truffle test test/crytic/InitializationTestERC20BuggyTransferable.js
   Contract: TestERC20BuggyTransferable
@@ -111,15 +112,15 @@ $ truffle test test/crytic/InitializationTestERC20BuggyTransferable.js
 
 ```
 
-As you can see, the unit tests detect some of the contracts bugs.
+As you can see, the unit tests detect some of the bugs.
 
-## 4. Echidna
+### 4. Run the property tests with Echidna
 
 ```
 $ echidna-test . --contract TestERC20BuggyTransferable --config echidna_config.yaml
 ```
 
-# Scenarios
+## Scenarios
 `slither-prop` contains different scenarios that can be specified with the `--scenario NAME` flag.
 Available scenarios:
 ```
@@ -132,7 +133,7 @@ NotBurnable - Test that no one can burn tokens
 Burnable - Test the burn of tokens. Require the "burn(address) returns()" function
 ``` 
 
-# All properties
+## All properties
 ```
 +-----+-------------------------------------------------------------------------+------------------------+
 | Num |                               Description                               |        Scenario        |
