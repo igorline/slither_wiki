@@ -10,11 +10,10 @@ Note: `slither-prop` currently only supports Truffle, however, we'll be adding s
 
 There are four steps:
 
-# [File generation](#1-file-generation)
-# [Constructor configuration](#2-constructor-configuration)
-# [Run the Unit tests](#2-unit-tests)
-# [Run the Echidna tests](#4-echidna)
-
+1. [File generation](#1-file-generation)
+1. [Constructor configuration](#2-constructor-configuration)
+1. [Run the Unit tests](#2-unit-tests)
+1. [Run the Echidna tests](#4-echidna)
 
 ### 1. Generate the tests
 
