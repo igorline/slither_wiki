@@ -2,20 +2,16 @@
 
 Note: `slither-prop` currently only supports Truffle, however, we'll be adding support for other frameworks soon!
 
-- [How to Use](#how-to-use)
-- [Scenarios](#scenarios)
-- [All Properties](#all-properties)
-
 ## How to Use Slither's Property Generator
 
 There are four steps:
 
-1. [File generation](#1-file-generation)
+1. [Generate the tests](#1-generate-the-tests)
 1. [Constructor configuration](#2-constructor-configuration)
 1. [Run the Unit tests](#2-unit-tests)
 1. [Run the Echidna tests](#4-echidna)
 
-### 1. Generate the tests
+### Step 1. Generate the tests
 
 ```
 slither-prop . --contract ContractName
@@ -48,7 +44,7 @@ To run Echidna:
 	 echidna-test . --contract TestERC20BuggyTransferable --config echidna_config.yaml
 ```
 
-### 2. Customize the constructor
+### Step 2. Customize the constructor
 
 Next, update the constructor in `contracts/crytic/TestX.sol`:
 
@@ -73,7 +69,7 @@ On [examples/slither-prop/contracts](https://github.com/crytic/slither/tree/9623
 	}
 ```
 
-## 3. Run the unit tests with Truffle
+## Step 3. Run the unit tests with Truffle
 
 The first unit test file, named `InitializationX.js` will check that the constructor has been correctly initialized:
 
@@ -113,15 +109,17 @@ $ truffle test test/crytic/InitializationTestERC20BuggyTransferable.js
 
 As you can see, the unit tests detect some of the bugs.
 
-### 4. Run the property tests with Echidna
+### Step 4. Run the property tests with Echidna
 
 ```
 $ echidna-test . --contract TestERC20BuggyTransferable --config echidna_config.yaml
 ```
 
 ## Scenarios
+
 `slither-prop` contains different scenarios that can be specified with the `--scenario NAME` flag.
-Available scenarios:
+
+Here are the available scenarios:
 ```
 #################### ERC20 ####################
 Transferable - Test the correct tokens transfer
