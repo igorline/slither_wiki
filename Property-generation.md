@@ -1,6 +1,6 @@
 `slither-prop` generates code properties (e.g., invariants) that can be tested with unit tests or [Echidna](https://github.com/crytic/echidna/), entirely automatically. Once you have these properties in hand, use [Crytic](https://crytic.io/) to continuously test them with every commit.
 
-Note: `slither-prop` currently only supports Truffle, however, we'll be adding support for other frameworks soon!
+Note: `slither-prop` only supports Truffle for now, however, we'll be adding support for other frameworks soon!
 
 ## How to Use Slither's Property Generator
 
