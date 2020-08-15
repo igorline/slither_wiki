@@ -9,27 +9,27 @@ List of public detectors
 * Confidence: `High`
 
 ### Description
-If a codebase has two contracts with the similar name, the compilation artifacts
-will not contain one of the contract with the dupplicate name.
+If a codebase has two contracts the similar names, the compilation artifacts
+will not contain one of the contracts with the duplicate name.
 
 ### Exploit Scenario:
 
-Bob's truffle codebase has two contracts named `ERC20`.
-When `truffle compile` runs, only one of the two contract will generate artifacts in `build/contracts`.
+Bob's `truffle` codebase has two contracts named `ERC20`.
+When `truffle compile` runs, only one of the two contracts will generate artifacts in `build/contracts`.
 As a result, the second contract cannot be analyzed.
 
 
 ### Recommendation
 Rename the contract.
 
-## Right-To-Left-Override character
+## Right-to-Left-Override character
 ### Configuration
 * Check: `rtlo`
 * Severity: `High`
 * Confidence: `High`
 
 ### Description
-An attacker can manipulate the logic of the contract by using a right-to-left-override character (U+202E)
+An attacker can manipulate the logic of the contract by using a right-to-left-override character (`U+202E)`.
 
 ### Exploit Scenario:
 
@@ -146,7 +146,7 @@ contract Uninitialized{
     }
 }
 ```
-Bob calls `transfer`. As a result, the ethers are sent to the address 0x0 and are lost.
+Bob calls `transfer`. As a result, the Ether are sent to the address `0x0` and are lost.
 
 
 ### Recommendation
@@ -161,7 +161,7 @@ Initialize all the variables. If a variable is meant to be initialized to zero, 
 * Confidence: `High`
 
 ### Description
-An uinitialized storage variable will act as a reference to the first state variable, and can override a critical variable.
+An uninitialized storage variable will act as a reference to the first state variable, and can override a critical variable.
 
 ### Exploit Scenario:
 
@@ -179,20 +179,20 @@ contract Uninitialized{
     }
 }
 ```
-Bob calls `func`. As a result, `owner` is override to 0.
+Bob calls `func`. As a result, `owner` is overridden to `0`.
 
 
 ### Recommendation
-Initialize all the storage variables.
+Initialize all storage variables.
 
-## Functions that send ether to arbitrary destinations
+## Functions that send Ether to arbitrary destinations
 ### Configuration
 * Check: `arbitrary-send`
 * Severity: `High`
 * Confidence: `Medium`
 
 ### Description
-Unprotected call to a function executing sending ethers to an arbitrary address.
+Unprotected call to a function sending Ether to an arbitrary address.
 
 ### Exploit Scenario:
 
@@ -211,7 +211,7 @@ contract ArbitrarySend{
 Bob calls `setDestination` and `withdraw`. As a result he withdraws the contract's balance.
 
 ### Recommendation
-Ensure that an arbitrary user cannot withdraw unauthorize funds.
+Ensure that an arbitrary user cannot withdraw unauthorized funds.
 
 ## Controlled Delegatecall
 ### Configuration
@@ -220,7 +220,7 @@ Ensure that an arbitrary user cannot withdraw unauthorize funds.
 * Confidence: `Medium`
 
 ### Description
-Delegatecall or callcode to an address controlled by the user.
+`Delegatecall` or `callcode` to an address controlled by the user.
 
 ### Exploit Scenario:
 
@@ -231,7 +231,7 @@ contract Delegatecall{
     }
 }
 ```
-Bob calls `delegate` and delegates the execution to its malicious contract. As a result, Bob withdraws the funds of the contract and destructs it.
+Bob calls `delegate` and delegates the execution to his malicious contract. As a result, Bob withdraws the funds of the contract and destructs it.
 
 ### Recommendation
 Avoid using `delegatecall`. Use only trusted destinations.
@@ -244,14 +244,14 @@ Avoid using `delegatecall`. Use only trusted destinations.
 
 ### Description
 
-Detection of the [re-entrancy bug](https://github.com/trailofbits/not-so-smart-contracts/tree/master/reentrancy).
-Do not report reentrancies that don't involve ethers (see `reentrancy-no-eth`)
+Detection of the [reentrancy bug](https://github.com/trailofbits/not-so-smart-contracts/tree/master/reentrancy).
+Do not report reentrancies that don't involve Ether (see `reentrancy-no-eth`)
 
 ### Exploit Scenario:
 
 ```solidity
     function withdrawBalance(){
-        // send userBalance[msg.sender] ethers to msg.sender
+        // send userBalance[msg.sender] Ether to msg.sender
         // if mgs.sender is a contract, it will call its fallback function
         if( ! (msg.sender.call.value(userBalance[msg.sender])() ) ){
             throw;
@@ -263,7 +263,7 @@ Do not report reentrancies that don't involve ethers (see `reentrancy-no-eth`)
 Bob uses the re-entrancy bug to call `withdrawBalance` two times, and withdraw more than its initial deposit to the contract.
 
 ### Recommendation
-Apply the [check-effects-interactions pattern](http://solidity.readthedocs.io/en/v0.4.21/security-considerations.html#re-entrancy).
+Apply the [`check-effects-interactions pattern`](http://solidity.readthedocs.io/en/v0.4.21/security-considerations.html#re-entrancy).
 
 ## Incorrect erc20 interface
 ### Configuration
@@ -272,7 +272,7 @@ Apply the [check-effects-interactions pattern](http://solidity.readthedocs.io/en
 * Confidence: `High`
 
 ### Description
-Incorrect return values for ERC20 functions. A contract compiled with solidity > 0.4.22 interacting with these functions will fail to execute them, as the return value is missing.
+Incorrect return values for `ERC20` functions. A contract compiled with Solidity > 0.4.22 interacting with these functions will fail to execute them, as the return value is missing.
 
 ### Exploit Scenario:
 
@@ -282,10 +282,10 @@ contract Token{
     //...
 }
 ```
-`Token.transfer` does not return a boolean. Bob deploys the token. Alice creates a contract that interacts with it but assumes a correct ERC20 interface implementation. Alice's contract is unable to interact with Bob's contract.
+`Token.transfer` does not return a boolean. Bob deploys the token. Alice creates a contract that interacts with it but assumes a correct `ERC20` interface implementation. Alice's contract is unable to interact with Bob's contract.
 
 ### Recommendation
-Set the appropriate return values and value-types for the defined ERC20 functions.
+Set the appropriate return values and types for the defined `ERC20` functions.
 
 ## Incorrect erc721 interface
 ### Configuration
@@ -294,7 +294,7 @@ Set the appropriate return values and value-types for the defined ERC20 function
 * Confidence: `High`
 
 ### Description
-Incorrect return values for ERC721 functions. A contract compiled with solidity > 0.4.22 interacting with these functions will fail to execute them, as the return value is missing.
+Incorrect return values for `ERC721` functions. A contract compiled with solidity > 0.4.22 interacting with these functions will fail to execute them, as the return value is missing.
 
 ### Exploit Scenario:
 
@@ -304,10 +304,10 @@ contract Token{
     //...
 }
 ```
-`Token.ownerOf` does not return an address as ERC721 expects. Bob deploys the token. Alice creates a contract that interacts with it but assumes a correct ERC721 interface implementation. Alice's contract is unable to interact with Bob's contract.
+`Token.ownerOf` does not return an address like `ERC721` expects. Bob deploys the token. Alice creates a contract that interacts with it but assumes a correct `ERC721` interface implementation. Alice's contract is unable to interact with Bob's contract.
 
 ### Recommendation
-Set the appropriate return values and value-types for the defined ERC721 functions.
+Set the appropriate return values and vtypes for the defined `ERC721` functions.
 
 ## Dangerous strict equalities
 ### Configuration
@@ -326,19 +326,20 @@ contract Crowdsale{
         return this.balance == 100 ether;
     }
 ```
-`Crowdsale` relies on `fund_reached` to know when to stop the sale of tokens. `Crowdsale` reaches 100 ether. Bob sends 0.1 ether. As a result, `fund_reached` is always false and the crowdsale never ends.
+`Crowdsale` relies on `fund_reached` to know when to stop the sale of tokens.
+`Crowdsale` reaches 100 Ether. Bob sends 0.1 Ether. As a result, `fund_reached` is always false and the `crowdsale` never ends.
 
 ### Recommendation
-Don't use strict equality to determine if an account has enough ethers or tokens.
+Don't use strict equality to determine if an account has enough Ether or tokens.
 
-## Contracts that lock ether
+## Contracts that lock Ether
 ### Configuration
 * Check: `locked-ether`
 * Severity: `Medium`
 * Confidence: `High`
 
 ### Description
-Contract with a `payable` function, but without a withdraw capacity.
+Contract with a `payable` function, but without a withdrawal capacity.
 
 ### Exploit Scenario:
 
@@ -349,7 +350,7 @@ contract Locked{
     }
 }
 ```
-Every ether sent to `Locked` will be lost.
+Every Ether sent to `Locked` will be lost.
 
 ### Recommendation
 Remove the payable attribute or add a withdraw function.
@@ -407,12 +408,12 @@ contract A {
 	}
 }
 ```
-`x` is an `uint256`, as a result `x >= 0` will be always true.
-`y` is an `uint8`, as a result `y <512` will be always true.  
+`x` is a `uint256`, so `x >= 0` will be always true.
+`y` is a `uint8`, so `y <512` will be always true.  
 
 
 ### Recommendation
-Fix the incorrect comparison by chaning the value type or the comparison.
+Fix the incorrect comparison by changing the value type or the comparison.
 
 ## Misuse of a Boolean constant
 ### Configuration
@@ -442,7 +443,8 @@ contract A {
 	}
 }
 ```
-Boolean constants in code have only a few legitimate uses.  Other uses (in complex expressions, as conditionals) indicate either an error or (most likely) the persistence of debugging/development code that is likely faulty.
+Boolean constants in code have only a few legitimate uses. 
+Other uses (in complex expressions, as conditionals) indicate either an error or, most likely, the persistence of faulty code.
 
 ### Recommendation
 Verify and simplify the condition.
@@ -457,7 +459,7 @@ Verify and simplify the condition.
 
 Functions declared as `constant`/`pure`/`view` using assembly code.
 
-`constant`/`pure`/`view` was not enforced prior Solidity 0.5.
+`constant`/`pure`/`view` was not enforced prior to Solidity 0.5.
 Starting from Solidity 0.5, a call to a `constant`/`pure`/`view` function uses the `STATICCALL` opcode, which reverts in case of state modification.
 
 As a result, a call to an [incorrectly labeled function may trap a contract compiled with Solidity 0.5](https://solidity.readthedocs.io/en/develop/050-breaking-changes.html#interoperability-with-older-contracts).
@@ -473,11 +475,11 @@ contract Constant{
     }
 }
 ```
-`Constant` was deployed with Solidity 0.4.25. Bob writes a smart contract interacting with `Constant` in Solidity 0.5.0. 
+`Constant` was deployed with Solidity 0.4.25. Bob writes a smart contract that interacts with `Constant` in Solidity 0.5.0. 
 All the calls to `get` revert, breaking Bob's smart contract execution.
 
 ### Recommendation
-Ensure that the attributes of contracts compiled prior to Solidity 0.5.0 are correct.
+Ensure the attributes of contracts compiled prior to Solidity 0.5.0 are correct.
 
 ## Constant functions changing the state
 ### Configuration
@@ -487,9 +489,9 @@ Ensure that the attributes of contracts compiled prior to Solidity 0.5.0 are cor
 
 ### Description
 
-Functions declared as `constant`/`pure`/`view` changing the state.
+Functions declared as `constant`/`pure`/`view` change the state.
 
-`constant`/`pure`/`view` was not enforced prior Solidity 0.5.
+`constant`/`pure`/`view` was not enforced prior to Solidity 0.5.
 Starting from Solidity 0.5, a call to a `constant`/`pure`/`view` function uses the `STATICCALL` opcode, which reverts in case of state modification.
 
 As a result, a call to an [incorrectly labeled function may trap a contract compiled with Solidity 0.5](https://solidity.readthedocs.io/en/develop/050-breaking-changes.html#interoperability-with-older-contracts).
@@ -505,11 +507,11 @@ contract Constant{
     }
 }
 ```
-`Constant` was deployed with Solidity 0.4.25. Bob writes a smart contract interacting with `Constant` in Solidity 0.5.0. 
+`Constant` was deployed with Solidity 0.4.25. Bob writes a smart contract that interacts with `Constant` in Solidity 0.5.0. 
 All the calls to `get` revert, breaking Bob's smart contract execution.
 
 ### Recommendation
-Ensure that the attributes of contracts compiled prior to Solidity 0.5.0 are correct.
+Ensure that attributes of contracts compiled prior to Solidity 0.5.0 are correct.
 
 ## Divide before multiply
 ### Configuration
@@ -518,7 +520,7 @@ Ensure that the attributes of contracts compiled prior to Solidity 0.5.0 are cor
 * Confidence: `Medium`
 
 ### Description
-Solidity integeer division will might truncate. As a result, performing a multiply before a divison might lead to loss of precision.
+Solidity integer division might truncate. As a result, performing multiplication before divison might reduce precision.
 
 ### Exploit Scenario:
 
@@ -531,10 +533,10 @@ contract A {
 ```
 If `n` is greater than `oldSupply`, `coins` will be zero. For example, with `oldSupply = 5; n = 10, interest = 2`, coins will be zero.  
 If `(oldSupply * interest / n)` was used, `coins` would have been `1`.   
-In general, it's usually a good idea to re-arrange arithmetic to perform multiply before divide, unless the limit of a smaller type makes this dangerous.
+In general, it's usually a good idea to re-arrange arithmetic to perform multiplication before division, unless the limit of a smaller type makes this dangerous.
 
 ### Recommendation
-Consider ordering multiplication prior division.
+Consider ordering multiplication before division.
 
 ## Reentrancy vulnerabilities
 ### Configuration
@@ -544,8 +546,8 @@ Consider ordering multiplication prior division.
 
 ### Description
 
-Detection of the [re-entrancy bug](https://github.com/trailofbits/not-so-smart-contracts/tree/master/reentrancy).
-Do not report reentrancies that involve ethers (see `reentrancy-eth`)
+Detection of the [reentrancy bug](https://github.com/trailofbits/not-so-smart-contracts/tree/master/reentrancy).
+Do not report reentrancies that involve Ether (see `reentrancy-eth`).
 
 ### Exploit Scenario:
 
@@ -561,7 +563,7 @@ Do not report reentrancies that involve ethers (see `reentrancy-eth`)
 
 
 ### Recommendation
-Apply the [check-effects-interactions pattern](http://solidity.readthedocs.io/en/v0.4.21/security-considerations.html#re-entrancy).
+Apply the [`check-effects-interactions` pattern](http://solidity.readthedocs.io/en/v0.4.21/security-considerations.html#re-entrancy).
 
 ## Dangerous usage of `tx.origin`
 ### Configuration
@@ -570,7 +572,7 @@ Apply the [check-effects-interactions pattern](http://solidity.readthedocs.io/en
 * Confidence: `Medium`
 
 ### Description
-`tx.origin`-based protection can be abused by malicious contract if a legitimate user interacts with the malicious contract.
+`tx.origin`-based protection can be abused by a malicious contract if a legitimate user interacts with the malicious contract.
 
 ### Exploit Scenario:
 
@@ -605,12 +607,12 @@ contract MyConc{
     }
 }
 ```
-The return value of the low-level call is not checked. As a result if the callfailed, the ether will be locked in the contract.
+The return value of the low-level call is not checked, so if the call fails, the Ether will be locked in the contract.
 If the low level is used to prevent blocking operations, consider logging failed calls.
     
 
 ### Recommendation
-Ensure that the return value of low-level call is checked or logged.
+Ensure that the return value of a low-level call is checked or logged.
 
 ## Unchecked Send
 ### Configuration
@@ -619,7 +621,7 @@ Ensure that the return value of low-level call is checked or logged.
 * Confidence: `Medium`
 
 ### Description
-The return value of a send is not checked.
+The return value of a `send` is not checked.
 
 ### Exploit Scenario:
 
@@ -630,12 +632,12 @@ contract MyConc{
     }
 }
 ```
-The return value of `send` is not checked. As a result if the send failed, the ether will be locked in the contract.
-If `send` is used to prevent blocking operations, consider logging the failed sent.
+The return value of `send` is not checked, so if the send fails, the Ether will be locked in the contract.
+If `send` is used to prevent blocking operations, consider logging the failed `send`.
     
 
 ### Recommendation
-Ensure that the return value of send is checked or logged.
+Ensure that the return value of `send` is checked or logged.
 
 ## Uninitialized local variables
 ### Configuration
@@ -656,7 +658,7 @@ contract Uninitialized is Owner{
     }
 }
 ```
-Bob calls `transfer`. As a result, the ethers are sent to the address 0x0 and are lost.
+Bob calls `transfer`. As a result, all Ether is sent to the address `0x0` and is lost.
 
 ### Recommendation
 Initialize all the variables. If a variable is meant to be initialized to zero, explicitly set it to zero.
@@ -680,7 +682,7 @@ contract MyConc{
     }
 }
 ```
-`MyConc` calls `add` of SafeMath, but does not store the result in `a`. As a result, the computation has no effect.
+`MyConc` calls `add` of `SafeMath`, but does not store the result in `a`. As a result, the computation has no effect.
 
 ### Recommendation
 Ensure that all the return values of the function calls are used.
@@ -692,7 +694,7 @@ Ensure that all the return values of the function calls are used.
 * Confidence: `High`
 
 ### Description
-Detection of shadowing built-in symbols using local variables/state variables/functions/modifiers/events.
+Detection of shadowing built-in symbols using local variables, state variables, functions, modifiers, or events.
 
 ### Exploit Scenario:
 
@@ -714,9 +716,9 @@ contract Bug {
 `now` is defined as a state variable, and shadows with the built-in symbol `now`. The function `assert` overshadows the built-in `assert` function. Any use of either of these built-in symbols may lead to unexpected results.
 
 ### Recommendation
-Rename the local variable/state variable/function/modifier/event, so as not to mistakenly overshadow any built-in symbol definitions.
+Rename the local variables, state variables, functions, modifiers, and events that shadow a builtin symbol.
 
-## Local Variable Shadowing
+## Local variable shadowing
 ### Configuration
 * Check: `shadowing-local`
 * Severity: `Low`
@@ -745,19 +747,19 @@ contract Bug {
     }
 }
 ```
-`sensitive_function.owner` shadows `Bug.owner`. As a result, the use of `owner` inside `sensitive_function` might be incorrect.
+`sensitive_function.owner` shadows `Bug.owner`. As a result, the use of `owner` in `sensitive_function` might be incorrect.
 
 ### Recommendation
-Rename the local variable so as not to mistakenly overshadow any state variable/function/modifier/event definitions.
+Rename the local variables that shadow another component.
 
-## Void Constructor
+## Void constructor
 ### Configuration
 * Check: `void-cst`
 * Severity: `Low`
 * Confidence: `High`
 
 ### Description
-Detect the call to a constructor not implemented
+Detect the call to a constructor that is not implemented
 
 ### Exploit Scenario:
 
@@ -767,7 +769,7 @@ contract B is A{
     constructor() public A(){}
 }
 ```
-By reading B's constructor definition, the reader might assume that `A()` initiate the contract, while no code is executed.
+When reading `B`'s constructor definition, we might assume that `A()` initiates the contract, but no code is executed.
 
 ### Recommendation
 Remove the constructor call.
@@ -779,7 +781,7 @@ Remove the constructor call.
 * Confidence: `Medium`
 
 ### Description
-Calls inside a loop might lead to denial of service attack.
+Calls inside a loop might lead to a denial-of-service attack.
 
 ### Exploit Scenario:
 
@@ -800,7 +802,7 @@ contract CallsInLoop{
 
 }
 ```
-If one of the destinations has a fallback function which reverts, `bad` will always revert.
+If one of the destinations has a fallback function that reverts, `bad` will always revert.
 
 ### Recommendation
 Favor [pull over push](https://github.com/ethereum/wiki/wiki/Safety#favor-pull-over-push-for-external-calls) strategy for external calls.
@@ -813,7 +815,7 @@ Favor [pull over push](https://github.com/ethereum/wiki/wiki/Safety#favor-pull-o
 
 ### Description
 
-Detection of the [re-entrancy bug](https://github.com/trailofbits/not-so-smart-contracts/tree/master/reentrancy).
+Detection of the [reentrancy bug](https://github.com/trailofbits/not-so-smart-contracts/tree/master/reentrancy).
 Only report reentrancy that acts as a double call (see `reentrancy-eth`, `reentrancy-no-eth`).
 
 ### Exploit Scenario:
@@ -830,7 +832,7 @@ Only report reentrancy that acts as a double call (see `reentrancy-eth`, `reentr
 `callme` contains a reentrancy. The reentrancy is benign because it's exploitation would have the same effect as two consecutive calls.
 
 ### Recommendation
-Apply the [check-effects-interactions pattern](http://solidity.readthedocs.io/en/v0.4.21/security-considerations.html#re-entrancy).
+Apply the [`check-effects-interactions` pattern](http://solidity.readthedocs.io/en/v0.4.21/security-considerations.html#re-entrancy).
 
 ## Reentrancy vulnerabilities
 ### Configuration
@@ -840,8 +842,8 @@ Apply the [check-effects-interactions pattern](http://solidity.readthedocs.io/en
 
 ### Description
 
-Detection of the [re-entrancy bug](https://github.com/trailofbits/not-so-smart-contracts/tree/master/reentrancy).
-Only report reentrancies leading to out-of-order Events
+Detection of the [reentrancy bug](https://github.com/trailofbits/not-so-smart-contracts/tree/master/reentrancy).
+Only report reentrancies leading to out-of-order events.
 
 ### Exploit Scenario:
 
@@ -853,10 +855,10 @@ Only report reentrancies leading to out-of-order Events
     }
 ```
 
-If `d.()` reenters, the `Counter` events will be showed in an incorrect order, which might lead to issues for third-parties.
+If `d.()` re-enters, the `Counter` events will be shown in an incorrect order, which might lead to issues for third parties.
 
 ### Recommendation
-Apply the [check-effects-interactions pattern](http://solidity.readthedocs.io/en/v0.4.21/security-considerations.html#re-entrancy).
+Apply the [`check-effects-interactions` pattern](http://solidity.readthedocs.io/en/v0.4.21/security-considerations.html#re-entrancy).
 
 ## Block timestamp
 ### Configuration
@@ -883,16 +885,16 @@ Avoid relying on `block.timestamp`.
 The use of assembly is error-prone and should be avoided.
 
 ### Recommendation
-Do not use evm assembly.
+Do not use `evm` assembly.
 
-## Boolean Equality
+## Boolean equality
 ### Configuration
 * Check: `boolean-equal`
 * Severity: `Informational`
 * Confidence: `High`
 
 ### Description
-Detects the comparison to boolean constant.
+Detects the comparison to boolean constants.
 
 ### Exploit Scenario:
 
@@ -907,19 +909,19 @@ contract A {
 	}
 }
 ```
-Boolean can be used directly and do not need to be compare to `true` or `false`.
+Boolean constants can be used directly and do not need to be compare to `true` or `false`.
 
 ### Recommendation
 Remove the equality to the boolean constant.
 
-## Deprecated Standards
+## Deprecated standards
 ### Configuration
 * Check: `deprecated-standards`
 * Severity: `Informational`
 * Confidence: `High`
 
 ### Description
-Detect the usage of deprecated standards (as defined by SWC-111), excluding only `constant` keyword detection on functions.
+Detect the usage of deprecated standards.
 
 ### Exploit Scenario:
 
@@ -954,14 +956,14 @@ contract ContractWithDeprecatedReferences {
 ### Recommendation
 Replace all uses of deprecated symbols.
 
-## Unindexed ERC20 Event Parameters
+## Unindexed ERC20 event oarameters
 ### Configuration
 * Check: `erc20-indexed`
 * Severity: `Informational`
 * Confidence: `High`
 
 ### Description
-Detects that events defined by the ERC20 specification which are meant to have some parameters as `indexed`, are missing the `indexed` keyword.
+Detects whether events defined by the `ERC20` specification that should have some parameters as `indexed` are missing the `indexed` keyword.
 
 ### Exploit Scenario:
 
@@ -974,12 +976,13 @@ contract ERC20Bad {
     // ...
 }
 ```
-In this case, Transfer and Approval events should have the 'indexed' keyword on their two first parameters, as defined by the ERC20 specification. Failure to include these keywords will not include the parameter data in the transaction/block's bloom filter. This may cause external tooling searching for these parameters to overlook them, and fail to index logs from this token contract.
+`Transfer` and `Approval` events should have the 'indexed' keyword on their two first parameters, as defined by the `ERC20` specification.
+Failure to include these keywords will exclude the parameter data in the transaction/block's bloom filter, so external tooling searching for these parameters may overlook them and fail to index logs from this token contract.
 
 ### Recommendation
-Add the `indexed` keyword to event parameters which should include it, according to the ERC20 specification.
+Add the `indexed` keyword to event parameters that should include it, according to the `ERC20` specification.
 
-## Low level calls
+## Low-level calls
 ### Configuration
 * Check: `low-level-calls`
 * Severity: `Informational`
@@ -1000,9 +1003,9 @@ Avoid low-level calls. Check the call success. If the call is meant for a contra
 ### Description
 
 Solidity defines a [naming convention](https://solidity.readthedocs.io/en/v0.4.25/style-guide.html#naming-conventions) that should be followed.
-#### Rules exceptions
-- Allow constant variables name/symbol/decimals to be lowercase (ERC20)
-- Allow `_` at the beginning of the mixed_case match for private variables and unused parameters.
+#### Rule exceptions
+- Allow constant variable name/symbol/decimals to be lowercase (`ERC20`).
+- Allow `_` at the beginning of the `mixed_case` match for private variables and unused parameters.
 
 ### Recommendation
 Follow the Solidity [naming convention](https://solidity.readthedocs.io/en/v0.4.25/style-guide.html#naming-conventions).
@@ -1014,7 +1017,7 @@ Follow the Solidity [naming convention](https://solidity.readthedocs.io/en/v0.4.
 * Confidence: `High`
 
 ### Description
-Detect if different Solidity versions are used.
+Detect whether different Solidity versions are used.
 
 ### Recommendation
 Use one Solidity version.
@@ -1027,14 +1030,20 @@ Use one Solidity version.
 
 ### Description
 
-Solc frequently releases new compiler versions. Using an old version prevents access to new Solidity security checks.
-We recommend avoiding complex pragma statement.
+`solc` frequently releases new compiler versions. Using an old version prevents access to new Solidity security checks.
+We also recommend avoiding complex `pragma` statement.
 
 ### Recommendation
 
-Use Solidity 0.4.25 or 0.5.11. Consider using the latest version of Solidity for testing the compilation, and a trusted version for deploying.
+Deploy with any of the following Solidity versions:
+- 0.5.11 - 0.5.13,
+- 0.5.15 - 0.5.17,
+- 0.6.8,
+- 0.6.10 - 0.6.11.
+Use a simple pragma version that allows any of these versions.
+Consider using the latest version of Solidity for testing.
 
-## Unused state variables
+## Unused state variable
 ### Configuration
 * Check: `unused-state`
 * Severity: `Informational`
@@ -1054,8 +1063,8 @@ Remove unused state variables.
 
 ### Description
 
-Detection of the [re-entrancy bug](https://github.com/trailofbits/not-so-smart-contracts/tree/master/reentrancy).
-Only report reentrancy that are based on `transfer` or `send`.
+Detection of the [reentrancy bug](https://github.com/trailofbits/not-so-smart-contracts/tree/master/reentrancy).
+Only report reentrancy that is based on `transfer` or `send`.
 
 ### Exploit Scenario:
 
@@ -1066,10 +1075,10 @@ Only report reentrancy that are based on `transfer` or `send`.
     }   
 ```
 
-`send` and `transfer` does not protect from reentrancies in case of gas-price change.
+`send` and `transfer` do not protect from reentrancies in case of gas price changes.
 
 ### Recommendation
-Apply the [check-effects-interactions pattern](http://solidity.readthedocs.io/en/v0.4.21/security-considerations.html#re-entrancy).
+Apply the [`check-effects-interactions` pattern](http://solidity.readthedocs.io/en/v0.4.21/security-considerations.html#re-entrancy).
 
 ## Too many digits
 ### Configuration
@@ -1090,13 +1099,13 @@ contract MyContract{
 }
 ```
 
-While `1_ether` looks like `1 ether`, it is `10 ether`. As a result, its usage is likely to be incorrect.
+While `1_ether` looks like `1 ether`, it is `10 ether`. As a result, it's likely to be used incorrectly.
 
 
 ### Recommendation
 
 Use:
-- [Ether suffix](https://solidity.readthedocs.io/en/latest/units-and-global-variables.html#ether-units)
+- [Ether suffix](https://solidity.readthedocs.io/en/latest/units-and-global-variables.html#ether-units),
 - [Time suffix](https://solidity.readthedocs.io/en/latest/units-and-global-variables.html#time-units), or
 - [The scientific notation](https://solidity.readthedocs.io/en/latest/types.html#rational-and-integer-literals)
 
@@ -1108,12 +1117,12 @@ Use:
 * Confidence: `High`
 
 ### Description
-Constant state variable should be declared constant to save gas.
+Constant state variables should be declared constant to save gas.
 
 ### Recommendation
-Add the `constant` attributes to the state variables that never change.
+Add the `constant` attributes to state variables that never change.
 
-## Public function that could be declared as external
+## Public function that could be declared external
 ### Configuration
 * Check: `external-function`
 * Severity: `Optimization`
