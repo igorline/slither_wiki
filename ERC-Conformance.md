@@ -2,15 +2,18 @@
 
 ## Features
 
-- Check that all the functions are present
-- Check that all the events are present
-- Check that functions return the correct type
-- Check that functions that must be view are view
-- Check that events' parameters are correctly indexed
-- Check that the functions emit the events
-- Check that the derived contracts do not break the conformance
+`slither-check-erc` will check that:
 
-## ERC supported
+- All the functions are present
+- All the events are present
+- Functions return the correct type
+- Functions that must be view are view
+- Events' parameters are correctly indexed
+- The functions emit the events
+- Derived contracts do not break the conformance
+
+## Supported ERC
+
 - ERC20
 - ERC223
 - ERC165
@@ -19,6 +22,7 @@
 - ERC777
 
 ## Usage:
+
 ```
 slither-check-erc contract.sol ContractName
 ```
