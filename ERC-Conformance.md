@@ -12,14 +12,14 @@
 - The functions emit the events
 - Derived contracts do not break the conformance
 
-## Supported ERC
+## Supported ERCs
 
-- ERC20
-- ERC223
-- ERC165
-- ERC721
-- ERC1820
-- ERC777
+- [ERC20](https://eips.ethereum.org/EIPS/eip-20): Token standard
+- [ERC223](https://github.com/ethereum/eips/issues/223): Token standard
+- [ERC777](https://eips.ethereum.org/EIPS/eip-777): Token standard
+- [ERC165](https://eips.ethereum.org/EIPS/eip-165): Standard interface detection
+- [ERC721](https://eips.ethereum.org/EIPS/eip-721): Non-fungible token standard
+- [ERC1820](https://eips.ethereum.org/EIPS/eip-1820): Pseudo-introspection registry contract
 
 ## Usage:
 
