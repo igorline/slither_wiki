@@ -1040,7 +1040,6 @@ Deploy with any of the following Solidity versions:
 - 0.5.15 - 0.5.17,
 - 0.6.8,
 - 0.6.10 - 0.6.11.
-
 Use a simple pragma version that allows any of these versions.
 Consider using the latest version of Solidity for testing.
 
