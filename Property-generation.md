@@ -7,8 +7,8 @@ Note: `slither-prop` only supports Truffle for now. We'll be adding support for 
 There are four steps:
 
 1. [Generate the tests](#step-1-generate-the-tests)
-1. [Constructor configuration](#step-2-customize-the-constructor)
-1. [Run the Unit tests](#step-3-run-the-unit-tests-with-truffle)
+1. [Customize the constructor](#step-2-customize-the-constructor)
+1. [Run the unit tests](#step-3-run-the-unit-tests-with-truffle)
 1. [Run the Echidna tests](#step-4-run-the-property-tests-with-echidna)
 
 ### Step 1. Generate the tests
