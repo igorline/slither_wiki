@@ -26,7 +26,7 @@ class Skeleton(AbstractDetector):
     WIKI_RECOMMENDATION = ''
 
     def _detect(self):
-        info = 'This is an example!'
+        info = ['This is an example']
         res = self.generate_result(info)
 
         return [res]
@@ -52,8 +52,8 @@ An `AbstractDetector` object has the `slither` attribute, which returns the curr
 ## Integration
 
 You can integrate your detector into Slither by:
-- Adding it in [slither/detectors/all_detectors.py](https://github.com/trailofbits/slither/blob/5cc07a3608a154a2fa022c3e064af4e699d63dda/slither/detectors/all_detectors.py)
-- or, by creating a plugin package (see the [skeleton example](https://github.com/trailofbits/slither/tree/8f91c801c0bb903990c4fc9fa30611f157c6b0f9/plugin_example)).
+- Adding it in [slither/detectors/all_detectors.py](https://github.com/trailofbits/slither/blob/ae7c410938b616d993e6c27678f6e48d9a4d7dd6/slither/detectors/all_detectors.py)
+- or, by creating a plugin package (see the [skeleton example](https://github.com/trailofbits/slither/tree/ae7c410938b616d993e6c27678f6e48d9a4d7dd6/plugin_example)).
 
 ### Test the detector
 If you want to add your detector to [trailofbits/slither](https://github.com/trailofbits/slither), create a unit-test in [tests](https://github.com/trailofbits/slither/tree/master/tests) and update [scripts/travis_test_4.sh](https://github.com/trailofbits/slither/blob/master/scripts/travis_test_4.sh#L92) to run the unit-test automatically.
@@ -64,4 +64,4 @@ pip install deepdiff
 ```
 
 ## Example
-[backdoor.py](https://github.com/crytic/slither/blob/bfaa9a51ea76d3e118c494cb8f9c9c48fec3903b/slither/detectors/examples/backdoor.py) will detect any function with `backdoor` in its name.
+[backdoor.py](https://github.com/crytic/slither/blob/ae7c410938b616d993e6c27678f6e48d9a4d7dd6/slither/detectors/examples/backdoor.py) will detect any function with `backdoor` in its name.
