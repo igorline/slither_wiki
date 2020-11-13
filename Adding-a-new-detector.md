@@ -56,12 +56,7 @@ You can integrate your detector into Slither by:
 - or, by creating a plugin package (see the [skeleton example](https://github.com/trailofbits/slither/tree/ae7c410938b616d993e6c27678f6e48d9a4d7dd6/plugin_example)).
 
 ### Test the detector
-If you want to add your detector to [trailofbits/slither](https://github.com/trailofbits/slither), create a unit-test in [tests](https://github.com/trailofbits/slither/tree/master/tests) and update [scripts/travis_test_4.sh](https://github.com/trailofbits/slither/blob/master/scripts/travis_test_4.sh#L92) to run the unit-test automatically.
-
-[deepdiff](https://github.com/seperman/deepdiff) is needed to run `travis_test.sh`:
-```
-pip install deepdiff
-```
+See [CONTRIBUTING.md#development-environment](https://github.com/crytic/slither/blob/master/CONTRIBUTING.md#development-environment)
 
 ## Example
 [backdoor.py](https://github.com/crytic/slither/blob/ae7c410938b616d993e6c27678f6e48d9a4d7dd6/slither/detectors/examples/backdoor.py) will detect any function with `backdoor` in its name.
