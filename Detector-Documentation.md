@@ -185,6 +185,36 @@ Bob calls `func`. As a result, `owner` is overridden to `0`.
 ### Recommendation
 Initialize all storage variables.
 
+## Unprotected upgradeable contract
+### Configuration
+* Check: `unprotected-upgrade`
+* Severity: `High`
+* Confidence: `High`
+
+### Description
+Detects logic contract that can be destructed.
+
+### Exploit Scenario:
+
+    ```solidity
+    contract Buggy is Initializable{
+        address payable owner;
+    
+        function initialize() external initializer{
+            require(owner == address(0));
+            owner = msg.sender;
+        }
+        function kill() external{
+            require(msg.sender == owner);
+            selfdestruct(owner);
+        }
+    }
+    ```
+    Buggy is an upgradeable contract. Anyone can call initialize on the logic contract, and destruct the contract.
+
+### Recommendation
+Add a constructor to ensure `initialize` cannot be called on the logic contract.
+
 ## Functions that send Ether to arbitrary destinations
 ### Configuration
 * Check: `arbitrary-send`
@@ -520,7 +550,7 @@ Ensure that attributes of contracts compiled prior to Solidity 0.5.0 are correct
 * Confidence: `Medium`
 
 ### Description
-Solidity integer division might truncate. As a result, performing multiplication before divison might reduce precision.
+Solidity integer division might truncate. As a result, performing multiplication before division can sometimes avoid loss of precision.
 
 ### Exploit Scenario:
 
