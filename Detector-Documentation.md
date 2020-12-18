@@ -2,6 +2,125 @@
 
 List of public detectors
 
+## Storage ABIEncoderV2 Array
+### Configuration
+* Check: `abiencoderv2-array`
+* Severity: `High`
+* Confidence: `High`
+
+### Description
+`solc` versions `0.4.7`-`0.5.10` contain a [compiler bug](https://blog.ethereum.org/2019/06/25/solidity-storage-array-bugs.) leading to incorrect ABI encoder usage.
+
+### Exploit Scenario:
+
+```solidity
+contract A {
+    uint[2][3] bad_arr = [[1, 2], [3, 4], [5, 6]];
+    
+    /* Array of arrays passed to abi.encode is vulnerable */
+    function bad() public {                                                                                          
+        bytes memory b = abi.encode(bad_arr);
+    }
+}
+```
+`abi.encode(bad_arr)` in a call to `bad()` will incorrectly encode the array as `[[1, 2], [2, 3], [3, 4]]` and lead to unintended behavior.
+
+
+### Recommendation
+Use a compiler >= `0.5.10`.
+
+## Modifying storage array by value
+### Configuration
+* Check: `array-by-reference`
+* Severity: `High`
+* Confidence: `High`
+
+### Description
+Detect arrays passed to a function that expects reference to a storage array
+
+### Exploit Scenario:
+
+```solidity
+contract Memory {
+    uint[1] public x; // storage
+
+    function f() public {
+        f1(x); // update x
+        f2(x); // do not update x
+    }
+
+    function f1(uint[1] storage arr) internal { // by reference
+        arr[0] = 1;
+    }
+
+    function f2(uint[1] arr) internal { // by value
+        arr[0] = 2;
+    }
+}
+```
+
+Bob calls `f()`. Bob assumes that at the end of the call `x[0]` is 2, but it is 1.
+As a result, Bob's usage of the contract is incorrect.
+
+### Recommendation
+Ensure the correct usage of `memory` and `storage` in the function parameters. Make all the locations explicit.
+
+## Incorrect shift in assembly.
+### Configuration
+* Check: `incorrect-shift`
+* Severity: `High`
+* Confidence: `High`
+
+### Description
+Detect if the values in a shift operation are reversed
+
+### Exploit Scenario:
+
+```solidity
+contract C {
+    function f() internal returns (uint a) {
+        assembly {
+            a := shr(a, 8)
+        }
+    }
+}
+```
+The shift statement will right-shift the constant 8 by `a` bits
+
+### Recommendation
+Swap the order of parameters.
+
+## Multiple constructor schemes
+### Configuration
+* Check: `multiple-constructors`
+* Severity: `High`
+* Confidence: `High`
+
+### Description
+Detect multiple constructor definitions in the same contract (using new and old schemes).
+
+### Exploit Scenario:
+
+```solidity
+contract A {
+    uint x;
+    constructor() public {
+        x = 0;
+    }
+    function A() public {
+        x = 1;
+    }
+    
+    function test() public returns(uint) {
+        return x;
+    }
+}
+```
+In Solidity [0.4.22](https://github.com/ethereum/solidity/releases/tag/v0.4.23), a contract with both constructor schemes will compile. The first constructor will take precedence over the second, which may be unintended.
+
+### Recommendation
+Only declare one constructor, preferably using the new scheme `constructor(...)` instead of `function <contractName>(...)`.
+
 ## Name reused
 ### Configuration
 * Check: `name-reused`
@@ -21,6 +140,21 @@ As a result, the second contract cannot be analyzed.
 
 ### Recommendation
 Rename the contract.
+
+## Public mappings with nested variables
+### Configuration
+* Check: `public-mappings-nested`
+* Severity: `High`
+* Confidence: `High`
+
+### Description
+Prior to Solidity 0.5, a public mapping with nested structures returned [incorrect values](https://github.com/ethereum/solidity/issues/5520).
+
+### Exploit Scenario:
+Bob interacts with a contract that has a public mapping with nested structures. The values returned by the mapping are incorrect, breaking Bob's usage
+
+### Recommendation
+Do not use public mapping with nested structures.
 
 ## Right-to-Left-Override character
 ### Configuration
@@ -243,6 +377,43 @@ Bob calls `setDestination` and `withdraw`. As a result he withdraws the contract
 ### Recommendation
 Ensure that an arbitrary user cannot withdraw unauthorized funds.
 
+## Array Length Assignment
+### Configuration
+* Check: `controlled-array-length`
+* Severity: `High`
+* Confidence: `Medium`
+
+### Description
+Detects the direct assignment of an array's length.
+
+### Exploit Scenario:
+
+```solidity
+contract A {
+	uint[] testArray; // dynamic size array
+
+	function f(uint usersCount) public {
+		// ...
+		testArray.length = usersCount;
+		// ...
+	}
+
+	function g(uint userIndex, uint val) public {
+		// ...
+		testArray[userIndex] = val;
+		// ...
+	}
+}
+```
+Contract storage/state-variables are indexed by a 256-bit integer.
+The user can set the array length to `2**256-1` in order to index all storage slots. 
+In the example above, one could call the function `f` to set the array length, then call the function `g` to control any storage slot desired. 
+Note that storage slots here are indexed via a hash of the indexers; nonetheless, all storage will still be accessible and could be controlled by the attacker.
+
+### Recommendation
+Do not allow array lengths to be set directly set; instead, opt to add values as needed.
+Otherwise, thoroughly review the contract to ensure a user-controlled variable cannot reach an array length assignment.
+
 ## Controlled Delegatecall
 ### Configuration
 * Check: `controlled-delegatecall`
@@ -294,6 +465,89 @@ Bob uses the re-entrancy bug to call `withdrawBalance` two times, and withdraw m
 
 ### Recommendation
 Apply the [`check-effects-interactions pattern`](http://solidity.readthedocs.io/en/v0.4.21/security-considerations.html#re-entrancy).
+
+## Storage Signed Integer Array
+### Configuration
+* Check: `storage-array`
+* Severity: `High`
+* Confidence: `Medium`
+
+### Description
+`solc` versions `0.4.7`-`0.5.10` contain [a compiler bug](https://blog.ethereum.org/2019/06/25/solidity-storage-array-bugs)
+leading to incorrect values in signed integer arrays.
+
+### Exploit Scenario:
+
+```solidity
+contract A {
+	int[3] ether_balances; // storage signed integer array
+	function bad0() private {
+		// ...
+		ether_balances = [-1, -1, -1];
+		// ...
+	}
+}
+```
+`bad0()` uses a (storage-allocated) signed integer array state variable to store the ether balances of three accounts.  
+`-1` is supposed to indicate uninitialized values but the Solidity bug makes these as `1`, which could be exploited by the accounts.
+
+
+### Recommendation
+Use a compiler version >= `0.5.10`.
+
+## Weak PRNG
+### Configuration
+* Check: `weak-prng`
+* Severity: `High`
+* Confidence: `Medium`
+
+### Description
+Weak PRNG due to a modulo on `block.timestamp`, `now` or `blockhash`. These can be influenced by miners to some extent so they should be avoided.
+
+### Exploit Scenario:
+
+```solidity
+contract Game {
+
+    uint reward_determining_number;
+
+    function guessing() external{
+      reward_determining_number = uint256(block.blockhash(10000)) % 10;
+    }
+}
+```
+Eve is a miner. Eve calls `guessing` and re-orders the block containing the transaction. 
+As a result, Eve wins the game.
+
+### Recommendation
+Do not use `block.timestamp`, `now` or `blockhash` as a source of randomness
+
+## Dangerous enum conversion
+### Configuration
+* Check: `enum-conversion`
+* Severity: `Medium`
+* Confidence: `High`
+
+### Description
+Detect out-of-range `enum` conversion (`solc` < `0.4.5`).
+
+### Exploit Scenario:
+
+```solidity
+    pragma solidity 0.4.2;
+    contract Test{
+    
+    enum E{a}
+    
+    function bug(uint a) public returns(E){
+        return E(a);   
+    }
+}
+```
+Attackers can trigger unexpected behaviour by calling `bug(1)`.
+
+### Recommendation
+Use a recent compiler version. If `solc` <`0.4.5` is required, check the `enum` conversion range.
 
 ## Incorrect erc20 interface
 ### Configuration
@@ -384,6 +638,34 @@ Every Ether sent to `Locked` will be lost.
 
 ### Recommendation
 Remove the payable attribute or add a withdraw function.
+
+## Deletion on mapping containing a structure
+### Configuration
+* Check: `mapping-deletion`
+* Severity: `Medium`
+* Confidence: `High`
+
+### Description
+A deletion in a structure containing a mapping will not delete the mapping (see the [Solidity documentation](https://solidity.readthedocs.io/en/latest/types.html##delete)). The remaining data may be used to compromise the contract.
+
+### Exploit Scenario:
+
+```solidity
+    struct BalancesStruct{
+        address owner;
+        mapping(address => uint) balances;
+    }
+    mapping(address => BalancesStruct) public stackBalance;
+
+    function remove() internal{
+         delete stackBalance[msg.sender];
+    }
+```
+`remove` deletes an item of `stackBalance`.
+The mapping `balances` is never deleted, so `remove` does not work as intended.
+
+### Recommendation
+Use a lock mechanism instead of a deletion to disable structure containing a mapping.
 
 ## State variable shadowing from abstract contracts
 ### Configuration
@@ -595,6 +877,51 @@ Do not report reentrancies that involve Ether (see `reentrancy-eth`).
 ### Recommendation
 Apply the [`check-effects-interactions` pattern](http://solidity.readthedocs.io/en/v0.4.21/security-considerations.html#re-entrancy).
 
+## Reused base constructors
+### Configuration
+* Check: `reused-constructor`
+* Severity: `Medium`
+* Confidence: `Medium`
+
+### Description
+Detects if the same base constructor is called with arguments from two different locations in the same inheritance hierarchy.
+
+### Exploit Scenario:
+
+```solidity
+pragma solidity ^0.4.0;
+
+contract A{
+    uint num = 5;
+    constructor(uint x) public{
+        num += x;
+    }
+}
+
+contract B is A{
+    constructor() A(2) public { /* ... */ }
+}
+
+contract C is A {
+    constructor() A(3) public { /* ... */ }
+}
+
+contract D is B, C {
+    constructor() public { /* ... */ }
+}
+
+contract E is B {
+    constructor() A(1) public { /* ... */ }
+}
+```
+The constructor of `A` is called multiple times in `D` and `E`:
+- `D` inherits from `B` and `C`, both of which construct `A`.
+- `E` only inherits from `B`, but `B` and `E` construct `A`.
+.
+
+### Recommendation
+Remove the duplicate constructor call.
+
 ## Dangerous usage of `tx.origin`
 ### Configuration
 * Check: `tx-origin`
@@ -717,6 +1044,32 @@ contract MyConc{
 ### Recommendation
 Ensure that all the return values of the function calls are used.
 
+## Incorrect modifier
+### Configuration
+* Check: `incorrect-modifier`
+* Severity: `Low`
+* Confidence: `High`
+
+### Description
+If a modifier does not execute `_` or revert, the execution of the function will return the default value, which can be misleading for the caller.
+
+### Exploit Scenario:
+
+```solidity
+    modidfier myModif(){
+        if(..){
+           _;
+        }
+    }
+    function get() myModif returns(uint){
+
+    }
+```
+If the condition in `myModif` is false, the execution of `get()` will return 0.
+
+### Recommendation
+All the paths in a modifier must execute `_` or revert.
+
 ## Builtin Symbol Shadowing
 ### Configuration
 * Check: `shadowing-builtin`
@@ -782,6 +1135,70 @@ contract Bug {
 ### Recommendation
 Rename the local variables that shadow another component.
 
+## Uninitialized function pointers in constructors
+### Configuration
+* Check: `uninitialized-fptr-cst`
+* Severity: `Low`
+* Confidence: `High`
+
+### Description
+solc versions `0.4.5`-`0.4.26` and `0.5.0`-`0.5.8` contain a compiler bug leading to unexpected behavior when calling uninitialized function pointers in constructors.
+
+### Exploit Scenario:
+
+```solidity
+contract bad0 {
+
+  constructor() public {
+    /* Uninitialized function pointer */
+    function(uint256) internal returns(uint256) a;
+    a(10);
+  }
+
+}
+```
+The call to `a(10)` will lead to unexpected behavior because function pointer `a` is not initialized in the constructor.
+
+### Recommendation
+Initialize function pointers before calling. Avoid function pointers if possible.
+
+## Pre-declaration usage of local variables
+### Configuration
+* Check: `variable-scope`
+* Severity: `Low`
+* Confidence: `High`
+
+### Description
+Detects the possible usage of a variable before the declaration is stepped over (either because it is later declared, or declared in another scope).
+
+### Exploit Scenario:
+
+```solidity
+contract C {
+    function f(uint z) public returns (uint) {
+        uint y = x + 9 + z; // 'z' is used pre-declaration
+        uint x = 7;
+
+        if (z % 2 == 0) {
+            uint max = 5;
+            // ...
+        }
+
+        // 'max' was intended to be 5, but it was mistakenly declared in a scope and not assigned (so it is zero).
+        for (uint i = 0; i < max; i++) {
+            x += 1;
+        }
+
+        return x;
+    }
+}
+```
+In the case above, the variable `x` is used before its declaration, which may result in unintended consequences. 
+Additionally, the for-loop uses the variable `max`, which is declared in a previous scope that may not always be reached. This could lead to unintended consequences if the user mistakenly uses a variable prior to any intended declaration assignment. It also may indicate that the user intended to reference a different variable.
+
+### Recommendation
+Move all variable declarations prior to any usage of the variable, and ensure that reaching a variable declaration does not depend on some conditional if it is used unconditionally.
+
 ## Void constructor
 ### Configuration
 * Check: `void-cst`
@@ -836,6 +1253,126 @@ If one of the destinations has a fallback function that reverts, `bad` will alwa
 
 ### Recommendation
 Favor [pull over push](https://github.com/ethereum/wiki/wiki/Safety#favor-pull-over-push-for-external-calls) strategy for external calls.
+
+## Missing events access control
+### Configuration
+* Check: `events-access`
+* Severity: `Low`
+* Confidence: `Medium`
+
+### Description
+Detect missing events for critical access control parameters
+
+### Exploit Scenario:
+
+```solidity
+contract C {
+
+  modifier onlyAdmin {
+    if (msg.sender != owner) throw;
+    _;
+  }
+
+  function updateOwner(address newOwner) onlyAdmin external {
+    owner = newOwner;
+  }
+}
+```
+`updateOwner()` has no event, so it is difficult to track off-chain owner changes.
+
+
+### Recommendation
+Emit an event for critical parameter changes.
+
+## Missing events arithmetic
+### Configuration
+* Check: `events-maths`
+* Severity: `Low`
+* Confidence: `Medium`
+
+### Description
+Detect missing events for critical arithmetic parameters.
+
+### Exploit Scenario:
+
+```solidity
+contract C {
+
+    modifier onlyOwner {
+        if (msg.sender != owner) throw;
+        _;
+    }
+
+    function setBuyPrice(uint256 newBuyPrice) onlyOwner public {
+        buyPrice = newBuyPrice;
+    }
+
+    function buy() external {
+     ... // buyPrice is used to determine the number of tokens purchased
+    }    
+}
+```
+`updateOwner()` has no event, so it is difficult to track off-chain changes in the buy price. 
+
+
+### Recommendation
+Emit an event for critical parameter changes.
+
+## Dangerous unary expressions
+### Configuration
+* Check: `incorrect-unary`
+* Severity: `Low`
+* Confidence: `Medium`
+
+### Description
+Unary expressions such as `x=+1` probably typos.
+
+### Exploit Scenario:
+
+```Solidity 
+contract Bug{
+    uint public counter;
+
+    function increase() public returns(uint){
+        counter=+1;
+        return counter;
+    }
+}
+```
+`increase()` uses `=+` instead of `+=`, so `counter` will never exceed 1.
+
+### Recommendation
+Remove the unary expression.
+
+## Missing zero address validation
+### Configuration
+* Check: `missing-zero-check`
+* Severity: `Low`
+* Confidence: `Medium`
+
+### Description
+Detect missing zero address validation.
+
+### Exploit Scenario:
+
+```solidity
+contract C {
+
+  modifier onlyAdmin {
+    if (msg.sender != owner) throw;
+    _;
+  }
+
+  function updateOwner(address newOwner) onlyAdmin external {
+    owner = newOwner;
+  }
+}
+```
+Bob calls `updateOwner` without specifying the `newOwner`, soBob loses ownership of the contract.
+
+
+### Recommendation
+Check that the address is not zero.
 
 ## Reentrancy vulnerabilities
 ### Configuration
@@ -916,6 +1453,33 @@ The use of assembly is error-prone and should be avoided.
 
 ### Recommendation
 Do not use `evm` assembly.
+
+## Assert state shange
+### Configuration
+* Check: `assert-state-change`
+* Severity: `Informational`
+* Confidence: `High`
+
+### Description
+Incorrect use of `assert()`. See Solidity best [practices](https://solidity.readthedocs.io/en/latest/control-structures.html#id4).
+
+### Exploit Scenario:
+
+```solidity
+contract A {
+
+  uint s_a;
+
+  function bad() public {
+    assert((s_a += 1) > 10);
+  }
+}
+```
+The assert in `bad()` increments the state variable `s_a` while checking for the condition.
+
+
+### Recommendation
+Use `require` for invariants modifying the state.
 
 ## Boolean equality
 ### Configuration
@@ -1012,6 +1576,48 @@ Failure to include these keywords will exclude the parameter data in the transac
 ### Recommendation
 Add the `indexed` keyword to event parameters that should include it, according to the `ERC20` specification.
 
+## Function Initializing State
+### Configuration
+* Check: `function-init-state`
+* Severity: `Informational`
+* Confidence: `High`
+
+### Description
+Detects the immediate initialization of state variables through function calls that are not pure/constant, or that use non-constant state variable.
+
+### Exploit Scenario:
+
+```solidity
+contract StateVarInitFromFunction {
+
+    uint public v = set(); // Initialize from function (sets to 77)
+    uint public w = 5;
+    uint public x = set(); // Initialize from function (sets to 88)
+    address public shouldntBeReported = address(8);
+
+    constructor(){
+        // The constructor is run after all state variables are initialized.
+    }
+
+    function set() public  returns(uint)  {
+        // If this function is being used to initialize a state variable declared
+        // before w, w will be zero. If it is declared after w, w will be set.
+        if(w == 0) {
+            return 77;
+        }
+
+        return 88;
+    }
+}
+```
+In this case, users might intend a function to return a value a state variable can initialize with, without realizing the context for the contract is not fully initialized. 
+In the example above, the same function sets two different values for state variables because it checks a state variable that is not yet initialized in one case, and is initialized in the other. 
+Special care must be taken when initializing state variables from an immediate function call so as not to incorrectly assume the state is initialized.
+
+
+### Recommendation
+Remove any initialization of state variables via non-constant state variables or function calls. If variables must be set upon contract deployment, locate initialization in the constructor instead.
+
 ## Low-level calls
 ### Configuration
 * Check: `low-level-calls`
@@ -1023,6 +1629,34 @@ The use of low-level calls is error-prone. Low-level calls do not check for [cod
 
 ### Recommendation
 Avoid low-level calls. Check the call success. If the call is meant for a contract, check for code existence.
+
+## Missing inheritance
+### Configuration
+* Check: `missing-inheritance`
+* Severity: `Informational`
+* Confidence: `High`
+
+### Description
+Detect missing inheritance.
+
+### Exploit Scenario:
+
+```solidity
+interface ISomething {
+    function f1() external returns(uint);
+}
+
+contract Something {
+    function f1() external returns(uint){
+        return 42;
+    }
+}
+```
+`Something` should inherit from `ISomething`. 
+
+
+### Recommendation
+Inherit from the missing interface or contract.
 
 ## Conformance to Solidity naming conventions
 ### Configuration
@@ -1052,6 +1686,39 @@ Detect whether different Solidity versions are used.
 ### Recommendation
 Use one Solidity version.
 
+## Redundant Statements
+### Configuration
+* Check: `redundant-statements`
+* Severity: `Informational`
+* Confidence: `High`
+
+### Description
+Detect the usage of redundant statements that have no effect.
+
+### Exploit Scenario:
+
+```solidity
+contract RedundantStatementsContract {
+
+    constructor() public {
+        uint; // Elementary Type Name
+        bool; // Elementary Type Name
+        RedundantStatementsContract; // Identifier
+    }
+
+    function test() public returns (uint) {
+        uint; // Elementary Type Name
+        assert; // Identifier
+        test; // Identifier
+        return 777;
+    }
+}
+```
+Each commented line references types/identifiers, but performs no action with them, so no code will be generated for such statements and they can be removed.
+
+### Recommendation
+Remove redundant statements if they congest code but offer no value.
+
 ## Incorrect versions of Solidity
 ### Configuration
 * Check: `solc-version`
@@ -1073,6 +1740,40 @@ Deploy with any of the following Solidity versions:
 Use a simple pragma version that allows any of these versions.
 Consider using the latest version of Solidity for testing.
 
+## Unimplemented functions
+### Configuration
+* Check: `unimplemented-functions`
+* Severity: `Informational`
+* Confidence: `High`
+
+### Description
+Detect functions that are not implemented on derived-most contracts.
+
+### Exploit Scenario:
+
+```solidity
+interface BaseInterface {
+    function f1() external returns(uint);
+    function f2() external returns(uint);
+}
+
+interface BaseInterface2 {
+    function f3() external returns(uint);
+}
+
+contract DerivedContract is BaseInterface, BaseInterface2 {
+    function f1() external returns(uint){
+        return 42;
+    }
+}
+```
+`DerivedContract` does not implement `BaseInterface.f2` or `BaseInterface2.f3`.
+As a result, the contract will not properly compile. 
+All unimplemented functions must be implemented on a contract that is meant to be used.
+
+### Recommendation
+Implement all unimplemented functions in any contract you intend to use directly (not simply inherit from).
+
 ## Unused state variable
 ### Configuration
 * Check: `unused-state`
@@ -1084,6 +1785,43 @@ Unused state variable.
 
 ### Recommendation
 Remove unused state variables.
+
+## Costly operations inside a loop
+### Configuration
+* Check: `costly-loop`
+* Severity: `Informational`
+* Confidence: `Medium`
+
+### Description
+Costly operations inside a loop might waste gas, so optimizations are justified.
+
+### Exploit Scenario:
+
+```solidity
+contract CostlyOperationsInLoop{
+
+    uint loop_count = 100;
+    uint state_variable=0;
+
+    function bad() external{
+        for (uint i=0; i < loop_count; i++){
+            state_variable++;
+        }
+    }
+
+    function good() external{
+      uint local_variable = state_variable;
+      for (uint i=0; i < loop_count; i++){
+        local_variable++;
+      }
+      state_variable = local_variable;
+    }
+}
+```
+Incrementing `state_variable` in a loop incurs a lot of gas because of expensive `SSTOREs`, which might lead to an `out-of-gas`.
+
+### Recommendation
+Use a local variable to hold the loop computation result.
 
 ## Reentrancy vulnerabilities
 ### Configuration
@@ -1109,6 +1847,21 @@ Only report reentrancy that is based on `transfer` or `send`.
 
 ### Recommendation
 Apply the [`check-effects-interactions` pattern](http://solidity.readthedocs.io/en/v0.4.21/security-considerations.html#re-entrancy).
+
+## Variable names too similar
+### Configuration
+* Check: `similar-names`
+* Severity: `Informational`
+* Confidence: `Medium`
+
+### Description
+Detect variables with names that are too similar.
+
+### Exploit Scenario:
+Bob uses several variables with similar names. As a result, his code is difficult to review.
+
+### Recommendation
+Prevent variables from having similar names.
 
 ## Too many digits
 ### Configuration
