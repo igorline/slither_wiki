@@ -34,7 +34,7 @@ sudo apt install xdot
 Export the call-graph of the contracts to a dot file
 ### Example
 ```
-$ slither examples/printers/call_graph.sol --print contract-summary
+$ slither examples/printers/call_graph.sol --print call-graph
 ```
 <img src="https://raw.githubusercontent.com/crytic/slither/master/examples/printers/call_graph.sol.dot.png">
 
