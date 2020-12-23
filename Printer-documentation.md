@@ -286,7 +286,7 @@ Inheritances:: []
 ```
 
 ## Human Summary
-`slither file.sol --print contract-summary`
+`slither file.sol --print human-summary`
 
 Print a human-readable summary of the contracts
 
