@@ -117,6 +117,13 @@ slither . --filter-paths "Migrations.sol|ConvertLib.sol"
 ```
 Filter all the results only related to the file `SafeMath.sol` or `ConvertLib.sol`.
 
+
+### Triage mode
+
+Slither offers two ways to remove results:
+- By adding `//slither-disable-next-line DETECTOR_NAME` before the issue
+- By running the triage mode (see below)
+
 ### Triage mode
 
 `--triage-mode` runs Slither in its triage mode. For every finding, Slither will ask if the result should be shown for the next run. Results are saved in `slither.db.json`.
