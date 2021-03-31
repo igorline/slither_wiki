@@ -285,7 +285,7 @@ Bob calls `transfer`. As a result, the Ether are sent to the address `0x0` and a
 
 ### Recommendation
 
-Initialize all the variables. If a variable is meant to be initialized to zero, explicitly set it to zero.
+Initialize all the variables. If a variable is meant to be initialized to zero, explicitly set it to zero to improve code readability.
 
 
 ## Uninitialized storage variables
@@ -1018,7 +1018,7 @@ contract Uninitialized is Owner{
 Bob calls `transfer`. As a result, all Ether is sent to the address `0x0` and is lost.
 
 ### Recommendation
-Initialize all the variables. If a variable is meant to be initialized to zero, explicitly set it to zero.
+Initialize all the variables. If a variable is meant to be initialized to zero, explicitly set it to zero to improve code readability.
 
 ## Unused return
 ### Configuration
@@ -1733,10 +1733,9 @@ We also recommend avoiding complex `pragma` statement.
 ### Recommendation
 
 Deploy with any of the following Solidity versions:
-- 0.5.11 - 0.5.13,
-- 0.5.15 - 0.5.17,
-- 0.6.8,
-- 0.6.10 - 0.6.11.
+- 0.5.16 - 0.5.17
+- 0.6.11 - 0.6.12
+- 0.7.5 - 0.7.6
 Use a simple pragma version that allows any of these versions.
 Consider using the latest version of Solidity for testing.
 
