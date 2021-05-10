@@ -495,6 +495,35 @@ contract A {
 ### Recommendation
 Use a compiler version >= `0.5.10`.
 
+## Unchecked transfer
+### Configuration
+* Check: `unchecked-transfer`
+* Severity: `High`
+* Confidence: `Medium`
+
+### Description
+The return value of an external transfer/transferFrom call is not checked
+
+### Exploit Scenario:
+
+```solidity
+contract Token {
+    function transferFrom(address _from, address _to, uint256 _value) public returns (bool success);
+}
+contract MyBank{  
+    mapping(address => uint) balances;
+    Token token;
+    function deposit(uint amount) public{
+        token.transferFrom(msg.sender, address(this), amount);
+        balances[msg.sender] += amount;
+    }
+}
+```
+Several tokens do not revert in case of failure and return false. If one of these tokens is used in `MyBank`, `deposit` will not revert if the transfer fails, and an attacker can call `deposit` for free..
+
+### Recommendation
+Use `SafeERC20`, or ensure that the transfer/transferFrom return value is checked.
+
 ## Weak PRNG
 ### Configuration
 * Check: `weak-prng`
@@ -726,6 +755,32 @@ contract A {
 
 ### Recommendation
 Fix the incorrect comparison by changing the value type or the comparison.
+
+## Write after write
+### Configuration
+* Check: `write-after-write`
+* Severity: `Medium`
+* Confidence: `High`
+
+### Description
+Detects variables that are written but never read and written again.
+
+### Exploit Scenario:
+
+    ```solidity
+    contract Buggy{
+        function my_func() external initializer{
+            // ...
+            a = b;
+            a = c;
+            // ..
+        }
+    }
+    ```
+    `a` is first asigned to `b`, and then to `c`. As a result the first write does nothing.
+
+### Recommendation
+Fix or remove the writes.
 
 ## Misuse of a Boolean constant
 ### Configuration
@@ -1821,6 +1876,27 @@ Incrementing `state_variable` in a loop incurs a lot of gas because of expensive
 
 ### Recommendation
 Use a local variable to hold the loop computation result.
+
+## Dead-code
+### Configuration
+* Check: `dead-code`
+* Severity: `Informational`
+* Confidence: `Medium`
+
+### Description
+Functions that are not sued.
+
+### Exploit Scenario:
+
+```solidity
+contract Contract{
+    function dead_code() internal() {}
+}
+```
+`dead_code` is not used in the contract, and make the code's review more difficult.
+
+### Recommendation
+Remove unused functions.
 
 ## Reentrancy vulnerabilities
 ### Configuration
