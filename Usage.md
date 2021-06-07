@@ -7,7 +7,7 @@
   - [Etherscan](#etherscan)
   - [AST input](#ast-file)
 - [Options](#options)
-  - [Detectors selection](#detectors-selection)
+  - [Detector selection](#detector-selection)
   - [Printer selection](#printer-selection)
   - [Path Filtering](#path-filtering)
   - [Triage mode](#triage-mode)
