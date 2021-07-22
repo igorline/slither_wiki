@@ -19,6 +19,7 @@
 - [ERC777](https://eips.ethereum.org/EIPS/eip-777): Token standard
 - [ERC721](https://eips.ethereum.org/EIPS/eip-721): Non-fungible token standard
 - [ERC165](https://eips.ethereum.org/EIPS/eip-165): Standard interface detection
+- [ERC1155](https://eips.ethereum.org/EIPS/eip-1155): Multi Token Standard
 - [ERC1820](https://eips.ethereum.org/EIPS/eip-1820): Pseudo-introspection registry contract
 
 ## Usage:
