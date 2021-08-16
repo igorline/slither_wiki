@@ -160,18 +160,14 @@ The following flags are supported:
     "exclude_low": false,
     "exclude_medium": false,
     "exclude_high": false,
-    "solc": "solc",
-    "solc_args": "",
-    "solc_disable_warnings": false,
     "json": "",
-    "truffle_build_directory": "custom/path",
-    "truffle_version": "truffle@x.x.x",
-    "truffle_ignore_compile": false,
     "disable_color": false,
     "filter_paths": "file1.sol,file2.sol",
     "legacy_ast": false
 }
 ```
+
+For flags related to the compilation, see the [`crytic-compile` configuration](https://github.com/crytic/crytic-compile/blob/master/crytic_compile/cryticparser/defaults.py)
 
 ## IDE integrations
 
