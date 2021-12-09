@@ -9,7 +9,7 @@ List of public detectors
 * Confidence: `High`
 
 ### Description
-`solc` versions `0.4.7`-`0.5.10` contain a [compiler bug](https://blog.ethereum.org/2019/06/25/solidity-storage-array-bugs.) leading to incorrect ABI encoder usage.
+`solc` versions `0.4.7`-`0.5.9` contain a [compiler bug](https://blog.ethereum.org/2019/06/25/solidity-storage-array-bugs) leading to incorrect ABI encoder usage.
 
 ### Exploit Scenario:
 
@@ -36,7 +36,7 @@ Use a compiler >= `0.5.10`.
 * Confidence: `High`
 
 ### Description
-Detect arrays passed to a function that expects a reference to a storage array
+Detect arrays passed to a function that expects reference to a storage array
 
 ### Exploit Scenario:
 
@@ -437,6 +437,72 @@ Bob calls `delegate` and delegates the execution to his malicious contract. As a
 ### Recommendation
 Avoid using `delegatecall`. Use only trusted destinations.
 
+## Payable functions using `delegatecall` inside a loop
+### Configuration
+* Check: `delegatecall-loop`
+* Severity: `High`
+* Confidence: `Medium`
+
+### Description
+Detect the use of `delegatecall` inside a loop in a payable function.
+
+### Exploit Scenario:
+
+```solidity
+contract DelegatecallInLoop{
+
+    mapping (address => uint256) balances;
+
+    function bad(address[] memory receivers) public payable {
+        for (uint256 i = 0; i < receivers.length; i++) {
+            address(this).delegatecall(abi.encodeWithSignature("addBalance(address)", receivers[i]));
+        }
+    }
+
+    function addBalance(address a) public payable {
+        balances[a] += msg.value;
+    } 
+
+}
+```
+When calling `bad` the same `msg.value` amount will be accredited multiple times.
+
+### Recommendation
+
+Carefully check that the function called by `delegatecall` is not payable/doesn't use `msg.value`.
+
+
+## `msg.value` inside a loop
+### Configuration
+* Check: `msg-value-loop`
+* Severity: `High`
+* Confidence: `Medium`
+
+### Description
+Detect the use of `msg.value` inside a loop.
+
+### Exploit Scenario:
+
+```solidity
+contract MsgValueInLoop{
+
+    mapping (address => uint256) balances;
+
+    function bad(address[] memory receivers) public payable {
+        for (uint256 i=0; i < receivers.length; i++) {
+            balances[receivers[i]] += msg.value;
+        }
+    }
+
+}
+```
+
+
+### Recommendation
+
+Track msg.value through a local variable and decrease its amount on every iteration/usage.
+
+
 ## Reentrancy vulnerabilities
 ### Configuration
 * Check: `reentrancy-eth`
@@ -519,7 +585,7 @@ contract MyBank{
     }
 }
 ```
-Several tokens do not revert in case of failure and return false. If one of these tokens is used in `MyBank`, `deposit` will not revert if the transfer fails, and an attacker can call `deposit` for free.
+Several tokens do not revert in case of failure and return false. If one of these tokens is used in `MyBank`, `deposit` will not revert if the transfer fails, and an attacker can call `deposit` for free..
 
 ### Recommendation
 Use `SafeERC20`, or ensure that the transfer/transferFrom return value is checked.
@@ -826,7 +892,7 @@ Verify and simplify the condition.
 
 Functions declared as `constant`/`pure`/`view` using assembly code.
 
-`constant`/`pure`/`view` was not enforced before Solidity 0.5.
+`constant`/`pure`/`view` was not enforced prior to Solidity 0.5.
 Starting from Solidity 0.5, a call to a `constant`/`pure`/`view` function uses the `STATICCALL` opcode, which reverts in case of state modification.
 
 As a result, a call to an [incorrectly labeled function may trap a contract compiled with Solidity 0.5](https://solidity.readthedocs.io/en/develop/050-breaking-changes.html#interoperability-with-older-contracts).
@@ -878,7 +944,7 @@ contract Constant{
 All the calls to `get` revert, breaking Bob's smart contract execution.
 
 ### Recommendation
-Ensure that attributes of contracts compiled before Solidity 0.5.0 are correct.
+Ensure that attributes of contracts compiled prior to Solidity 0.5.0 are correct.
 
 ## Divide before multiply
 ### Configuration
@@ -1249,7 +1315,7 @@ contract C {
 }
 ```
 In the case above, the variable `x` is used before its declaration, which may result in unintended consequences. 
-Additionally, the for-loop uses the variable `max`, which is declared in a previous scope that may not always be reached. This could lead to unintended consequences if the user mistakenly uses a variable before any intended declaration assignment. It also may indicate that the user intended to reference a different variable.
+Additionally, the for-loop uses the variable `max`, which is declared in a previous scope that may not always be reached. This could lead to unintended consequences if the user mistakenly uses a variable prior to any intended declaration assignment. It also may indicate that the user intended to reference a different variable.
 
 ### Recommendation
 Move all variable declarations prior to any usage of the variable, and ensure that reaching a variable declaration does not depend on some conditional if it is used unconditionally.
@@ -1380,7 +1446,7 @@ Emit an event for critical parameter changes.
 * Confidence: `Medium`
 
 ### Description
-Unary expressions such as `x=+1` are probably typos.
+Unary expressions such as `x=+1` probably typos.
 
 ### Exploit Scenario:
 
@@ -1423,7 +1489,7 @@ contract C {
   }
 }
 ```
-Bob calls `updateOwner` without specifying the `newOwner`, so Bob loses ownership of the contract.
+Bob calls `updateOwner` without specifying the `newOwner`, soBob loses ownership of the contract.
 
 
 ### Recommendation
@@ -1451,7 +1517,7 @@ Only report reentrancy that acts as a double call (see `reentrancy-eth`, `reentr
     }   
 ```
 
-`callme` contains a reentrancy. The reentrancy is benign because its exploitation would have the same effect as two consecutive calls.
+`callme` contains a reentrancy. The reentrancy is benign because it's exploitation would have the same effect as two consecutive calls.
 
 ### Recommendation
 Apply the [`check-effects-interactions` pattern](http://solidity.readthedocs.io/en/v0.4.21/security-considerations.html#re-entrancy).
@@ -1509,7 +1575,7 @@ The use of assembly is error-prone and should be avoided.
 ### Recommendation
 Do not use `evm` assembly.
 
-## Assert state shange
+## Assert state change
 ### Configuration
 * Check: `assert-state-change`
 * Severity: `Informational`
@@ -1558,7 +1624,7 @@ contract A {
 	}
 }
 ```
-Boolean constants can be used directly and do not need to be compared to `true` or `false`.
+Boolean constants can be used directly and do not need to be compare to `true` or `false`.
 
 ### Recommendation
 Remove the equality to the boolean constant.
@@ -1605,7 +1671,7 @@ contract ContractWithDeprecatedReferences {
 ### Recommendation
 Replace all uses of deprecated symbols.
 
-## Unindexed ERC20 event oarameters
+## Unindexed ERC20 event parameters
 ### Configuration
 * Check: `erc20-indexed`
 * Severity: `Informational`
@@ -1666,7 +1732,7 @@ contract StateVarInitFromFunction {
 }
 ```
 In this case, users might intend a function to return a value a state variable can initialize with, without realizing the context for the contract is not fully initialized. 
-In the example above, the same function sets two different values for state variables because it checks a state variable that is not yet initialized in one case and is initialized in the other. 
+In the example above, the same function sets two different values for state variables because it checks a state variable that is not yet initialized in one case, and is initialized in the other. 
 Special care must be taken when initializing state variables from an immediate function call so as not to incorrectly assume the state is initialized.
 
 
@@ -1783,7 +1849,7 @@ Remove redundant statements if they congest code but offer no value.
 ### Description
 
 `solc` frequently releases new compiler versions. Using an old version prevents access to new Solidity security checks.
-We also recommend avoiding complex `pragma` statements.
+We also recommend avoiding complex `pragma` statement.
 
 ### Recommendation
 
@@ -1884,7 +1950,7 @@ Use a local variable to hold the loop computation result.
 * Confidence: `Medium`
 
 ### Description
-Functions that are not used.
+Functions that are not sued.
 
 ### Exploit Scenario:
 
@@ -1893,7 +1959,7 @@ contract Contract{
     function dead_code() internal() {}
 }
 ```
-`dead_code` is not used in the contract, and makes code review more difficult.
+`dead_code` is not used in the contract, and make the code's review more difficult.
 
 ### Recommendation
 Remove unused functions.
