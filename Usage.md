@@ -109,9 +109,9 @@ slither file.sol --print inheritance-graph
 
 Examples:
 ```
-slither . --filter-paths "openzepellin"
+slither . --filter-paths "openzeppelin"
 ```
-Filter all the results only related to openzepellin.
+Filter all the results only related to openzeppelin.
 ```
 slither . --filter-paths "Migrations.sol|ConvertLib.sol"
 ```
