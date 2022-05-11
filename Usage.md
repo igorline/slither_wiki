@@ -90,7 +90,7 @@ slither file.sol --exclude naming-convention,unused-state,suicidal
 
 To exclude detectors with an informational or low severity, use `--exclude-informational` or `--exclude-low`.
 
-`--list-detectors` lists [available detectors](https://github.com/trailofbits/slither/wiki/Detectors-Documentation).
+`--list-detectors` lists [available detectors](https://github.com/crytic/slither/wiki/Detector-Documentation).
 
 ### Printer selection
 
@@ -101,7 +101,7 @@ To run selected printers, use `--print printer1,printer2`. For example:
 slither file.sol --print inheritance-graph
 ```
 
-`--list-printers` lists [available printers](https://github.com/trailofbits/slither/wiki/Printers-Documentation).
+`--list-printers` lists [available printers](https://github.com/crytic/slither/wiki/Printer-Documentation).
 
 ### Path filtering
 
@@ -109,9 +109,9 @@ slither file.sol --print inheritance-graph
 
 Examples:
 ```
-slither . --filter-paths "openzeppelin"
+slither . --filter-paths "openzepellin"
 ```
-Filter all the results only related to openzeppelin.
+Filter all the results only related to openzepellin.
 ```
 slither . --filter-paths "Migrations.sol|ConvertLib.sol"
 ```
@@ -170,7 +170,5 @@ The following flags are supported:
 For flags related to the compilation, see the [`crytic-compile` configuration](https://github.com/crytic/crytic-compile/blob/master/crytic_compile/cryticparser/defaults.py)
 
 ## IDE integrations
-
-* Remix: https://github.com/samparsky/remix-plugin-slither (http://remix.ethereum.org/ integration in progress)
-* Embark: https://github.com/embark-framework/embark-slither (Work in progress)
-* Visual Studio: https://github.com/samparsky/slither-vscode (Work in progress)
+* Remix: https://remix-ide.readthedocs.io/fr/latest/slither.html
+* Sarif viewer: https://marketplace.visualstudio.com/items?itemName=MS-SarifVSCode.sarif-viewer (use slither's sarif export)
