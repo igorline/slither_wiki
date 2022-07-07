@@ -162,7 +162,7 @@ The following flags are supported:
     "exclude_high": false,
     "json": "",
     "disable_color": false,
-    "filter_paths": "file1.sol,file2.sol",
+    "filter_paths": "(mocks/|test/)", # regex
     "legacy_ast": false
 }
 ```
