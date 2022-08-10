@@ -35,6 +35,7 @@ class Skeleton(AbstractDetector):
 - `ARGUMENT` lets you run the detector from the command line
 - `HELP` is the information printed from the command line
 - `IMPACT` indicates the impact of the issue. Allowed values are:
+  - `DetectorClassification.OPTIMIZATION`: printed in green
   - `DetectorClassification.INFORMATIONAL`: printed in green
   - `DetectorClassification.LOW`: printed in green
   - `DetectorClassification.MEDIUM`: printed in yellow
