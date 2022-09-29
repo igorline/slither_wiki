@@ -16,9 +16,9 @@ List of public detectors
 ```solidity
 contract A {
     uint[2][3] bad_arr = [[1, 2], [3, 4], [5, 6]];
-
+    
     /* Array of arrays passed to abi.encode is vulnerable */
-    function bad() public {
+    function bad() public {                                                                                          
         bytes memory b = abi.encode(bad_arr);
     }
 }
@@ -133,7 +133,7 @@ contract A {
     function A() public {
         x = 1;
     }
-
+    
     function test() public returns(uint) {
         return x;
     }
@@ -188,7 +188,7 @@ contract Buggy{
     function set_not_protected() public{
         owner = msg.sender;
     }
-}
+}    
 ```
 `owner` must be always written by function using `onlyOwner` (`write-protection="onlyOwner()"`), however anyone can call `set_not_protected`.
 
@@ -234,7 +234,7 @@ contract Token
         uint amount = tokens[msg.sender];
         address payable d = msg.sender;
         tokens[msg.sender] = 0;
-        _withdraw(/*owner/*noitanitsed*/ d, o/*
+        _withdraw(/*owner‮/*noitanitsed*/ d, o/*‭
 		        /*value */, amount);
     }
 
@@ -388,7 +388,7 @@ Detects logic contract that can be destructed.
     ```solidity
     contract Buggy is Initializable{
         address payable owner;
-
+    
         function initialize() external initializer{
             require(owner == address(0));
             owner = msg.sender;
@@ -485,8 +485,8 @@ contract A {
 }
 ```
 Contract storage/state-variables are indexed by a 256-bit integer.
-The user can set the array length to `2**256-1` in order to index all storage slots.
-In the example above, one could call the function `f` to set the array length, then call the function `g` to control any storage slot desired.
+The user can set the array length to `2**256-1` in order to index all storage slots. 
+In the example above, one could call the function `f` to set the array length, then call the function `g` to control any storage slot desired. 
 Note that storage slots here are indexed via a hash of the indexers; nonetheless, all storage will still be accessible and could be controlled by the attacker.
 
 ### Recommendation
@@ -540,7 +540,7 @@ contract DelegatecallInLoop{
 
     function addBalance(address a) public payable {
         balances[a] += msg.value;
-    }
+    } 
 
 }
 ```
@@ -633,7 +633,7 @@ contract A {
 	}
 }
 ```
-`bad0()` uses a (storage-allocated) signed integer array state variable to store the ether balances of three accounts.
+`bad0()` uses a (storage-allocated) signed integer array state variable to store the ether balances of three accounts.  
 `-1` is supposed to indicate uninitialized values but the Solidity bug makes these as `1`, which could be exploited by the accounts.
 
 
@@ -655,7 +655,7 @@ The return value of an external transfer/transferFrom call is not checked
 contract Token {
     function transferFrom(address _from, address _to, uint256 _value) public returns (bool success);
 }
-contract MyBank{
+contract MyBank{  
     mapping(address => uint) balances;
     Token token;
     function deposit(uint amount) public{
@@ -690,7 +690,7 @@ contract Game {
     }
 }
 ```
-Eve is a miner. Eve calls `guessing` and re-orders the block containing the transaction.
+Eve is a miner. Eve calls `guessing` and re-orders the block containing the transaction. 
 As a result, Eve wins the game.
 
 ### Recommendation
@@ -710,11 +710,11 @@ Detect out-of-range `enum` conversion (`solc` < `0.4.5`).
 ```solidity
     pragma solidity 0.4.2;
     contract Test{
-
+    
     enum E{a}
-
+    
     function bug(uint a) public returns(E){
-        return E(a);
+        return E(a);   
     }
 }
 ```
@@ -895,7 +895,7 @@ contract A {
 }
 ```
 `x` is a `uint256`, so `x >= 0` will be always true.
-`y` is a `uint8`, so `y <512` will be always true.
+`y` is a `uint8`, so `y <512` will be always true.  
 
 
 ### Recommendation
@@ -955,7 +955,7 @@ contract A {
 	}
 }
 ```
-Boolean constants in code have only a few legitimate uses.
+Boolean constants in code have only a few legitimate uses. 
 Other uses (in complex expressions, as conditionals) indicate either an error or, most likely, the persistence of faulty code.
 
 ### Recommendation
@@ -987,7 +987,7 @@ contract Constant{
     }
 }
 ```
-`Constant` was deployed with Solidity 0.4.25. Bob writes a smart contract that interacts with `Constant` in Solidity 0.5.0.
+`Constant` was deployed with Solidity 0.4.25. Bob writes a smart contract that interacts with `Constant` in Solidity 0.5.0. 
 All the calls to `get` revert, breaking Bob's smart contract execution.
 
 ### Recommendation
@@ -1019,7 +1019,7 @@ contract Constant{
     }
 }
 ```
-`Constant` was deployed with Solidity 0.4.25. Bob writes a smart contract that interacts with `Constant` in Solidity 0.5.0.
+`Constant` was deployed with Solidity 0.4.25. Bob writes a smart contract that interacts with `Constant` in Solidity 0.5.0. 
 All the calls to `get` revert, breaking Bob's smart contract execution.
 
 ### Recommendation
@@ -1043,8 +1043,8 @@ contract A {
     }
 }
 ```
-If `n` is greater than `oldSupply`, `coins` will be zero. For example, with `oldSupply = 5; n = 10, interest = 2`, coins will be zero.
-If `(oldSupply * interest / n)` was used, `coins` would have been `1`.
+If `n` is greater than `oldSupply`, `coins` will be zero. For example, with `oldSupply = 5; n = 10, interest = 2`, coins will be zero.  
+If `(oldSupply * interest / n)` was used, `coins` would have been `1`.   
 In general, it's usually a good idea to re-arrange arithmetic to perform multiplication before division, unless the limit of a smaller type makes this dangerous.
 
 ### Recommendation
@@ -1070,7 +1070,7 @@ Do not report reentrancies that involve Ether (see `reentrancy-eth`).
             throw;
         }
         not_called = False;
-    }
+    }   
 ```
 
 
@@ -1166,7 +1166,7 @@ contract MyConc{
 ```
 The return value of the low-level call is not checked, so if the call fails, the Ether will be locked in the contract.
 If the low level is used to prevent blocking operations, consider logging failed calls.
-
+    
 
 ### Recommendation
 Ensure that the return value of a low-level call is checked or logged.
@@ -1191,7 +1191,7 @@ contract MyConc{
 ```
 The return value of `send` is not checked, so if the send fails, the Ether will be locked in the contract.
 If `send` is used to prevent blocking operations, consider logging the failed `send`.
-
+    
 
 ### Recommendation
 Ensure that the return value of `send` is checked or logged.
@@ -1233,7 +1233,7 @@ The return value of an external call is not stored in a local or state variable.
 
 ```solidity
 contract MyConc{
-    using SafeMath for uint;
+    using SafeMath for uint;   
     function my_func(uint a, uint b) public{
         a.add(b);
     }
@@ -1393,7 +1393,7 @@ contract C {
     }
 }
 ```
-In the case above, the variable `x` is used before its declaration, which may result in unintended consequences.
+In the case above, the variable `x` is used before its declaration, which may result in unintended consequences. 
 Additionally, the for-loop uses the variable `max`, which is declared in a previous scope that may not always be reached. This could lead to unintended consequences if the user mistakenly uses a variable prior to any intended declaration assignment. It also may indicate that the user intended to reference a different variable.
 
 ### Recommendation
@@ -1509,10 +1509,10 @@ contract C {
 
     function buy() external {
      ... // buyPrice is used to determine the number of tokens purchased
-    }
+    }    
 }
 ```
-`updateOwner()` has no event, so it is difficult to track off-chain changes in the buy price.
+`updateOwner()` has no event, so it is difficult to track off-chain changes in the buy price. 
 
 
 ### Recommendation
@@ -1529,7 +1529,7 @@ Unary expressions such as `x=+1` probably typos.
 
 ### Exploit Scenario:
 
-```Solidity
+```Solidity 
 contract Bug{
     uint public counter;
 
@@ -1593,7 +1593,7 @@ Only report reentrancy that acts as a double call (see `reentrancy-eth`, `reentr
             throw;
         }
         counter += 1
-    }
+    }   
 ```
 
 `callme` contains a reentrancy. The reentrancy is benign because it's exploitation would have the same effect as two consecutive calls.
@@ -1810,8 +1810,8 @@ contract StateVarInitFromFunction {
     }
 }
 ```
-In this case, users might intend a function to return a value a state variable can initialize with, without realizing the context for the contract is not fully initialized.
-In the example above, the same function sets two different values for state variables because it checks a state variable that is not yet initialized in one case, and is initialized in the other.
+In this case, users might intend a function to return a value a state variable can initialize with, without realizing the context for the contract is not fully initialized. 
+In the example above, the same function sets two different values for state variables because it checks a state variable that is not yet initialized in one case, and is initialized in the other. 
 Special care must be taken when initializing state variables from an immediate function call so as not to incorrectly assume the state is initialized.
 
 
@@ -1852,7 +1852,7 @@ contract Something {
     }
 }
 ```
-`Something` should inherit from `ISomething`.
+`Something` should inherit from `ISomething`. 
 
 
 ### Recommendation
@@ -1936,7 +1936,14 @@ Deploy with any of the following Solidity versions:
 - 0.5.16 - 0.5.17
 - 0.6.11 - 0.6.12
 - 0.7.5 - 0.7.6
-- 0.8.4 - 0.8.7
+- 0.8.16
+
+The recommendations take into account:
+- Risks related to recent releases
+- Risks of complex code generation changes
+- Risks of new language features
+- Risks of known bugs
+
 Use a simple pragma version that allows any of these versions.
 Consider using the latest version of Solidity for testing.
 
@@ -1968,7 +1975,7 @@ contract DerivedContract is BaseInterface, BaseInterface2 {
 }
 ```
 `DerivedContract` does not implement `BaseInterface.f2` or `BaseInterface2.f3`.
-As a result, the contract will not properly compile.
+As a result, the contract will not properly compile. 
 All unimplemented functions must be implemented on a contract that is meant to be used.
 
 ### Recommendation
@@ -2061,7 +2068,7 @@ Only report reentrancy that is based on `transfer` or `send`.
     function callme(){
         msg.sender.transfer(balances[msg.sender]):
         balances[msg.sender] = 0;
-    }
+    }   
 ```
 
 `send` and `transfer` do not protect from reentrancies in case of gas price changes.
@@ -2099,7 +2106,7 @@ Literals with many digits are difficult to read and review.
 
 ```solidity
 contract MyContract{
-    uint 1_ether = 10000000000000000000;
+    uint 1_ether = 10000000000000000000; 
 }
 ```
 
