@@ -5,7 +5,7 @@ source /usr/local/bin/virtualenvwrapper.sh
 mkvirtualenv --python=`which python3` slither-dev
 git clone https://github.com/trailofbits/slither
 cd slither
-python setup.py develop
+slither % pip install -e ".[dev]"
 ```
 
 Start a shell with the Slither virtual environment by running:
