@@ -2,6 +2,7 @@
 
 List of public detectors
 
+
 ## Storage ABIEncoderV2 Array
 ### Configuration
 * Check: `abiencoderv2-array`
@@ -695,6 +696,27 @@ As a result, Eve wins the game.
 
 ### Recommendation
 Do not use `block.timestamp`, `now` or `blockhash` as a source of randomness
+
+## Domain separator collision
+### Configuration
+* Check: `domain-separator-collision`
+* Severity: `Medium`
+* Confidence: `High`
+
+### Description
+An ERC20 token has a function whose signature collides with EIP-2612's DOMAIN_SEPARATOR(), causing unanticipated behavior for contracts using `permit` functionality.
+
+### Exploit Scenario:
+
+```solidity
+contract Contract{
+    function some_collisions() external() {}
+}
+```
+`some_collision` clashes with EIP-2612's DOMAIN_SEPARATOR() and will interfere with contract's using `permit`.
+
+### Recommendation
+Remove or rename the function that collides with DOMAIN_SEPARATOR().
 
 ## Dangerous enum conversion
 ### Configuration
@@ -2144,3 +2166,4 @@ Add the `constant` attributes to state variables that never change.
 
 ### Recommendation
 Use the `external` attribute for functions never called from the contract, and change the location of immutable parameters to `calldata` to save gas.
+
