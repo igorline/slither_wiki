@@ -21,6 +21,10 @@
 - [ERC165](https://eips.ethereum.org/EIPS/eip-165): Standard interface detection
 - [ERC1155](https://eips.ethereum.org/EIPS/eip-1155): Multi Token Standard
 - [ERC1820](https://eips.ethereum.org/EIPS/eip-1820): Pseudo-introspection registry contract
+- [ERC4524](https://eips.ethereum.org/EIPS/eip-4524): Safer ERC-20
+- [ERC1363](https://eips.ethereum.org/EIPS/eip-1363): Payable Token
+- [ERC2612](https://eips.ethereum.org/EIPS/eip-2612): Permit Extension for EIP-20 Signed Approvals
+- [ERC4626](https://eips.ethereum.org/EIPS/eip-4626): Tokenized Vaults
 
 ## Usage:
 
