@@ -386,21 +386,22 @@ Detects logic contract that can be destructed.
 
 ### Exploit Scenario:
 
-    ```solidity
-    contract Buggy is Initializable{
-        address payable owner;
-    
-        function initialize() external initializer{
-            require(owner == address(0));
-            owner = msg.sender;
-        }
-        function kill() external{
-            require(msg.sender == owner);
-            selfdestruct(owner);
-        }
+```solidity
+contract Buggy is Initializable{
+    address payable owner;
+
+    function initialize() external initializer{
+        require(owner == address(0));
+        owner = msg.sender;
     }
-    ```
-    Buggy is an upgradeable contract. Anyone can call initialize on the logic contract, and destruct the contract.
+    function kill() external{
+        require(msg.sender == owner);
+        selfdestruct(owner);
+    }
+}
+```
+Buggy is an upgradeable contract. Anyone can call initialize on the logic contract, and destruct the contract.
+
 
 ### Recommendation
 Add a constructor to ensure `initialize` cannot be called on the logic contract.
@@ -619,7 +620,7 @@ Apply the [`check-effects-interactions pattern`](http://solidity.readthedocs.io/
 * Confidence: `Medium`
 
 ### Description
-`solc` versions `0.4.7`-`0.5.10` contain [a compiler bug](https://blog.ethereum.org/2019/06/25/solidity-storage-array-bugs)
+`solc` versions `0.4.7`-`0.5.9` contain [a compiler bug](https://blog.ethereum.org/2019/06/25/solidity-storage-array-bugs)
 leading to incorrect values in signed integer arrays.
 
 ### Exploit Scenario:
@@ -697,6 +698,21 @@ As a result, Eve wins the game.
 ### Recommendation
 Do not use `block.timestamp`, `now` or `blockhash` as a source of randomness
 
+## Codex
+### Configuration
+* Check: `codex`
+* Severity: `High`
+* Confidence: `Low`
+
+### Description
+Use [codex](https://openai.com/blog/openai-codex/) to find vulnerabilities
+
+### Exploit Scenario:
+N/A
+
+### Recommendation
+Review codex's message.
+
 ## Domain separator collision
 ### Configuration
 * Check: `domain-separator-collision`
@@ -732,11 +748,11 @@ Detect out-of-range `enum` conversion (`solc` < `0.4.5`).
 ```solidity
     pragma solidity 0.4.2;
     contract Test{
-    
+
     enum E{a}
-    
+
     function bug(uint a) public returns(E){
-        return E(a);   
+        return E(a);
     }
 }
 ```
@@ -1054,7 +1070,7 @@ Ensure that attributes of contracts compiled prior to Solidity 0.5.0 are correct
 * Confidence: `Medium`
 
 ### Description
-Solidity integer division might truncate. As a result, performing multiplication before division can sometimes avoid loss of precision.
+Solidity's integer division truncates. Thus, performing division before multiplication can lead to precision loss.
 
 ### Exploit Scenario:
 
@@ -1534,7 +1550,7 @@ contract C {
     }    
 }
 ```
-`updateOwner()` has no event, so it is difficult to track off-chain changes in the buy price. 
+`setBuyPrice()` does not emit an event, so it is difficult to track changes in the value of `buyPrice` off-chain. 
 
 
 ### Recommendation
@@ -2150,10 +2166,10 @@ Use:
 * Confidence: `High`
 
 ### Description
-Constant state variables should be declared constant to save gas.
+State variables that are not updated following deployment should be declared constant to save gas.
 
 ### Recommendation
-Add the `constant` attributes to state variables that never change.
+Add the `constant` attribute to state variables that never change.
 
 ## Public function that could be declared external
 ### Configuration
@@ -2166,4 +2182,41 @@ Add the `constant` attributes to state variables that never change.
 
 ### Recommendation
 Use the `external` attribute for functions never called from the contract, and change the location of immutable parameters to `calldata` to save gas.
+
+## State variables that could be declared immutable
+### Configuration
+* Check: `immutable-states`
+* Severity: `Optimization`
+* Confidence: `High`
+
+### Description
+State variables that are not updated following deployment should be declared immutable to save gas.
+
+### Recommendation
+Add the `immutable` attribute to state variables that never change or are set only in the constructor.
+
+## Public variable read in external context
+### Configuration
+* Check: `var-read-using-this`
+* Severity: `Optimization`
+* Confidence: `High`
+
+### Description
+The contract reads its own variable using `this`, adding overhead of an unnecessary STATICCALL.
+
+### Exploit Scenario:
+
+```solidity
+contract C {
+    mapping(uint => address) public myMap;
+    function test(uint x) external returns(address) {
+        return this.myMap(x);
+    }
+}
+```
+
+
+### Recommendation
+Read the variable directly from storage instead of calling the contract.
+
 
