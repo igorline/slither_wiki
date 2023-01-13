@@ -122,6 +122,8 @@ Filter all the results only related to the file `SafeMath.sol` or `ConvertLib.so
 
 Slither offers two ways to remove results:
 - By adding `//slither-disable-next-line DETECTOR_NAME` before the issue
+- By adding `// slither-disable-start [detector] ... // slither-disable-end [detector]` around the code to disable the detector on a large section
+- By adding `@custom:security non-reentrant` before the variable declaration will indicate to Slither that the external calls from this variable are non-reentrant
 - By running the triage mode (see below)
 
 ### Triage mode
