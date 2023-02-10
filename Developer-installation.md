@@ -14,3 +14,8 @@ workon slither-dev
 ```
 
 Update Slither by running `git pull` from the slither directory.
+
+To debug Slither interactively, use the following entry point:
+```
+$VIRTUAL_ENV/bin/slither
+```
