@@ -19,6 +19,7 @@ Slither is now installed to the local `slitherdev` environment.
 
 1. Configure your IDE to use `$(pyenv root)/slitherdev/bin/python` as the interpreter.
 2. Use `slither` as the entrypoint for the debugger.
+3. Pycharm specific: Set the environment working directory to `$(pyenv root)/versions/slitherdev/bin/`
 
 ## Developer Installation using Virtualenvs 
 
