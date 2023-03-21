@@ -2,7 +2,6 @@
 
 List of public detectors
 
-
 ## Storage ABIEncoderV2 Array
 ### Configuration
 * Check: `abiencoderv2-array`
@@ -600,7 +599,7 @@ Do not report reentrancies that don't involve Ether (see `reentrancy-no-eth`)
 ```solidity
     function withdrawBalance(){
         // send userBalance[msg.sender] Ether to msg.sender
-        // if mgs.sender is a contract, it will call its fallback function
+        // if msg.sender is a contract, it will call its fallback function
         if( ! (msg.sender.call.value(userBalance[msg.sender])() ) ){
             throw;
         }
@@ -1746,6 +1745,18 @@ Boolean constants can be used directly and do not need to be compare to `true` o
 ### Recommendation
 Remove the equality to the boolean constant.
 
+## Cyclomatic complexity
+### Configuration
+* Check: `cyclomatic-complexity`
+* Severity: `Informational`
+* Confidence: `High`
+
+### Description
+Detects functions with high (> 11) cyclomatic complexity.
+
+### Recommendation
+Reduce cyclomatic complexity by splitting the function into several smaller subroutines.
+
 ## Deprecated standards
 ### Configuration
 * Check: `deprecated-standards`
@@ -1971,10 +1982,7 @@ We also recommend avoiding complex `pragma` statement.
 ### Recommendation
 
 Deploy with any of the following Solidity versions:
-- 0.5.16 - 0.5.17
-- 0.6.11 - 0.6.12
-- 0.7.5 - 0.7.6
-- 0.8.16
+- 0.8.18
 
 The recommendations take into account:
 - Risks related to recent releases
@@ -2218,5 +2226,6 @@ contract C {
 
 ### Recommendation
 Read the variable directly from storage instead of calling the contract.
+
 
 
