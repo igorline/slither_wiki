@@ -88,6 +88,33 @@ As a result, Bob's usage of the contract is incorrect.
 ### Recommendation
 Ensure the correct usage of `memory` and `storage` in the function parameters. Make all the locations explicit.
 
+## ABI encodePacked Collision
+### Configuration
+* Check: `encode-packed-collision`
+* Severity: `High`
+* Confidence: `High`
+
+### Description
+Detect collision due to dynamic type usages in `abi.encodePacked`
+
+### Exploit Scenario:
+
+```solidity
+contract Sign {
+    function get_hash_for_signature(string name, string doc) external returns(bytes32) {
+        return keccak256(abi.encodePacked(name, doc));
+    }
+}
+```
+Bob calls `get_hash_for_signature` with (`bob`, `This is the content`). The hash returned is used as an ID.
+Eve creates a collision with the ID using (`bo`, `bThis is the content`) and compromises the system.
+
+
+### Recommendation
+Do not use more than one dynamic type in `abi.encodePacked()`
+(see the [Solidity documentation](https://solidity.readthedocs.io/en/v0.5.10/abi-spec.html?highlight=abi.encodePacked#non-standard-packed-modeDynamic)). 
+Use `abi.encode()`, preferably.
+
 ## Incorrect shift in assembly.
 ### Configuration
 * Check: `incorrect-shift`
@@ -580,7 +607,7 @@ contract MsgValueInLoop{
 
 ### Recommendation
 
-Track msg.value through a local variable and decrease its amount on every iteration/usage.
+Provide an explicit array of amounts alongside the receivers array, and check that the sum of all amounts matches `msg.value`.
 
 
 ## Reentrancy vulnerabilities
@@ -1646,23 +1673,44 @@ Apply the [`check-effects-interactions` pattern](http://solidity.readthedocs.io/
 
 ### Description
 
-Detection of the [reentrancy bug](https://github.com/trailofbits/not-so-smart-contracts/tree/master/reentrancy).
-Only report reentrancies leading to out-of-order events.
+Detects [reentrancies](https://github.com/trailofbits/not-so-smart-contracts/tree/master/reentrancy) that allow manipulation of the order or value of events.
 
 ### Exploit Scenario:
 
 ```solidity
-    function bug(Called d){
+contract ReentrantContract {
+	function f() external {
+		if (BugReentrancyEvents(msg.sender).counter() == 1) {
+			BugReentrancyEvents(msg.sender).count(this);
+		}
+	}
+}
+contract Counter {
+	uint public counter;
+	event Counter(uint);
+
+}
+contract BugReentrancyEvents is Counter {
+    function count(ReentrantContract d) external {
         counter += 1;
         d.f();
         emit Counter(counter);
     }
+}
+contract NoReentrancyEvents is Counter {
+	function count(ReentrantContract d) external {
+        counter += 1;
+        emit Counter(counter);
+        d.f();
+    }
+}
 ```
 
-If `d.()` re-enters, the `Counter` events will be shown in an incorrect order, which might lead to issues for third parties.
+If the external call `d.f()` re-enters `BugReentrancyEvents`, the `Counter` events will be incorrect (`Counter(2)`, `Counter(2)`) whereas `NoReentrancyEvents` will correctly emit 
+(`Counter(1)`, `Counter(2)`). This may cause issues for offchain components that rely on the values of events e.g. checking for the amount deposited to a bridge.
 
 ### Recommendation
-Apply the [`check-effects-interactions` pattern](http://solidity.readthedocs.io/en/v0.4.21/security-considerations.html#re-entrancy).
+Apply the [`check-effects-interactions` pattern](https://docs.soliditylang.org/en/latest/security-considerations.html#re-entrancy).
 
 ## Block timestamp
 ### Configuration
@@ -1866,6 +1914,29 @@ Special care must be taken when initializing state variables from an immediate f
 
 ### Recommendation
 Remove any initialization of state variables via non-constant state variables or function calls. If variables must be set upon contract deployment, locate initialization in the constructor instead.
+
+## Incorrect usage of using-for statement
+### Configuration
+* Check: `incorrect-using-for`
+* Severity: `Informational`
+* Confidence: `High`
+
+### Description
+In Solidity, it is possible to use libraries for certain types, by the `using-for` statement (`using <library> for <type>`). However, the Solidity compiler doesn't check whether a given library has at least one function matching a given type. If it doesn't, such a statement has no effect and may be confusing. 
+
+### Exploit Scenario:
+
+    ```solidity
+    library L {
+        function f(bool) public pure {}
+    }
+    
+    using L for uint;
+    ```
+    Such a code will compile despite the fact that `L` has no function with `uint` as its first argument.
+
+### Recommendation
+Make sure that the libraries used in `using-for` statements have at least one function matching a type used in these statements. 
 
 ## Low-level calls
 ### Configuration
@@ -2167,6 +2238,53 @@ Use:
 - [The scientific notation](https://solidity.readthedocs.io/en/latest/types.html#rational-and-integer-literals)
 
 
+## Cache array length
+### Configuration
+* Check: `cache-array-length`
+* Severity: `Optimization`
+* Confidence: `High`
+
+### Description
+Detects `for` loops that use `length` member of some storage array in their loop condition and don't modify it. 
+
+### Exploit Scenario:
+
+```solidity
+contract C
+{
+    uint[] array;
+    
+    function f() public 
+    {
+        for (uint i = 0; i < array.length; i++)
+        {
+            // code that does not modify length of `array`
+        }
+    }
+}
+```
+Since the `for` loop in `f` doesn't modify `array.length`, it is more gas efficient to cache it in some local variable and use that variable instead, like in the following example:
+
+```solidity
+contract C
+{
+    uint[] array;
+    
+    function f() public 
+    {
+        uint array_length = array.length;
+        for (uint i = 0; i < array_length; i++)
+        {
+            // code that does not modify length of `array`
+        }
+    }
+}
+```
+    
+
+### Recommendation
+Cache the lengths of storage arrays if they are used and not modified in `for` loops.
+
 ## State variables that could be declared constant
 ### Configuration
 * Check: `constable-states`
@@ -2226,6 +2344,3 @@ contract C {
 
 ### Recommendation
 Read the variable directly from storage instead of calling the contract.
-
-
-
