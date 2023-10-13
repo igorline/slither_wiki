@@ -579,6 +579,59 @@ When calling `bad` the same `msg.value` amount will be accredited multiple times
 Carefully check that the function called by `delegatecall` is not payable/doesn't use `msg.value`.
 
 
+## Incorrect exponentiation
+### Configuration
+* Check: `incorrect-exp`
+* Severity: `High`
+* Confidence: `Medium`
+
+### Description
+Detect use of bitwise `xor ^` instead of exponential `**`
+
+### Exploit Scenario:
+
+```solidity
+contract Bug{
+    uint UINT_MAX = 2^256 - 1;
+    ...
+}
+```
+Alice deploys a contract in which `UINT_MAX` incorrectly uses `^` operator instead of `**` for exponentiation
+
+### Recommendation
+Use the correct operator `**` for exponentiation.
+
+## Incorrect return in assembly
+### Configuration
+* Check: `incorrect-return`
+* Severity: `High`
+* Confidence: `Medium`
+
+### Description
+Detect if `return` in an assembly block halts unexpectedly the execution.
+
+### Exploit Scenario:
+
+```solidity
+contract C {
+    function f() internal returns (uint a, uint b) {
+        assembly {
+            return (5, 6)
+        }
+    }
+
+    function g() returns (bool){
+        f();
+        return true;
+    }
+}
+```
+The return statement in `f` will cause execution in `g` to halt.
+The function will return 6 bytes starting from offset 5, instead of returning a boolean.
+
+### Recommendation
+Use the `leave` statement.
+
 ## `msg.value` inside a loop
 ### Configuration
 * Check: `msg-value-loop`
@@ -638,6 +691,32 @@ Bob uses the re-entrancy bug to call `withdrawBalance` two times, and withdraw m
 
 ### Recommendation
 Apply the [`check-effects-interactions pattern`](http://solidity.readthedocs.io/en/v0.4.21/security-considerations.html#re-entrancy).
+
+## Return instead of leave in assembly
+### Configuration
+* Check: `return-leave`
+* Severity: `High`
+* Confidence: `Medium`
+
+### Description
+Detect if a `return` is used where a `leave` should be used.
+
+### Exploit Scenario:
+
+```solidity
+contract C {
+    function f() internal returns (uint a, uint b) {
+        assembly {
+            return (5, 6)
+        }
+    }
+
+}
+```
+The function will halt the execution, instead of returning a two uint.
+
+### Recommendation
+Use the `leave` statement.
 
 ## Storage Signed Integer Array
 ### Configuration
@@ -929,6 +1008,27 @@ contract DerivedContract is BaseContract{
 
 ### Recommendation
 Remove the state variable shadowing.
+
+## Tautological compare
+### Configuration
+* Check: `tautological-compare`
+* Severity: `Medium`
+* Confidence: `High`
+
+### Description
+A variable compared to itself is probably an error as it will always return `true` for `==`, `>=`, `<=` and always `false` for `<`, `>` and `!=`.
+
+### Exploit Scenario:
+
+```solidity
+    function check(uint a) external returns(bool){
+        return (a >= a);
+    }
+```
+`check` always return true.
+
+### Recommendation
+Remove comparison or compare to different value.
 
 ## Tautology or contradiction
 ### Configuration
@@ -1712,6 +1812,53 @@ If the external call `d.f()` re-enters `BugReentrancyEvents`, the `Counter` even
 ### Recommendation
 Apply the [`check-effects-interactions` pattern](https://docs.soliditylang.org/en/latest/security-considerations.html#re-entrancy).
 
+## Return Bomb
+### Configuration
+* Check: `return-bomb`
+* Severity: `Low`
+* Confidence: `Medium`
+
+### Description
+A low level callee may consume all callers gas unexpectedly.
+
+### Exploit Scenario:
+
+```solidity
+//Modified from https://github.com/nomad-xyz/ExcessivelySafeCall
+contract BadGuy {
+    function youveActivateMyTrapCard() external pure returns (bytes memory) {
+        assembly{
+            revert(0, 1000000)
+        }
+    }
+}
+
+contract Mark {
+    function oops(address badGuy) public{
+        bool success;
+        bytes memory ret;
+
+        // Mark pays a lot of gas for this copy
+        //(success, ret) = badGuy.call{gas:10000}(
+        (success, ret) = badGuy.call(
+            abi.encodeWithSelector(
+                BadGuy.youveActivateMyTrapCard.selector
+            )
+        );
+
+        // Mark may OOG here, preventing local state changes
+        //importantCleanup();
+    }
+}
+
+```
+After Mark calls BadGuy bytes are copied from returndata to memory, the memory expansion cost is paid. This means that when using a standard solidity call, the callee can "returnbomb" the caller, imposing an arbitrary gas cost. 
+Callee unexpectedly makes the caller OOG. 
+
+
+### Recommendation
+Avoid unlimited implicit decoding of returndata.
+
 ## Block timestamp
 ### Configuration
 * Check: `timestamp`
@@ -2344,3 +2491,4 @@ contract C {
 
 ### Recommendation
 Read the variable directly from storage instead of calling the contract.
+
