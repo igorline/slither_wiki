@@ -64,8 +64,8 @@ In the following we use:
 
 ## Operators
 
-- All the operators inherit from `Operation` and have a `read` attribute returning the list of variables read (see [slither/slithir/operations/operation.py](https://github.com/trailofbits/slither/blob/slithir/slither/slithir/operations/operation.py)).
-- All the operators writing to a `LVALUE` inherit from `OperationWithLValue` and have the `lvalue` attribute (see [slither/slithir/operations/lvalue.py](https://github.com/trailofbits/slither/blob/slithir/slither/slithir/operations/lvalue.py)).
+- All the operators inherit from `Operation` and have a `read` attribute returning the list of variables read (see [slither/slithir/operations/operation.py](https://github.com/trailofbits/slither/blob/master/slither/slithir/operations/operation.py)).
+- All the operators writing to a `LVALUE` inherit from `OperationWithLValue` and have the `lvalue` attribute (see [slither/slithir/operations/lvalue.py](https://github.com/trailofbits/slither/blob/master/slither/slithir/operations/lvalue.py)).
 
 ### Assignment
 
@@ -146,7 +146,7 @@ TYPE is a [solidity_types](https://github.com/trailofbits/slither/tree/master/sl
 
 ### Calls Operators
 
-In the following, `ARG` is a variable as defined in [SlithIR#variables](https://github.com/trailofbits/slither-private/wiki/SlithIR#variables)
+In the following, `ARG` is a variable as defined in [SlithIR#variables](https://github.com/trailofbits/slither/wiki/SlithIR#variables)
 
 - `LVALUE = HIGH_LEVEL_CALL DESTINATION FUNCTION [ARG, ..]`
 - `LVALUE = LOW_LEVEL_CALL DESTINATION FUNCTION_NAME [ARG, ..]`
